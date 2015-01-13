@@ -1,1 +1,3 @@
-game/battle-engline/.idea/
+game/*/.idea/
+game/*/target/
+game/*/*.iml
