@@ -6,7 +6,8 @@ package effects;
 public class Trap extends Effect {
     private Trigger trigger;
 
-    public Trap(Trigger trigger) {
+    public Trap(Impact impact, Trigger trigger) {
+        super(impact);
         this.trigger = trigger;
         type=EffectType.TRAP;
     }

@@ -7,7 +7,8 @@ public class Effect {
     protected EffectType type;
     private Impact impact;
 
-    public Effect() {
+    public Effect(Impact impact) {
+        this.impact=impact;
         type=EffectType.NORMAL;
     }
 

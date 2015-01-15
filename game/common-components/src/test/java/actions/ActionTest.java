@@ -13,10 +13,10 @@ public class ActionTest {
 
     @Test
     public void correctlyCompareDifferentTypeActions() throws Exception {
-        Action instantAction = new Action(0, new Instant());
-        Action auraAction = new Action(0, new Aura(1));
-        Action normalAction = new Action(0, new Effect());
-        Action trapAction = new Action(0, new Trap(Trigger.ACTION));
+        Action instantAction = new Action(0, new Instant(new Impact()));
+        Action auraAction = new Action(0, new Aura(new Impact(), 1));
+        Action normalAction = new Action(0, new Effect(new Impact()));
+        Action trapAction = new Action(0, new Trap(new Impact(), Trigger.ACTION));
 
         assertSame(1,instantAction.compareTo(auraAction));
         assertSame(-1, auraAction.compareTo(instantAction));
@@ -30,9 +30,9 @@ public class ActionTest {
         assertSame(-1, trapAction.compareTo(auraAction));
         assertSame(1,normalAction.compareTo(trapAction));
         assertSame(-1, trapAction.compareTo(normalAction));
-        assertSame(0, instantAction.compareTo( new Action(0, new Instant()) ) );
-        assertSame(0, auraAction.compareTo(new Action(0, new Aura(1)) ) );
-        assertSame(0, normalAction.compareTo(new Action(0, new Effect()) ) );
-        assertSame(0, trapAction.compareTo(new Action(0, new Trap(Trigger.ACTION)) ) );
+        assertSame(0, instantAction.compareTo( new Action(0, new Instant(new Impact())) ) );
+        assertSame(0, auraAction.compareTo(new Action(0, new Aura(new Impact(), 1)) ) );
+        assertSame(0, normalAction.compareTo(new Action(0, new Effect(new Impact())) ) );
+        assertSame(0, trapAction.compareTo(new Action(0, new Trap(new Impact(), Trigger.ACTION)) ) );
     }
 }
