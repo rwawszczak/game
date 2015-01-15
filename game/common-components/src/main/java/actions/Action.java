@@ -1,15 +1,20 @@
 package actions;
 
+import effects.Effect;
+import effects.EffectType;
+
 /**
  * Created by wawszcza on 1/13/2015.
  */
 public class Action implements Comparable<Action> {
-    private ActionType type;
+    private EffectType type;
     private int initiative;
+    private Effect effect;
 
-    public Action(ActionType type, int initiative) {
-        this.type = type;
+    public Action(int initiative, Effect effect) {
         this.initiative = initiative;
+        this.effect = effect;
+        this.type = effect.getType();
     }
 
     @Override

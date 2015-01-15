@@ -1,16 +1,16 @@
-package actions;
+package effects;
 
 /**
  * Created by wawszcza on 1/15/2015.
  */
-public enum ActionType {
+public enum EffectType {
     INSTANT(3), AURA(2), NORMAL(1), TRAP(0);
 
     private static final int INITIATIVE_MULTIPLICATOR = 100;
 
     private int initiative;
 
-    ActionType(int priority) {
+    EffectType(int priority) {
         initiative = priority*INITIATIVE_MULTIPLICATOR;
     }
 
