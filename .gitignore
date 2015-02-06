@@ -1,3 +1,6 @@
+game/.idea/
+game/target/
+game/*.iml
 game/*/.idea/
 game/*/target/
 game/*/*.iml
