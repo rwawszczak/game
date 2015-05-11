@@ -19,7 +19,6 @@
 </build>
   <modules>
   	<module>battle-engline</module>
-  	<module>player</module>
   </modules>
 </project>
 
