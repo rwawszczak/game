@@ -25,7 +25,7 @@ public class HealAction extends Action {
 
     @Override
     public void perform() {
-        int healValue = CoefficientGateway.getBase().ofHealValue();
+        int healValue = CoefficientGateway.getAbilityValue().ofHealingAmount();
         int missingHP = target.getMissingHP();
         if(missingHP>0){
             target.increaseHP(healValue>missingHP?missingHP:healValue);

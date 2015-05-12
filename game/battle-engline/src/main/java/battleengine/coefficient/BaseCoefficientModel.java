@@ -7,9 +7,9 @@ public class BaseCoefficientModel {
     private static final int DAMAGE_REDUCTION_CONSTANT = 100;
     private static final int DEFEND_BONUS = 10;
     private static final int ELEMENTAL_MANA = 11;
-    private static final int HEAL_VALUE = 20;
     private static final int PRIORITY_MULTIPLIER = 1000;
     private static final double CRITICAL_STRIKE_MULTIPLIER = 1.5;
+    private static final double HIT_CHANCE_MULTIPLIER = 0.125;
 
     public static int ofDamageReduction() {
         return DAMAGE_REDUCTION_CONSTANT;
@@ -23,15 +23,15 @@ public class BaseCoefficientModel {
         return ELEMENTAL_MANA;
     }
 
-    public int ofHealValue() {
-        return HEAL_VALUE;
-    }
-
     public int ofPriorityMultiplier() {
         return PRIORITY_MULTIPLIER;
     }
 
     public double ofCriticalStrikeMultiplier() {
         return CRITICAL_STRIKE_MULTIPLIER;
+    }
+
+    public double ofHitChanceMultiplier() {
+        return HIT_CHANCE_MULTIPLIER;
     }
 }

@@ -21,8 +21,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class EngineIT {
 
-    private static final String PLAYER_1_NAME = "Player 1";
-    private static final String PLAYER_2_NAME = "Player 2";
+    private static final String P1_NAME = "Player 1";
+    private static final String P2_NAME = "Player 2";
     private static final String WATER_ELEMENTAL_NAME = "Water Elemental";
 
     private static final int P1_HP = 100;
@@ -37,7 +37,7 @@ public class EngineIT {
     private static final int P2_HP = 100;
     private static final int P2_MANA = 50;
     private static final int P2_ATTACK = 10;
-    private static final int P2_DEXTERITY = 10;
+    private static final int P2_DEXTERITY = 0;
     private static final int P2_DEFENCE = 50;
     private static final int P1_INTELLIGENCE = 10;
     private static final int P2_SPEED = 10;
@@ -52,52 +52,60 @@ public class EngineIT {
     public void setUp() throws Exception {
         engine = new BattleEngine();
         players = new Players(
-                new Player(PLAYER_1_NAME, new Attributes(P1_HP, P1_MANA, P1_ATTACK, P1_DEXTERITY, P1_DEFENCE, P1_INTELLIGENCE, P1_SPEED, P1_LUCK)),
-                new Player(PLAYER_2_NAME, new Attributes(P2_HP, P2_MANA, P2_ATTACK, P2_DEXTERITY, P2_DEFENCE, P2_INTELLIGENCE, P2_SPEED, P2_LUCK)));
+                new Player(P1_NAME, new Attributes(P1_HP, P1_MANA, P1_ATTACK, P1_DEXTERITY, P1_DEFENCE, P1_INTELLIGENCE, P1_SPEED, P1_LUCK)),
+                new Player(P2_NAME, new Attributes(P2_HP, P2_MANA, P2_ATTACK, P2_DEXTERITY, P2_DEFENCE, P2_INTELLIGENCE, P2_SPEED, P2_LUCK)));
     }
 
     @Test ///TODO: dodać log i jego sprawdzanie
     public void testBasicAttackAction() throws Exception {
-        Actions actions = new Actions(new AttackAction(players.get(PLAYER_1_NAME), players.get(PLAYER_2_NAME)));
+        Actions actions = new Actions(new AttackAction(players.get(P1_NAME), players.get(P2_NAME)));
 
         engine.processTurn(actions);
 
-        assertEquals(87, players.get(PLAYER_2_NAME).getCurrentHP());
+        assertEquals(87, players.get(P2_NAME).getCurrentHP());
     }
 
     @Test
     public void testCriticalHitAttack() throws Exception {
-        players.get(PLAYER_2_NAME).getAttributes().decreaseDexterity(players.get(PLAYER_2_NAME).getAttributes().getDexterity());
-        players.get(PLAYER_1_NAME).getAttributes().increaseLuck(1);
-        Actions actions = new Actions(new AttackAction(players.get(PLAYER_1_NAME), players.get(PLAYER_2_NAME)));
+        players.get(P1_NAME).getAttributes().increaseLuck(1);
+        Actions actions = new Actions(new AttackAction(players.get(P1_NAME), players.get(P2_NAME)));
 
         engine.processTurn(actions);
 
-        assertEquals(81, players.get(PLAYER_2_NAME).getCurrentHP());
+        assertEquals(81, players.get(P2_NAME).getCurrentHP());
+    }
+
+    @Test
+    public void testMissedAttack() throws Exception {
+        Actions actions = new Actions(new AttackAction(players.get(P2_NAME), players.get(P1_NAME)));
+
+        engine.processTurn(actions);
+
+        assertEquals(P1_HP, players.get(P1_NAME).getCurrentHP());
     }
 
     @Test
     public void testBasicAttackWithDefend() throws Exception {
         Actions actions = new Actions();
-        actions.add(new AttackAction(players.get(PLAYER_1_NAME), players.get(PLAYER_2_NAME)));
-        actions.add(new DefendAction(players.get(PLAYER_2_NAME)));
+        actions.add(new AttackAction(players.get(P1_NAME), players.get(P2_NAME)));
+        actions.add(new DefendAction(players.get(P2_NAME)));
 
         engine.processTurn(actions);
 
-        assertEquals(88, players.get(PLAYER_2_NAME).getCurrentHP());
-        assertEquals(P2_DEFENCE, players.get(PLAYER_2_NAME).getAttributes().getDefence());
+        assertEquals(88, players.get(P2_NAME).getCurrentHP());
+        assertEquals(P2_DEFENCE, players.get(P2_NAME).getAttributes().getDefence());
     }
 
     @Test
     public void testBasicActionsWithElemental() throws Exception {
         int missingHP = 10;
         Elemental waterElemental = new Elemental(WATER_ELEMENTAL_NAME, ElementalType.WATER);
-        players.get(PLAYER_1_NAME).addElementals(waterElemental);
-        players.get(PLAYER_1_NAME).decreaseHP(missingHP);
+        players.get(P1_NAME).addElementals(waterElemental);
+        players.get(P1_NAME).decreaseHP(missingHP);
 
-        engine.processTurn(new Actions(new HealAction(players.get(PLAYER_1_NAME).getElemental(WATER_ELEMENTAL_NAME), players.get(PLAYER_1_NAME))));
+        engine.processTurn(new Actions(new HealAction(players.get(P1_NAME).getElemental(WATER_ELEMENTAL_NAME), players.get(P1_NAME))));
 
-        int expectedHP = min(P1_HP, P1_HP - missingHP + CoefficientGateway.getBase().ofHealValue());
-        assertEquals(expectedHP, players.get(PLAYER_1_NAME).getCurrentHP());
+        int expectedHP = min(P1_HP, P1_HP - missingHP + CoefficientGateway.getAbilityValue().ofHealingAmount());
+        assertEquals(expectedHP, players.get(P1_NAME).getCurrentHP());
     }
 }
