@@ -1,6 +1,7 @@
 package battleengine.action.player;
 
 import battleengine.action.Action;
+import battleengine.action.Actions;
 import battleengine.coefficient.CoefficientGateway;
 import battleengine.player.Player;
 
@@ -21,7 +22,7 @@ public class DefendAction extends Action {
     }
 
     @Override
-    public void perform() {
+    public void perform(Actions pushedActions) {
         owner.getAttributes().increaseDefence(CoefficientGateway.getBase().ofDefendBonus());
     }
 

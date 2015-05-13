@@ -1,6 +1,7 @@
 package battleengine;
 
 import battleengine.action.Actions;
+import battleengine.action.elemental.BoostAttackAction;
 import battleengine.action.player.AttackAction;
 import battleengine.action.player.DefendAction;
 import battleengine.action.elemental.HealAction;
@@ -24,6 +25,7 @@ public class EngineIT {
     private static final String P1_NAME = "Player 1";
     private static final String P2_NAME = "Player 2";
     private static final String WATER_ELEMENTAL_NAME = "Water Elemental";
+    private static final String FIRE_ELEMENTAL_NAME = "Fire Elemental";
 
     private static final int P1_HP = 100;
     private static final int P1_MANA = 50;
@@ -105,7 +107,20 @@ public class EngineIT {
 
         engine.processTurn(new Actions(new HealAction(players.get(P1_NAME).getElemental(WATER_ELEMENTAL_NAME), players.get(P1_NAME))));
 
-        int expectedHP = min(P1_HP, P1_HP - missingHP + CoefficientGateway.getAbilityValue().ofHealingAmount());
+        int expectedHP = (int) min(P1_HP, P1_HP - missingHP + CoefficientGateway.getAbilityValue().ofHealingMultiplier() * P1_HP);
         assertEquals(expectedHP, players.get(P1_NAME).getCurrentHP());
+    }
+
+    @Test
+    public void testBoostAttackFor3Turns() throws Exception {
+        Elemental fireElemental = new Elemental(FIRE_ELEMENTAL_NAME, ElementalType.FIRE);
+        players.get(P1_NAME).addElementals(fireElemental);
+
+        Actions pushedActions = engine.processTurn(new Actions(new BoostAttackAction(players.get(P1_NAME))));
+        assertEquals(26,players.get(P1_NAME).getAttributes().getAttack());
+        pushedActions = engine.processTurn(pushedActions);
+        assertEquals(26,players.get(P1_NAME).getAttributes().getAttack());
+        engine.processTurn(pushedActions);
+        assertEquals(20,players.get(P1_NAME).getAttributes().getAttack());
     }
 }

@@ -1,6 +1,7 @@
 package battleengine.action.player;
 
 import battleengine.action.Action;
+import battleengine.action.Actions;
 import battleengine.action.LuckCalculator;
 import battleengine.coefficient.CoefficientGateway;
 import battleengine.player.Player;
@@ -33,7 +34,7 @@ public class AttackAction
 
 
     @Override
-    public void perform() {
+    public void perform(Actions pushedActions) {
         hit = isHit();
         //TODO: add on hit effects
         if(hit) {

@@ -10,7 +10,7 @@ public abstract class Action implements Comparable<Action> {
     private int priority = 0;
 
     public abstract int getInitiative();
-    public abstract void perform();
+    public abstract void perform(Actions pushedActions);
     public abstract void finish();
 
     public final int getPriority() {

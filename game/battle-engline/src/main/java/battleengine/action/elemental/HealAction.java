@@ -1,6 +1,7 @@
 package battleengine.action.elemental;
 
 import battleengine.action.Action;
+import battleengine.action.Actions;
 import battleengine.coefficient.CoefficientGateway;
 import battleengine.player.Player;
 import battleengine.player.elemental.Elemental;
@@ -24,8 +25,8 @@ public class HealAction extends Action {
     }
 
     @Override
-    public void perform() {
-        int healValue = CoefficientGateway.getAbilityValue().ofHealingAmount();
+    public void perform(Actions pushedActions) {
+        int healValue = (int) (CoefficientGateway.getAbilityValue().ofHealingMultiplier()*target.getAttributes().getMaxHP());
         int missingHP = target.getMissingHP();
         if(missingHP>0){
             target.increaseHP(healValue>missingHP?missingHP:healValue);
