@@ -116,7 +116,7 @@ public class EngineIT {
         Elemental fireElemental = new Elemental(FIRE_ELEMENTAL_NAME, ElementalType.FIRE);
         players.get(P1_NAME).addElementals(fireElemental);
 
-        Actions pushedActions = engine.processTurn(new Actions(new BoostAttackAction(players.get(P1_NAME))));
+        Actions pushedActions = engine.processTurn(new Actions(new BoostAttackAction(fireElemental, players.get(P1_NAME))));
         assertEquals(26,players.get(P1_NAME).getAttributes().getAttack());
         pushedActions = engine.processTurn(pushedActions);
         assertEquals(26,players.get(P1_NAME).getAttributes().getAttack());

@@ -4,6 +4,7 @@ import battleengine.action.Action;
 import battleengine.action.Actions;
 import battleengine.coefficient.CoefficientGateway;
 import battleengine.player.Player;
+import battleengine.player.elemental.Elemental;
 
 
 /**
@@ -12,23 +13,26 @@ import battleengine.player.Player;
 public class BoostAttackAction
     extends Action
 {
-    private Player target;
+    private final Elemental owner;
+    private final Player target;
     private int turns = CoefficientGateway.getAbilityValue().ofBoostAttackTurns();
     private int boostAmount;
 
 
-    public BoostAttackAction( Player target )
+    public BoostAttackAction(Elemental owner, Player target)
     {
         super();
+        this.owner = owner;
         this.target = target;
         setPriority( CoefficientGateway.getPriority().ofBoostAttackAction() );
         this.boostAmount = 0;
     }
 
 
-    private BoostAttackAction( Player target, int turns, int boostAmount )
+    private BoostAttackAction(Elemental owner, Player target, int turns, int boostAmount)
     {
         super();
+        this.owner = owner;
         this.target = target;
         this.turns = turns;
         this.boostAmount = boostAmount;
@@ -50,7 +54,7 @@ public class BoostAttackAction
             target.getAttributes().increaseAttack(boostAmount);
         }
         if (turns>1)
-            pushedActions.add(new BoostAttackAction(target,turns-1,boostAmount));
+            pushedActions.add(new BoostAttackAction(owner, target,turns-1,boostAmount));
     }
 
 

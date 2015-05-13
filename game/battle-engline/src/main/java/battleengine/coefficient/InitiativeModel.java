@@ -6,7 +6,7 @@ package battleengine.coefficient;
 public class InitiativeModel {
     private static final int ATTACK_ACTION = 250;
     private static final int DEFEND_ACTION = 550;
-    private static final int BOOST_ATTACK_ACTION = 250;
+    private static final int BOOST_ATTACK_ACTION = 260;
 
     private static final int HEAL_ACTION = 0;
 
