@@ -2,7 +2,9 @@ package battleengine.action.elemental;
 
 import battleengine.action.Action;
 import battleengine.action.Actions;
+import battleengine.action.Targetable;
 import battleengine.coefficient.CoefficientGateway;
+import battleengine.player.BattleEntity;
 import battleengine.player.Player;
 import battleengine.player.elemental.Elemental;
 
@@ -12,6 +14,7 @@ import battleengine.player.elemental.Elemental;
  */
 public class BoostAttackAction
     extends Action
+    implements Targetable
 {
     private final Elemental owner;
     private final Player target;
@@ -19,17 +22,18 @@ public class BoostAttackAction
     private int boostAmount;
 
 
-    public BoostAttackAction(Elemental owner, Player target)
+    public BoostAttackAction( Elemental owner, Player target )
     {
         super();
         this.owner = owner;
         this.target = target;
-        setPriority( CoefficientGateway.getPriority().ofBoostAttackAction() );
         this.boostAmount = 0;
+        setPriority( CoefficientGateway.getPriority().ofBoostAttackAction() );
+        setInitiativeModifier( CoefficientGateway.getInitiative().ofBoostAttackAction() );
     }
 
 
-    private BoostAttackAction(Elemental owner, Player target, int turns, int boostAmount)
+    private BoostAttackAction( Elemental owner, Player target, int turns, int boostAmount )
     {
         super();
         this.owner = owner;
@@ -40,28 +44,36 @@ public class BoostAttackAction
 
 
     @Override
-    public int getInitiative()
+    public BattleEntity getOwner()
     {
-        return CoefficientGateway.getInitiative().ofBoostAttackAction();
+        return owner;
+    }
+
+
+    @Override
+    public BattleEntity getTarget()
+    {
+        return target;
     }
 
 
     @Override
     public void perform( Actions pushedActions )
     {
-        if( boostAmount == 0 ) {
-            boostAmount = (int) (target.getAttributes().getAttack() * CoefficientGateway.getAbilityValue().ofBoostAttackMultiplier());
-            target.getAttributes().increaseAttack(boostAmount);
+        if( boostAmount == 0 )
+        {
+            boostAmount = (int)(target.getAttributes().getAttack() * CoefficientGateway.getAbilityValue().ofBoostAttackMultiplier());
+            target.getAttributes().increaseAttack( boostAmount );
         }
-        if (turns>1)
-            pushedActions.add(new BoostAttackAction(owner, target,turns-1,boostAmount));
+        if( turns > 1 )
+            pushedActions.add( new BoostAttackAction( owner, target, turns - 1, boostAmount ) );
     }
 
 
     @Override
     public void finish()
     {
-        if(turns==1)
-            target.getAttributes().decreaseAttack(boostAmount);
+        if( turns == 1 )
+            target.getAttributes().decreaseAttack( boostAmount );
     }
 }

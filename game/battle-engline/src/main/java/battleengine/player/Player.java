@@ -1,12 +1,13 @@
 package battleengine.player;
 
+import battleengine.coefficient.CoefficientGateway;
 import battleengine.player.elemental.Elemental;
 import battleengine.player.elemental.Elementals;
 
 /**
  * Created by RaV on 09.05.15.
  */
-public class Player {
+public class Player implements BattleEntity {
     private String name;
     private int currentHP;
     private int currentMana;
@@ -71,5 +72,10 @@ public class Player {
 
     public Elemental getElemental(String name) {
         return elementals.get(name);
+    }
+
+    @Override
+    public int getInitiative() {
+        return (int) (attributes.getSpeed()* CoefficientGateway.getBase().ofPlayerSpeedInitiativeCoefficient());
     }
 }

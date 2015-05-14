@@ -1,5 +1,7 @@
 package battleengine.action;
 
+import battleengine.action.player.DefendAction;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,6 +21,10 @@ public class Actions {
         this.actions = Arrays.asList(action);
     }
 
+    private Actions(List<Action> actions) {
+        this.actions = actions;
+    }
+
     public void add(Action action) {
         actions.add(action);
     }
@@ -33,5 +39,18 @@ public class Actions {
 
     public Action get(int index){
         return actions.get(index);
+    }
+
+    public Actions getActionsFrom(int index) {
+        return new Actions(actions.subList(index,actionCount()));
+    }
+
+    public Actions getActionsOfType(Class<DefendAction> actionClass) {
+        Actions subActions = new Actions();
+        for(Action a : actions){
+            if(actionClass.isAssignableFrom(a.getClass()))
+                subActions.add(a);
+        }
+        return subActions;
     }
 }

@@ -5,17 +5,17 @@ import battleengine.coefficient.CoefficientGateway;
 /**
  * Created by RaV on 10.05.15.
  */
-public enum ElementalType {
+public enum Elements {
     FIRE(CoefficientGateway.getInitiative().ofFireElement()),
     EARTH(CoefficientGateway.getInitiative().ofEarthElement()),
     WATER(CoefficientGateway.getInitiative().ofWaterElement()),
     WIND(CoefficientGateway.getInitiative().ofWindElement()),
     SHADOW(CoefficientGateway.getInitiative().ofShadowElement()),
-    Light(CoefficientGateway.getInitiative().ofLightElement());
+    LIGHT(CoefficientGateway.getInitiative().ofLightElement());
 
     private int baseInitiative;
 
-    ElementalType(int baseInitiative) {
+    Elements(int baseInitiative) {
         this.baseInitiative = baseInitiative;
     }
 

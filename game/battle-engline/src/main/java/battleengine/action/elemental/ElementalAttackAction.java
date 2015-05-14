@@ -10,9 +10,9 @@ import battleengine.player.elemental.Elemental;
 
 
 /**
- * Created by RaV on 10.05.15.
+ * Created by wawszcza on 5/14/2015.
  */
-public class HealAction
+public class ElementalAttackAction
     extends Action
     implements Targetable
 {
@@ -20,12 +20,11 @@ public class HealAction
     private final Player target;
 
 
-    public HealAction( Elemental owner, Player target )
+    public ElementalAttackAction( Elemental owner, Player target )
     {
-        super();
         this.owner = owner;
         this.target = target;
-        setInitiativeModifier( CoefficientGateway.getInitiative().ofHealAction() );
+        setInitiativeModifier( CoefficientGateway.getInitiative().ofElementalAttackAction() );
     }
 
 
@@ -46,18 +45,13 @@ public class HealAction
     @Override
     public void perform( Actions pushedActions )
     {
-        int healValue = (int)(CoefficientGateway.getAbilityValue().ofHealingMultiplier() * target.getAttributes().getMaxHP());
-        int missingHP = target.getMissingHP();
-        if( missingHP > 0 )
-        {
-            target.increaseHP( healValue > missingHP ? missingHP : healValue );
-        }
+        // TODO: add implementation depending on target elemental resistance
     }
 
 
     @Override
     public void finish()
     {
-        // No finish actions
+
     }
 }

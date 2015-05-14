@@ -10,6 +10,7 @@ public class BaseCoefficientModel {
     private static final int PRIORITY_MULTIPLIER = 1000;
     private static final double CRITICAL_STRIKE_MULTIPLIER = 1.5;
     private static final double HIT_CHANCE_MULTIPLIER = 0.125;
+    private static final double PLAYER_SPEED_INITIATIVE_COEFFICIENT = 10;
 
     public static int ofDamageReduction() {
         return DAMAGE_REDUCTION_CONSTANT;
@@ -33,5 +34,9 @@ public class BaseCoefficientModel {
 
     public double ofHitChanceMultiplier() {
         return HIT_CHANCE_MULTIPLIER;
+    }
+
+    public double ofPlayerSpeedInitiativeCoefficient() {
+        return PLAYER_SPEED_INITIATIVE_COEFFICIENT;
     }
 }

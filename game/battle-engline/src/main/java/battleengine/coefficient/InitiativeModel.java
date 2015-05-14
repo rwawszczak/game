@@ -10,11 +10,11 @@ public class InitiativeModel {
 
     private static final int HEAL_ACTION = 0;
 
-    private static final int FIRE_ELEMENT = 400;
     private static final int EARTH_ELEMENT = 100;
     private static final int WATER_ELEMENT = 200;
-    private static final int WIND_ELEMENT = 500;
     private static final int SHADOW_ELEMENT = 300;
+    private static final int FIRE_ELEMENT = 400;
+    private static final int WIND_ELEMENT = 500;
     private static final int LIGHT_ELEMENT = 600;
 
     public static int ofAttackAction() {
@@ -55,5 +55,9 @@ public class InitiativeModel {
 
     public static int ofLightElement() {
         return LIGHT_ELEMENT;
+    }
+
+    public int ofElementalAttackAction() {
+        return ATTACK_ACTION;
     }
 }

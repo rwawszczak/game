@@ -3,7 +3,9 @@ package battleengine.action.player;
 import battleengine.action.Action;
 import battleengine.action.Actions;
 import battleengine.action.LuckCalculator;
+import battleengine.action.Targetable;
 import battleengine.coefficient.CoefficientGateway;
+import battleengine.player.BattleEntity;
 import battleengine.player.Player;
 
 
@@ -12,6 +14,7 @@ import battleengine.player.Player;
  */
 public class AttackAction
     extends Action
+    implements Targetable
 {
     private final Player owner;
     private final Player target;
@@ -23,31 +26,14 @@ public class AttackAction
         super();
         this.owner = owner;
         this.target = target;
+        setInitiativeModifier( CoefficientGateway.getInitiative().ofAttackAction() );
     }
 
 
-    @Override
-    public int getInitiative()
+    private boolean isHit()
     {
-        return CoefficientGateway.getInitiative().ofAttackAction();
-    }
-
-
-    @Override
-    public void perform(Actions pushedActions) {
-        hit = isHit();
-        //TODO: add on hit effects
-        if(hit) {
-            int damage = (int) (owner.getAttributes().getAttack() * calculateReduction());
-            if (isCritical()) {
-                damage *= CoefficientGateway.getBase().ofCriticalStrikeMultiplier();
-            }
-            target.decreaseHP(damage);
-        }
-    }
-
-    private boolean isHit() {
-        return Math.random()*owner.getAttributes().getDexterity() > target.getAttributes().getDexterity()*CoefficientGateway.getBase().ofHitChanceMultiplier();
+        return Math.random() * owner.getAttributes().getDexterity() > target.getAttributes().getDexterity() *
+            CoefficientGateway.getBase().ofHitChanceMultiplier();
     }
 
 
@@ -72,11 +58,43 @@ public class AttackAction
 
 
     @Override
+    public BattleEntity getOwner()
+    {
+        return owner;
+    }
+
+
+    @Override
+    public BattleEntity getTarget()
+    {
+        return target;
+    }
+
+
+    @Override
+    public void perform( Actions pushedActions )
+    {
+        hit = isHit();
+        // TODO: add on hit effects
+        if( hit )
+        {
+            int damage = (int)(owner.getAttributes().getAttack() * calculateReduction());
+            if( isCritical() )
+            {
+                damage *= CoefficientGateway.getBase().ofCriticalStrikeMultiplier();
+            }
+            target.decreaseHP( damage );
+        }
+    }
+
+
+    @Override
     public void finish()
     {
         // TODO: add finish item effects
-        if(hit){
-            //TODO: on hit effects
+        if( hit )
+        {
+            // TODO: on hit effects
         }
         // No finish actions
     }

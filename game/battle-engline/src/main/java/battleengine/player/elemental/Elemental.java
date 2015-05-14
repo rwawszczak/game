@@ -1,20 +1,21 @@
 package battleengine.player.elemental;
 
 import battleengine.coefficient.CoefficientGateway;
+import battleengine.player.BattleEntity;
 
 /**
  * Created by RaV on 10.05.15.
  */
-public class Elemental {
+public class Elemental implements BattleEntity {
     private String name;
     private int mana = CoefficientGateway.getBase().ofElementalMana();
-    private ElementalType type;
+    private Elements type;
 
-    public Elemental(ElementalType type) {
+    public Elemental(Elements type) {
         this(String.format("%s Elemental", type), type);
     }
 
-    public Elemental(String name, ElementalType type) {
+    public Elemental(String name, Elements type) {
         this.type = type;
         this.name = name;
     }
@@ -23,6 +24,7 @@ public class Elemental {
         return name;
     }
 
+    @Override
     public int getInitiative() {
         return type.getBaseInitiative();
     }
