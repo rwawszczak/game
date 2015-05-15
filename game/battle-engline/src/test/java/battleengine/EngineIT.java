@@ -5,12 +5,12 @@ import battleengine.action.elemental.BoostAttackAction;
 import battleengine.action.player.AttackAction;
 import battleengine.action.player.DefendAction;
 import battleengine.action.elemental.HealAction;
-import battleengine.coefficient.CoefficientGateway;
-import battleengine.player.Attributes;
-import battleengine.player.Player;
-import battleengine.player.Players;
-import battleengine.player.elemental.Elemental;
-import battleengine.player.elemental.Elements;
+import battleengine.gateway.CoefficientGateway;
+import battleengine.entities.player.Attributes;
+import battleengine.entities.player.Player;
+import battleengine.entities.player.Players;
+import battleengine.entities.elemental.Elemental;
+import battleengine.entities.Element;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -101,7 +101,7 @@ public class EngineIT {
     @Test
     public void testBasicActionsWithElemental() throws Exception {
         int missingHP = 10;
-        Elemental waterElemental = new Elemental(WATER_ELEMENTAL_NAME, Elements.WATER);
+        Elemental waterElemental = new Elemental(WATER_ELEMENTAL_NAME, Element.WATER);
         players.get(P1_NAME).addElementals(waterElemental);
         players.get(P1_NAME).decreaseHP(missingHP);
 
@@ -113,7 +113,7 @@ public class EngineIT {
 
     @Test
     public void testBoostAttackFor3Turns() throws Exception {
-        Elemental fireElemental = new Elemental(FIRE_ELEMENTAL_NAME, Elements.FIRE);
+        Elemental fireElemental = new Elemental(FIRE_ELEMENTAL_NAME, Element.FIRE);
         players.get(P1_NAME).addElementals(fireElemental);
 
         Actions pushedActions = engine.processTurn(new Actions(new BoostAttackAction(fireElemental, players.get(P1_NAME))));

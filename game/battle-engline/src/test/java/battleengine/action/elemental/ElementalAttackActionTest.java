@@ -1,9 +1,9 @@
 package battleengine.action.elemental;
 
 import battleengine.action.Actions;
-import battleengine.player.Player;
-import battleengine.player.elemental.Elemental;
-import battleengine.player.elemental.Elements;
+import battleengine.entities.player.Player;
+import battleengine.entities.elemental.Elemental;
+import battleengine.entities.Element;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,12 +18,12 @@ public class ElementalAttackActionTest {
 
     @Test
     public void elementalAttackActionsShouldBeCorrectlySortedAccordingToType() throws Exception {
-        ElementalAttackAction earthAttack = new ElementalAttackAction(new Elemental(Elements.EARTH),player);
-        ElementalAttackAction waterAttack = new ElementalAttackAction(new Elemental(Elements.WATER),player);
-        ElementalAttackAction shadowAttack = new ElementalAttackAction(new Elemental(Elements.SHADOW),player);
-        ElementalAttackAction fireAttack = new ElementalAttackAction(new Elemental(Elements.FIRE),player);
-        ElementalAttackAction windAttack = new ElementalAttackAction(new Elemental(Elements.WIND),player);
-        ElementalAttackAction lightAttack = new ElementalAttackAction(new Elemental(Elements.LIGHT),player);
+        ElementalAttackAction earthAttack = new ElementalAttackAction(new Elemental(Element.EARTH),player);
+        ElementalAttackAction waterAttack = new ElementalAttackAction(new Elemental(Element.WATER),player);
+        ElementalAttackAction shadowAttack = new ElementalAttackAction(new Elemental(Element.SHADOW),player);
+        ElementalAttackAction fireAttack = new ElementalAttackAction(new Elemental(Element.FIRE),player);
+        ElementalAttackAction windAttack = new ElementalAttackAction(new Elemental(Element.WIND),player);
+        ElementalAttackAction lightAttack = new ElementalAttackAction(new Elemental(Element.LIGHT),player);
         Actions actions = new Actions();
         actions.add(waterAttack);
         actions.add(fireAttack);

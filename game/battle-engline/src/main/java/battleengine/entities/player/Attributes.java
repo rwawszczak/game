@@ -1,4 +1,4 @@
-package battleengine.player;
+package battleengine.entities.player;
 
 /**
  * Created by RaV on 11.05.15.

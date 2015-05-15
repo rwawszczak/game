@@ -1,7 +1,8 @@
-package battleengine.player.elemental;
+package battleengine.entities.elemental;
 
-import battleengine.coefficient.CoefficientGateway;
-import battleengine.player.BattleEntity;
+import battleengine.entities.Element;
+import battleengine.gateway.CoefficientGateway;
+import battleengine.entities.BattleEntity;
 
 /**
  * Created by RaV on 10.05.15.
@@ -9,13 +10,13 @@ import battleengine.player.BattleEntity;
 public class Elemental implements BattleEntity {
     private String name;
     private int mana = CoefficientGateway.getBase().ofElementalMana();
-    private Elements type;
+    private Element type;
 
-    public Elemental(Elements type) {
+    public Elemental(Element type) {
         this(String.format("%s Elemental", type), type);
     }
 
-    public Elemental(String name, Elements type) {
+    public Elemental(String name, Element type) {
         this.type = type;
         this.name = name;
     }
@@ -26,19 +27,19 @@ public class Elemental implements BattleEntity {
 
     @Override
     public int getInitiative() {
-        return type.getBaseInitiative();
+        return CoefficientGateway.getInitiative().ofElement(type);
     }
 
     private int getCurrentMana() {
         return mana;
     }
 
-    private void decreaseMana(int amount) {
+    public void decreaseMana(int amount) {
         mana -= amount;
         if (mana < 0) mana = 0;
     }
 
-    private void increaseMana(int amount) {
+    public void increaseMana(int amount) {
         mana += amount;
     }
 }

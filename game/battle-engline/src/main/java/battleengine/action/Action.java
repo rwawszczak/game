@@ -1,7 +1,7 @@
 package battleengine.action;
 
-import battleengine.coefficient.CoefficientGateway;
-import battleengine.player.BattleEntity;
+import battleengine.gateway.CoefficientGateway;
+import battleengine.entities.BattleEntity;
 
 /**
  * Created by RaV on 09.05.15.

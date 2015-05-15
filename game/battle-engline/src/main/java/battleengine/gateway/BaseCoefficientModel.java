@@ -1,4 +1,4 @@
-package battleengine.coefficient;
+package battleengine.gateway;
 
 /**
  * Created by RaV on 09.05.15.

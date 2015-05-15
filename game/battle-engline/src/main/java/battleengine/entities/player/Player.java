@@ -1,8 +1,9 @@
-package battleengine.player;
+package battleengine.entities.player;
 
-import battleengine.coefficient.CoefficientGateway;
-import battleengine.player.elemental.Elemental;
-import battleengine.player.elemental.Elementals;
+import battleengine.entities.BattleEntity;
+import battleengine.gateway.CoefficientGateway;
+import battleengine.entities.elemental.Elemental;
+import battleengine.entities.elemental.Elementals;
 
 /**
  * Created by RaV on 09.05.15.

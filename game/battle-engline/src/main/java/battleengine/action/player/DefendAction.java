@@ -2,9 +2,9 @@ package battleengine.action.player;
 
 import battleengine.action.Action;
 import battleengine.action.Actions;
-import battleengine.coefficient.CoefficientGateway;
-import battleengine.player.BattleEntity;
-import battleengine.player.Player;
+import battleengine.gateway.CoefficientGateway;
+import battleengine.entities.BattleEntity;
+import battleengine.entities.player.Player;
 
 
 /**

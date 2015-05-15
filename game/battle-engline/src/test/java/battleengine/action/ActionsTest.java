@@ -5,6 +5,7 @@ import battleengine.action.player.AttackAction;
 import battleengine.action.player.DefendAction;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertSame;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -19,7 +20,7 @@ public class ActionsTest {
         Actions subActions = actions.getActionsFrom(1);
 
         assertEquals(1,subActions.actionCount());
-        assertTrue(subActions.get(0)==defendAction);
+        assertSame(subActions.get(0), defendAction);
     }
 
     @Test

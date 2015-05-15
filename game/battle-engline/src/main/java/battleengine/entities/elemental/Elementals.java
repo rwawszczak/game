@@ -1,4 +1,4 @@
-package battleengine.player.elemental;
+package battleengine.entities.elemental;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class Elementals {
         elementals.add(elemental);
     }
 
-    public class CantFindElementalException extends RuntimeException{
+    public static class CantFindElementalException extends RuntimeException{
         public CantFindElementalException(String name) {
             super(String.format("Can't find elemental with name: \"%s\"",name));
         }

@@ -1,4 +1,4 @@
-package battleengine.player;
+package battleengine.entities.player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class Players {
         players.add(player);
     }
 
-    public class CantFindPlayerException extends RuntimeException{
+    public static class CantFindPlayerException extends RuntimeException{
         public CantFindPlayerException(String name) {
             super(String.format("Can't find player with name: \"%s\"",name));
         }
