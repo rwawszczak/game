@@ -91,11 +91,13 @@ public class AttackAction
     @Override
     public void finish()
     {
-        // TODO: add finish item effects
         if( hit )
         {
-            // TODO: on hit effects
+            finishOnHitEffects();
         }
-        // No finish actions
+    }
+
+    private void finishOnHitEffects() {
+        // TODO: add finish item effects
     }
 }
