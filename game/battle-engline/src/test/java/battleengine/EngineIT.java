@@ -2,15 +2,15 @@ package battleengine;
 
 import battleengine.action.Actions;
 import battleengine.action.elemental.BoostAttackAction;
+import battleengine.action.elemental.HealAction;
 import battleengine.action.player.AttackAction;
 import battleengine.action.player.DefendAction;
-import battleengine.action.elemental.HealAction;
-import battleengine.gateway.CoefficientGateway;
+import battleengine.entities.Element;
+import battleengine.entities.elemental.Elemental;
 import battleengine.entities.player.Attributes;
 import battleengine.entities.player.Player;
 import battleengine.entities.player.Players;
-import battleengine.entities.elemental.Elemental;
-import battleengine.entities.Element;
+import battleengine.gateway.CoefficientGateway;
 import org.junit.Before;
 import org.junit.Test;
 
