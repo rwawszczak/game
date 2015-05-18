@@ -34,7 +34,7 @@ public class Elemental implements BattleEntity {
         return CoefficientGateway.getInitiative().ofElement(type);
     }
 
-    private int getCurrentMana() {
+    public int getCurrentMana() {
         return mana;
     }
 

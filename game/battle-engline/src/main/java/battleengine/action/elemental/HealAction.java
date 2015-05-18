@@ -1,19 +1,18 @@
 package battleengine.action.elemental;
 
-import battleengine.action.Action;
 import battleengine.action.Actions;
 import battleengine.action.Targetable;
-import battleengine.gateway.CoefficientGateway;
 import battleengine.entities.BattleEntity;
-import battleengine.entities.player.Player;
 import battleengine.entities.elemental.Elemental;
+import battleengine.entities.player.Player;
+import battleengine.gateway.CoefficientGateway;
 
 
 /**
  * Created by RaV on 10.05.15.
  */
 public class HealAction
-    extends Action
+    extends BaseElementalAction
     implements Targetable
 {
     private final Elemental owner;
@@ -22,7 +21,7 @@ public class HealAction
 
     public HealAction( Elemental owner, Player target )
     {
-        super();
+        super(CoefficientGateway.getManaCost().ofHealManaCost());
         this.owner = owner;
         this.target = target;
         setInitiativeModifier( CoefficientGateway.getInitiative().ofHealAction() );
@@ -30,7 +29,7 @@ public class HealAction
 
 
     @Override
-    public BattleEntity getOwner()
+    public Elemental getOwner()
     {
         return owner;
     }
@@ -44,7 +43,7 @@ public class HealAction
 
 
     @Override
-    public void perform( Actions pushedActions )
+    public void performElementalAction( Actions pushedActions )
     {
         int healValue = (int)(CoefficientGateway.getAbilityValue().ofHealingMultiplier() * target.getAttributes().getMaxHP());
         int missingHP = target.getMissingHP();
@@ -56,7 +55,7 @@ public class HealAction
 
 
     @Override
-    public void finish()
+    public void finishElementalAction()
     {
         // No finish actions
     }

@@ -1,19 +1,18 @@
 package battleengine.action.elemental;
 
-import battleengine.action.Action;
 import battleengine.action.Actions;
 import battleengine.action.Targetable;
-import battleengine.gateway.CoefficientGateway;
 import battleengine.entities.BattleEntity;
-import battleengine.entities.player.Player;
 import battleengine.entities.elemental.Elemental;
+import battleengine.entities.player.Player;
+import battleengine.gateway.CoefficientGateway;
 
 
 /**
  * Created by wawszcza on 5/14/2015.
  */
 public class ElementalAttackAction
-    extends Action
+    extends BaseElementalAction
     implements Targetable
 {
     private final Elemental owner;
@@ -22,6 +21,7 @@ public class ElementalAttackAction
 
     public ElementalAttackAction( Elemental owner, Player target )
     {
+        super(CoefficientGateway.getManaCost().ofElementalAttackManaCost());
         this.owner = owner;
         this.target = target;
         setInitiativeModifier( CoefficientGateway.getInitiative().ofElementalAttackAction() );
@@ -29,7 +29,7 @@ public class ElementalAttackAction
 
 
     @Override
-    public BattleEntity getOwner()
+    public Elemental getOwner()
     {
         return owner;
     }
@@ -43,19 +43,19 @@ public class ElementalAttackAction
 
 
     @Override
-    public void perform( Actions pushedActions )
+    public void performElementalAction( Actions pushedActions )
     {
         int damage = (int)(CoefficientGateway.getBase().ofElementalAttackDamage() * (1-target.getElementalDamageReduction(owner.getType())));
         if(damage > 0)
             target.decreaseHP( damage );
         else if (damage < 0)
-            target.increaseHP( -damage );
+            target.increaseHP(-damage);
     }
 
 
     @Override
-    public void finish()
+    public void finishElementalAction()
     {
-
+        // No finish actions
     }
 }

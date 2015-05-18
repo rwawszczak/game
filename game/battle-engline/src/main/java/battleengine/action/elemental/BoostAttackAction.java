@@ -1,19 +1,18 @@
 package battleengine.action.elemental;
 
-import battleengine.action.Action;
 import battleengine.action.Actions;
 import battleengine.action.Targetable;
-import battleengine.gateway.CoefficientGateway;
 import battleengine.entities.BattleEntity;
-import battleengine.entities.player.Player;
 import battleengine.entities.elemental.Elemental;
+import battleengine.entities.player.Player;
+import battleengine.gateway.CoefficientGateway;
 
 
 /**
  * Created by wawszcza on 5/13/2015.
  */
 public class BoostAttackAction
-    extends Action
+    extends BaseElementalAction
     implements Targetable
 {
     private final Elemental owner;
@@ -24,18 +23,18 @@ public class BoostAttackAction
 
     public BoostAttackAction( Elemental owner, Player target )
     {
-        super();
+        super(CoefficientGateway.getManaCost().ofBoostAttackManaCost());
         this.owner = owner;
         this.target = target;
         this.boostAmount = 0;
-        setPriority( CoefficientGateway.getPriority().ofBoostAttackAction() );
-        setInitiativeModifier( CoefficientGateway.getInitiative().ofBoostAttackAction() );
+        setPriority(CoefficientGateway.getPriority().ofBoostAttackAction());
+        setInitiativeModifier(CoefficientGateway.getInitiative().ofBoostAttackAction());
     }
 
 
     private BoostAttackAction( Elemental owner, Player target, int turns, int boostAmount )
     {
-        super();
+        super(0);//TODO: test paying mana only once
         this.owner = owner;
         this.target = target;
         this.turns = turns;
@@ -44,7 +43,7 @@ public class BoostAttackAction
 
 
     @Override
-    public BattleEntity getOwner()
+    public Elemental getOwner()
     {
         return owner;
     }
@@ -58,7 +57,7 @@ public class BoostAttackAction
 
 
     @Override
-    public void perform( Actions pushedActions )
+    public void performElementalAction( Actions pushedActions )
     {
         if( boostAmount == 0 )
         {
@@ -71,7 +70,7 @@ public class BoostAttackAction
 
 
     @Override
-    public void finish()
+    public void finishElementalAction()
     {
         if( turns == 1 )
             target.getAttributes().decreaseAttack( boostAmount );
