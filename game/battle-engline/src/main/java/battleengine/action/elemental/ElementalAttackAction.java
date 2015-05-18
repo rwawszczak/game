@@ -45,7 +45,11 @@ public class ElementalAttackAction
     @Override
     public void perform( Actions pushedActions )
     {
-        // TODO: add implementation depending on target elemental resistance
+        int damage = (int)(CoefficientGateway.getBase().ofElementalAttackDamage() * (1-target.getElementalDamageReduction(owner.getType())));
+        if(damage > 0)
+            target.decreaseHP( damage );
+        else if (damage < 0)
+            target.increaseHP( -damage );
     }
 
 

@@ -50,13 +50,6 @@ public class AttackAction
     }
 
 
-    private double calculateReduction()
-    {
-        double base = target.getAttributes().getDefence() + CoefficientGateway.getBase().ofDamageReduction();
-        return 1 - (target.getAttributes().getDefence() / base);
-    }
-
-
     @Override
     public BattleEntity getOwner()
     {
@@ -78,7 +71,7 @@ public class AttackAction
         // TODO: add on hit effects
         if( hit )
         {
-            int damage = (int)(owner.getAttributes().getAttack() * calculateReduction());
+            int damage = (int)(owner.getAttributes().getAttack() * target.getPhysicalDamageReduction());
             if( isCritical() )
             {
                 damage *= CoefficientGateway.getBase().ofCriticalStrikeMultiplier();

@@ -25,6 +25,10 @@ public class Elemental implements BattleEntity {
         return name;
     }
 
+    public Element getType() {
+        return type;
+    }
+
     @Override
     public int getInitiative() {
         return CoefficientGateway.getInitiative().ofElement(type);

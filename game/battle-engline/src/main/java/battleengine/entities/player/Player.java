@@ -1,9 +1,10 @@
 package battleengine.entities.player;
 
 import battleengine.entities.BattleEntity;
-import battleengine.gateway.CoefficientGateway;
+import battleengine.entities.Element;
 import battleengine.entities.elemental.Elemental;
 import battleengine.entities.elemental.Elementals;
+import battleengine.gateway.CoefficientGateway;
 
 /**
  * Created by RaV on 09.05.15.
@@ -73,6 +74,15 @@ public class Player implements BattleEntity {
 
     public Elemental getElemental(String name) {
         return elementals.get(name);
+    }
+
+    public double getPhysicalDamageReduction(){
+        double base = getAttributes().getDefence() + CoefficientGateway.getBase().ofDamageReduction();
+        return 1 - (getAttributes().getDefence() / base);
+    }
+
+    public double getElementalDamageReduction(Element type){
+        return 0; //TODO: Implement elemental damage reduction based on type
     }
 
     @Override
