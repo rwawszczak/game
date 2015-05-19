@@ -19,26 +19,18 @@ public class BoostAttackAction
     private final Player target;
     private int turns = CoefficientGateway.getAbilityValue().ofBoostAttackTurns();
     private int boostAmount;
+    private boolean shouldBoost;
 
 
     public BoostAttackAction( Elemental owner, Player target )
     {
-        super(CoefficientGateway.getManaCost().ofBoostAttackManaCost());
+        super(CoefficientGateway.getManaCost().ofBoostAttack());
         this.owner = owner;
         this.target = target;
         this.boostAmount = 0;
         setPriority(CoefficientGateway.getPriority().ofBoostAttackAction());
         setInitiativeModifier(CoefficientGateway.getInitiative().ofBoostAttackAction());
-    }
-
-
-    private BoostAttackAction( Elemental owner, Player target, int turns, int boostAmount )
-    {
-        super(0);//TODO: test paying mana only once
-        this.owner = owner;
-        this.target = target;
-        this.turns = turns;
-        this.boostAmount = boostAmount;
+        shouldBoost = true;
     }
 
 
@@ -59,20 +51,23 @@ public class BoostAttackAction
     @Override
     public void performElementalAction( Actions pushedActions )
     {
-        if( boostAmount == 0 )
+        turns--;
+        if( shouldBoost )
         {
+            setManaCost(0);
             boostAmount = (int)(target.getAttributes().getAttack() * CoefficientGateway.getAbilityValue().ofBoostAttackMultiplier());
-            target.getAttributes().increaseAttack( boostAmount );
+            target.getAttributes().increaseAttack(boostAmount);
+            shouldBoost = false;
         }
-        if( turns > 1 )
-            pushedActions.add( new BoostAttackAction( owner, target, turns - 1, boostAmount ) );
+        if( turns > 0 )
+            pushedActions.add( this );
     }
 
 
     @Override
     public void finishElementalAction()
     {
-        if( turns == 1 )
+        if( turns == 0 )
             target.getAttributes().decreaseAttack( boostAmount );
     }
 }

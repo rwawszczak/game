@@ -16,7 +16,7 @@ public class Actions {
     }
 
     public Actions(Action... action) {
-        this.actions = Arrays.asList(action);
+        this.actions = new ArrayList<Action>(Arrays.asList(action));
     }
 
     private Actions(List<Action> actions) {
@@ -50,5 +50,9 @@ public class Actions {
                 subActions.add(a);
         }
         return subActions;
+    }
+
+    public void clear(){
+        actions.clear();
     }
 }

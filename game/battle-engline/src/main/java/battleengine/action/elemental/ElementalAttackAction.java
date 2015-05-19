@@ -21,7 +21,7 @@ public class ElementalAttackAction
 
     public ElementalAttackAction( Elemental owner, Player target )
     {
-        super(CoefficientGateway.getManaCost().ofElementalAttackManaCost());
+        super(CoefficientGateway.getManaCost().ofElementalAttack());
         this.owner = owner;
         this.target = target;
         setInitiativeModifier( CoefficientGateway.getInitiative().ofElementalAttackAction() );

@@ -21,7 +21,7 @@ public class HealAction
 
     public HealAction( Elemental owner, Player target )
     {
-        super(CoefficientGateway.getManaCost().ofHealManaCost());
+        super(CoefficientGateway.getManaCost().ofHeal());
         this.owner = owner;
         this.target = target;
         setInitiativeModifier( CoefficientGateway.getInitiative().ofHealAction() );
