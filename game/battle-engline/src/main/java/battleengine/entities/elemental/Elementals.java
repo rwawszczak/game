@@ -1,5 +1,7 @@
 package battleengine.entities.elemental;
 
+import battleengine.entities.Element;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +30,18 @@ public class Elementals {
             if(name.equals(e.getName()))return e;
         }
         throw new CantFindElementalException(name);
+    }
+
+    public int getCount(){
+        return elementals.size();
+    }
+
+    public int getCount(Element type){
+        int count = 0;
+        for (Elemental elemental : elementals){
+            if(elemental.getType() == type)count++;
+        }
+        return count;
     }
 
     public void add(Elemental elemental) {

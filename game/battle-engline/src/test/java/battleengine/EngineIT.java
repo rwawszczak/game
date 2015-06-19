@@ -102,7 +102,7 @@ public class EngineIT {
     public void testBasicActionsWithElemental() throws Exception {
         int missingHP = 10;
         Elemental waterElemental = new Elemental(WATER_ELEMENTAL_NAME, Element.WATER);
-        players.get(P1_NAME).addElementals(waterElemental);
+        players.get(P1_NAME).addElemental(waterElemental);
         players.get(P1_NAME).decreaseHP(missingHP);
 
         engine.processTurn(new Actions(new HealAction(players.get(P1_NAME).getElemental(WATER_ELEMENTAL_NAME), players.get(P1_NAME))));
@@ -114,7 +114,7 @@ public class EngineIT {
     @Test
     public void testBoostAttackFor3Turns() throws Exception {
         Elemental fireElemental = new Elemental(FIRE_ELEMENTAL_NAME, Element.FIRE);
-        players.get(P1_NAME).addElementals(fireElemental);
+        players.get(P1_NAME).addElemental(fireElemental);
 
         Actions pushedActions = engine.processTurn(new Actions(new BoostAttackAction(fireElemental, players.get(P1_NAME))));
         assertEquals(26,players.get(P1_NAME).getAttributes().getAttack());

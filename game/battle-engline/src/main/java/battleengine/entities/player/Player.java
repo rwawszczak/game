@@ -64,7 +64,7 @@ public class Player implements BattleEntity {
         if (currentMana < 0) currentMana = 0;
     }
 
-    public void addElementals(Elemental elemental) {
+    public void addElemental(Elemental elemental) {
         elementals.add(elemental);
     }
 
@@ -82,7 +82,13 @@ public class Player implements BattleEntity {
     }
 
     public double getElementalDamageReduction(Element type){
-        return 0; //TODO: Implement elemental damage reduction based on type
+        double effectiveness = 0;
+        for(int i = 0; i < elementals.getCount(); i++){
+            effectiveness += type.effectiveAgainst(getElemental(i).getType());
+        }
+        double reduction = (elementals.getCount() - effectiveness) / elementals.getCount();
+
+        return reduction * CoefficientGateway.getBase().ofElementalDamageNegationCoefficient();
     }
 
     @Override
