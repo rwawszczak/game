@@ -84,9 +84,9 @@ public class Player implements BattleEntity {
     public double getElementalDamageReduction(Element type){
         double effectiveness = 0;
         for(int i = 0; i < elementals.getCount(); i++){
-            effectiveness += type.effectiveAgainst(getElemental(i).getType());
+            effectiveness += type.effectiveAgainst(getElemental(i).getType())-1;
         }
-        double reduction = (elementals.getCount() - effectiveness) / elementals.getCount();
+        double reduction = effectiveness / elementals.getCount();
 
         return reduction * CoefficientGateway.getBase().ofElementalDamageNegationCoefficient();
     }

@@ -33,7 +33,7 @@ public enum Element
 
     public double effectiveAgainst(Element element){
         double effectiveness = 1;
-        if(this == element)effectiveness -= 2* CoefficientGateway.getBase().ofElementalTypeResistanceCoefficient();
+        if(this == element)effectiveness += 2* CoefficientGateway.getBase().ofElementalTypeResistanceCoefficient();
         else{
             if(isStrongAgainst(element)) effectiveness += CoefficientGateway.getBase().ofElementalTypeResistanceCoefficient();
             if(isWeakAgainst(element)) effectiveness -= CoefficientGateway.getBase().ofElementalTypeResistanceCoefficient();
