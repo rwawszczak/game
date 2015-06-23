@@ -81,7 +81,7 @@ public class EngineIT {
 
         assertEquals(81, players.get(P2_NAME).getCurrentHP());
         assertEquals(1,log.size());
-        assertLog(log.getItem(0), 19, players.get(P1_NAME), players.get(P2_NAME), 1, true, 0);
+        assertLog(log.getItem(0), 19, players.get(P1_NAME), players.get(P2_NAME), CoefficientGateway.getLogValue().ofCriticalStrike(), true, 0);
     }
 
     @Test
@@ -133,7 +133,7 @@ public class EngineIT {
         EngineOutput engineOutput = engine.processTurn(new Actions(new BoostAttackAction(fireElemental, players.get(P1_NAME))));
         assertEquals(26,players.get(P1_NAME).getAttributes().getAttack());
         assertLog(engineOutput.getBattleLog().getItem(0), 6, fireElemental, players.get(P1_NAME), 0, true, 2);
-        
+
         engineOutput = engine.processTurn(engineOutput.getActions());
         assertEquals(26, players.get(P1_NAME).getAttributes().getAttack());
         assertLog(engineOutput.getBattleLog().getItem(0), 6, fireElemental, players.get(P1_NAME), 0, true, 1);

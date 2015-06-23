@@ -82,6 +82,10 @@ public class Player implements BattleEntity {
     }
 
     public double getElementalDamageReduction(Element type){
+        return getReductionFromElementals(type);
+    }
+
+    private double getReductionFromElementals(Element type) {
         double effectiveness = 0;
         for(int i = 0; i < elementals.getCount(); i++){
             effectiveness += type.effectiveAgainst(getElemental(i).getType())-1;
