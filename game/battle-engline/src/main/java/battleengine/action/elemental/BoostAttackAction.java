@@ -2,6 +2,7 @@ package battleengine.action.elemental;
 
 import battleengine.action.Actions;
 import battleengine.action.Targetable;
+import battleengine.action.log.LogItem;
 import battleengine.entities.BattleEntity;
 import battleengine.entities.elemental.Elemental;
 import battleengine.entities.player.Player;
@@ -49,7 +50,7 @@ public class BoostAttackAction
 
 
     @Override
-    public void performElementalAction( Actions pushedActions )
+    public LogItem performElementalAction( Actions pushedActions )
     {
         turns--;
         if( shouldBoost )
@@ -61,6 +62,7 @@ public class BoostAttackAction
         }
         if( turns > 0 )
             pushedActions.add( this );
+        return new LogItem(this.getClass().getSimpleName());
     }
 
 
@@ -69,5 +71,13 @@ public class BoostAttackAction
     {
         if( turns == 0 )
             target.getAttributes().decreaseAttack( boostAmount );
+    }
+
+    @Override
+    protected void fillLog(LogItem item) {
+        item.setTarget(target);
+        item.setOwner(owner);
+        item.setDuration(turns);
+        item.setValue(boostAmount);
     }
 }

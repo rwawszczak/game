@@ -2,6 +2,7 @@ package battleengine.action.elemental;
 
 import battleengine.action.Actions;
 import battleengine.action.Targetable;
+import battleengine.action.log.LogItem;
 import battleengine.entities.BattleEntity;
 import battleengine.entities.elemental.Elemental;
 import battleengine.entities.player.Player;
@@ -43,14 +44,17 @@ public class HealAction
 
 
     @Override
-    public void performElementalAction( Actions pushedActions )
+    public LogItem performElementalAction( Actions pushedActions )
     {
+        LogItem logItem = new LogItem(this.getClass().getSimpleName());
         int healValue = (int)(CoefficientGateway.getAbilityValue().ofHealingMultiplier() * target.getAttributes().getMaxHP());
         int missingHP = target.getMissingHP();
         if( missingHP > 0 )
         {
             target.increaseHP( healValue > missingHP ? missingHP : healValue );
         }
+        logItem.setValue(healValue);
+        return logItem;
     }
 
 
@@ -58,5 +62,11 @@ public class HealAction
     public void finishElementalAction()
     {
         // No finish actions
+    }
+
+    @Override
+    protected void fillLog(LogItem item) {
+        item.setTarget(target);
+        item.setOwner(owner);
     }
 }

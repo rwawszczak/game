@@ -44,8 +44,6 @@ public class PlayerTest {
         player.addElemental(new Elemental(Element.WATER));
         player.addElemental(new Elemental(Element.WATER));
 
-        System.out.println(player.getElementalDamageReduction(Element.FIRE));
-
         assertTrue(player.getElementalDamageReduction(Element.FIRE) < 0);
     }
 

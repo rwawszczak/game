@@ -3,8 +3,11 @@ package battleengine;
 import battleengine.action.Actions;
 import battleengine.action.elemental.BoostAttackAction;
 import battleengine.action.elemental.HealAction;
+import battleengine.action.log.BattleLog;
+import battleengine.action.log.LogItem;
 import battleengine.action.player.AttackAction;
 import battleengine.action.player.DefendAction;
+import battleengine.entities.BattleEntity;
 import battleengine.entities.Element;
 import battleengine.entities.elemental.Elemental;
 import battleengine.entities.player.Attributes;
@@ -58,13 +61,15 @@ public class EngineIT {
                 new Player(P2_NAME, new Attributes(P2_HP, P2_MANA, P2_ATTACK, P2_DEXTERITY, P2_DEFENCE, P2_INTELLIGENCE, P2_SPEED, P2_LUCK)));
     }
 
-    @Test ///TODO: dodać log i jego sprawdzanie
+    @Test
     public void testBasicAttackAction() throws Exception {
         Actions actions = new Actions(new AttackAction(players.get(P1_NAME), players.get(P2_NAME)));
 
-        engine.processTurn(actions);
+        BattleLog log = engine.processTurn(actions).getBattleLog();
 
         assertEquals(87, players.get(P2_NAME).getCurrentHP());
+        assertEquals(1,log.size());
+        assertLog(log.getItem(0), 13, players.get(P1_NAME),players.get(P2_NAME), 0, true, 0);
     }
 
     @Test
@@ -72,18 +77,22 @@ public class EngineIT {
         players.get(P1_NAME).getAttributes().increaseLuck(1);
         Actions actions = new Actions(new AttackAction(players.get(P1_NAME), players.get(P2_NAME)));
 
-        engine.processTurn(actions);
+        BattleLog log = engine.processTurn(actions).getBattleLog();
 
         assertEquals(81, players.get(P2_NAME).getCurrentHP());
+        assertEquals(1,log.size());
+        assertLog(log.getItem(0), 19, players.get(P1_NAME), players.get(P2_NAME), 1, true, 0);
     }
 
     @Test
     public void testMissedAttack() throws Exception {
         Actions actions = new Actions(new AttackAction(players.get(P2_NAME), players.get(P1_NAME)));
 
-        engine.processTurn(actions);
+        BattleLog log = engine.processTurn(actions).getBattleLog();
 
         assertEquals(P1_HP, players.get(P1_NAME).getCurrentHP());
+        assertEquals(1,log.size());
+        assertLog(log.getItem(0), 0, players.get(P2_NAME), players.get(P1_NAME), 0, false, 0);
     }
 
     @Test
@@ -92,10 +101,13 @@ public class EngineIT {
         actions.add(new AttackAction(players.get(P1_NAME), players.get(P2_NAME)));
         actions.add(new DefendAction(players.get(P2_NAME)));
 
-        engine.processTurn(actions);
+        BattleLog log = engine.processTurn(actions).getBattleLog();
 
         assertEquals(88, players.get(P2_NAME).getCurrentHP());
         assertEquals(P2_DEFENCE, players.get(P2_NAME).getAttributes().getDefence());
+        assertEquals(2,log.size());
+        assertLog(log.getItem(0), 0, players.get(P2_NAME), players.get(P2_NAME), 0, true, 0);
+        assertLog(log.getItem(1), 12, players.get(P1_NAME), players.get(P2_NAME), 0, true, 0);
     }
 
     @Test
@@ -105,10 +117,12 @@ public class EngineIT {
         players.get(P1_NAME).addElemental(waterElemental);
         players.get(P1_NAME).decreaseHP(missingHP);
 
-        engine.processTurn(new Actions(new HealAction(players.get(P1_NAME).getElemental(WATER_ELEMENTAL_NAME), players.get(P1_NAME))));
+        BattleLog log = engine.processTurn(new Actions(new HealAction(players.get(P1_NAME).getElemental(WATER_ELEMENTAL_NAME), players.get(P1_NAME)))).getBattleLog();
 
         int expectedHP = (int) min(P1_HP, P1_HP - missingHP + CoefficientGateway.getAbilityValue().ofHealingMultiplier() * P1_HP);
         assertEquals(expectedHP, players.get(P1_NAME).getCurrentHP());
+        assertEquals(1,log.size());
+        assertLog(log.getItem(0), 30, waterElemental, players.get(P1_NAME), 0, true, 0);
     }
 
     @Test
@@ -116,11 +130,25 @@ public class EngineIT {
         Elemental fireElemental = new Elemental(FIRE_ELEMENTAL_NAME, Element.FIRE);
         players.get(P1_NAME).addElemental(fireElemental);
 
-        Actions pushedActions = engine.processTurn(new Actions(new BoostAttackAction(fireElemental, players.get(P1_NAME))));
+        EngineOutput engineOutput = engine.processTurn(new Actions(new BoostAttackAction(fireElemental, players.get(P1_NAME))));
         assertEquals(26,players.get(P1_NAME).getAttributes().getAttack());
-        pushedActions = engine.processTurn(pushedActions);
-        assertEquals(26,players.get(P1_NAME).getAttributes().getAttack());
-        engine.processTurn(pushedActions);
-        assertEquals(20,players.get(P1_NAME).getAttributes().getAttack());
+        assertLog(engineOutput.getBattleLog().getItem(0), 6, fireElemental, players.get(P1_NAME), 0, true, 2);
+        
+        engineOutput = engine.processTurn(engineOutput.getActions());
+        assertEquals(26, players.get(P1_NAME).getAttributes().getAttack());
+        assertLog(engineOutput.getBattleLog().getItem(0), 6, fireElemental, players.get(P1_NAME), 0, true, 1);
+
+        engineOutput = engine.processTurn(engineOutput.getActions());
+        assertEquals(20, players.get(P1_NAME).getAttributes().getAttack());
+        assertLog(engineOutput.getBattleLog().getItem(0), 6, fireElemental, players.get(P1_NAME), 0, true, 0);
+    }
+
+    private void assertLog(LogItem logItem, int value, BattleEntity owner, BattleEntity target, int code, boolean success, int duration) {
+        assertEquals(value, logItem.getValue());
+        assertEquals(owner, logItem.getOwner());
+        assertEquals(target, logItem.getTarget());
+        assertEquals(code, logItem.getInfoCode());
+        assertEquals(success, logItem.isSuccess());
+        assertEquals(duration, logItem.getDuration());
     }
 }

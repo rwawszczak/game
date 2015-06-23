@@ -4,6 +4,7 @@ import battleengine.action.Action;
 import battleengine.action.Actions;
 import battleengine.action.LuckCalculator;
 import battleengine.action.Targetable;
+import battleengine.action.log.LogItem;
 import battleengine.gateway.CoefficientGateway;
 import battleengine.entities.BattleEntity;
 import battleengine.entities.player.Player;
@@ -65,9 +66,13 @@ public class AttackAction
 
 
     @Override
-    public void perform( Actions pushedActions )
+    public LogItem perform( Actions pushedActions )
     {
+        LogItem logItem = new LogItem(this.getClass().getSimpleName());
+        logItem.setOwner(owner);
+        logItem.setTarget(target);
         hit = isHit();
+        logItem.setSuccess(hit);
         // TODO: add on hit effects
         if( hit )
         {
@@ -75,9 +80,12 @@ public class AttackAction
             if( isCritical() )
             {
                 damage *= CoefficientGateway.getBase().ofCriticalStrikeMultiplier();
+                logItem.setInfoCode(CoefficientGateway.getLogValue().ofCriticalStrike());
             }
             target.decreaseHP( damage );
+            logItem.setValue(damage);
         }
+        return logItem;
     }
 
 

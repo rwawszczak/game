@@ -2,6 +2,7 @@ package battleengine.action.elemental;
 
 import battleengine.action.Actions;
 import battleengine.action.Targetable;
+import battleengine.action.log.LogItem;
 import battleengine.entities.BattleEntity;
 import battleengine.entities.elemental.Elemental;
 import battleengine.entities.player.Player;
@@ -43,13 +44,16 @@ public class ElementalAttackAction
 
 
     @Override
-    public void performElementalAction( Actions pushedActions )
+    public LogItem performElementalAction( Actions pushedActions )
     {
+        LogItem logItem = new LogItem(this.getClass().getSimpleName());
         int damage = (int)(CoefficientGateway.getBase().ofElementalAttackDamage() * (1-target.getElementalDamageReduction(owner.getType())));
         if(damage > 0)
             target.decreaseHP( damage );
         else if (damage < 0)
             target.increaseHP(-damage);
+        logItem.setValue(damage);
+        return logItem;
     }
 
 
@@ -57,5 +61,11 @@ public class ElementalAttackAction
     public void finishElementalAction()
     {
         // No finish actions
+    }
+
+    @Override
+    protected void fillLog(LogItem item) {
+        item.setTarget(target);
+        item.setOwner(owner);
     }
 }

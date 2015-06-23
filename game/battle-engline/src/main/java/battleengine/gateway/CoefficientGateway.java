@@ -10,6 +10,7 @@ public final class CoefficientGateway
     private static AbilityValueModel abilityValueModel = new AbilityValueModel();
     private static PriorityModel priorityModel = new PriorityModel();
     private static ManaCostModel manaCostModel = new ManaCostModel();
+    private static LogValueModel logValueModel = new LogValueModel();
 
 
     private CoefficientGateway()
@@ -22,12 +23,10 @@ public final class CoefficientGateway
         return baseCoefficientModel;
     }
 
-
     public static InitiativeModel getInitiative()
     {
         return initiativeModel;
     }
-
 
     public static AbilityValueModel getAbilityValue()
     {
@@ -41,4 +40,6 @@ public final class CoefficientGateway
     public static ManaCostModel getManaCost() {
         return manaCostModel;
     }
+
+    public static LogValueModel getLogValue() { return logValueModel; }
 }

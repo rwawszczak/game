@@ -1,5 +1,6 @@
 package battleengine.action;
 
+import battleengine.action.log.LogItem;
 import battleengine.gateway.CoefficientGateway;
 import battleengine.entities.BattleEntity;
 
@@ -12,7 +13,7 @@ public abstract class Action implements Comparable<Action> {
     private int initiativeModifier = 0;
 
     public abstract BattleEntity getOwner();
-    public abstract void perform(Actions pushedActions);
+    public abstract LogItem perform(Actions pushedActions);
     public abstract void finish();
 
     public final int getPriority() {

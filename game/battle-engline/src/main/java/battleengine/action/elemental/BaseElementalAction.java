@@ -2,6 +2,7 @@ package battleengine.action.elemental;
 
 import battleengine.action.Action;
 import battleengine.action.Actions;
+import battleengine.action.log.LogItem;
 import battleengine.entities.elemental.Elemental;
 
 /**
@@ -15,9 +16,11 @@ public abstract class BaseElementalAction extends Action{
         this.manaCost = manaCost;
     }
 
-    protected abstract void performElementalAction(Actions pushedActions);
+    protected abstract LogItem performElementalAction(Actions pushedActions);
 
     protected abstract void finishElementalAction();
+
+    protected abstract void fillLog(LogItem item);
 
     public void setManaCost(int manaCost) {
         this.manaCost = manaCost;
@@ -28,13 +31,18 @@ public abstract class BaseElementalAction extends Action{
     }
 
     @Override
-    public final void perform(Actions pushedActions){
+    public final LogItem perform(Actions pushedActions){
+        LogItem logItem;
         if(getOwner().getCurrentMana()>=manaCost){
             getOwner().decreaseMana(manaCost);
-            performElementalAction(pushedActions);
+            logItem = performElementalAction(pushedActions);
         } else {
+            logItem = new LogItem(this.getClass().getSimpleName());
             success = false;
         }
+        logItem.setSuccess(success);
+        fillLog(logItem);
+        return logItem;
     }
 
     @Override
