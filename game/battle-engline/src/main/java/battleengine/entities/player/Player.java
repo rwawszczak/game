@@ -9,19 +9,23 @@ import battleengine.gateway.CoefficientGateway;
 /**
  * Created by RaV on 09.05.15.
  */
-public class Player implements BattleEntity {
+public class Player implements BattleEntity { //Todo: equip/unequip items
     private String name;
     private int currentHP;
     private int currentMana;
     private Attributes attributes;
+    private Equipment equipment;
 
     private Elementals elementals = new Elementals();
 
-
-
     public Player(String name, Attributes attributes) {
+        this(name, attributes, new Equipment());
+    }
+
+    public Player(String name, Attributes attributes, Equipment equipment) {
         this.name = name;
         this.attributes = attributes;
+        this.equipment = equipment;
         this.currentHP = attributes.getMaxHP();
         this.currentMana = attributes.getMaxMana();
     }
