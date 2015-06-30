@@ -19,7 +19,7 @@ public final class LuckCalculator {
     }
 
     private static boolean getSuccess(int luck, int difficulty) {
-        return Math.random()*100d < getProbability(luck, difficulty);
+        return Math.random()*TO_PERCENTAGE_MULTIPLIER < getProbability(luck, difficulty);
     }
 
     private static double getProbability(int luck, int difficulty) {

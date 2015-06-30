@@ -17,6 +17,7 @@ public class AttackAction
     extends Action
     implements Targetable
 {
+    private static final double ADVANTAGE_MODIFIER = 1.5;
     private final Player owner;
     private final Player target;
     private boolean hit = true;
@@ -47,7 +48,7 @@ public class AttackAction
 
     private int getDifficulty()
     {
-        int difficulty = (int)(target.getAttributes().getDexterity() * 1.5) - owner.getAttributes().getDexterity();
+        int difficulty = (int)(target.getAttributes().getDexterity() * ADVANTAGE_MODIFIER) - owner.getAttributes().getDexterity();
         return difficulty > 0 ? difficulty : 0;
     }
 
