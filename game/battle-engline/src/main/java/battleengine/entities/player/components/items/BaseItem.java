@@ -1,4 +1,4 @@
-package battleengine.entities.items;
+package battleengine.entities.player.components.items;
 
 /**
  * Created by wawszcza on 6/25/2015.

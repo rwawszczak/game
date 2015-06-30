@@ -1,6 +1,5 @@
 package battleengine.gateway;
 
-import battleengine.entities.Element;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
@@ -15,14 +14,14 @@ public class InitiativeModel {
 
     private static final int HEAL_ACTION = 0;
 
-    private static final Map<Element, Integer> ELEMENTS =
-            ImmutableMap.<Element, Integer> builder()
-                    .put(Element.EARTH, 100)
-                    .put(Element.WATER, 200)
-                    .put(Element.SHADOW, 300)
-                    .put(Element.FIRE, 400)
-                    .put(Element.WIND, 500)
-                    .put(Element.LIGHT, 600)
+    private static final Map<String, Integer> ELEMENTS =
+            ImmutableMap.<String, Integer> builder()
+                    .put("EARTH", 100)
+                    .put("WATER", 200)
+                    .put("SHADOW", 300)
+                    .put("FIRE", 400)
+                    .put("WIND", 500)
+                    .put("LIGHT", 600)
                             .build();
 
     public int ofAttackAction() {
@@ -41,7 +40,7 @@ public class InitiativeModel {
         return BOOST_ATTACK_ACTION;
     }
 
-    public int ofElement(Element element) {
+    public int ofElement(String element) {
         return ELEMENTS.get(element);
     }
 

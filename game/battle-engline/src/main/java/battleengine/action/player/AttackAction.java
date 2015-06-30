@@ -5,9 +5,9 @@ import battleengine.action.Actions;
 import battleengine.action.LuckCalculator;
 import battleengine.action.Targetable;
 import battleengine.action.log.LogItem;
-import battleengine.gateway.CoefficientGateway;
 import battleengine.entities.BattleEntity;
 import battleengine.entities.player.Player;
+import battleengine.gateway.CoefficientGateway;
 
 
 /**
@@ -20,6 +20,7 @@ public class AttackAction
     private final Player owner;
     private final Player target;
     private boolean hit = true;
+    private boolean crit = false;
 
 
     public AttackAction( Player owner, Player target )
@@ -73,13 +74,14 @@ public class AttackAction
         logItem.setTarget(target);
         hit = isHit();
         logItem.setSuccess(hit);
-        // TODO: add on hit effects
         if( hit )
         {
+            onHitEffects();
             int damage = (int)(owner.getAttributes().getAttack() * target.getPhysicalDamageReduction());
             if( isCritical() )
             {
                 damage *= CoefficientGateway.getBase().ofCriticalStrikeMultiplier();
+                crit = true;
                 logItem.setInfoCode(CoefficientGateway.getLogValue().ofCriticalStrike());
             }
             target.decreaseHP( damage );
@@ -98,7 +100,14 @@ public class AttackAction
         }
     }
 
+    private void onHitEffects() {
+        if(owner.getMainWeapon() != null) {
+            owner.getMainWeapon().performOnHit(owner, target, crit);
+        }
+    }
+
     private void finishOnHitEffects() {
-        // TODO: add finish item effects
+        if(owner.getMainWeapon() != null)
+            owner.getMainWeapon().finishOnHit(owner, target, crit);
     }
 }

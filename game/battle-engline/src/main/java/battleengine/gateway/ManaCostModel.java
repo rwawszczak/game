@@ -8,15 +8,15 @@ public class ManaCostModel {
     private static final int ELEMENTAL_ATTACK_MANA_COST = 2;
     private static final int HEAL_MANA_COST = 4;
 
-    public static int ofBoostAttack() {
+    public int ofBoostAttack() {
         return BOOST_ATTACK_MANA_COST;
     }
 
-    public static int ofElementalAttack() {
+    public int ofElementalAttack() {
         return ELEMENTAL_ATTACK_MANA_COST;
     }
 
-    public static int ofHeal() {
+    public int ofHeal() {
         return HEAL_MANA_COST;
     }
 }

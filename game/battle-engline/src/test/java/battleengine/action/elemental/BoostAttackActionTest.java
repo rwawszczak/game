@@ -4,7 +4,7 @@ import battleengine.action.Action;
 import battleengine.action.Actions;
 import battleengine.entities.Element;
 import battleengine.entities.elemental.Elemental;
-import battleengine.entities.player.Attributes;
+import battleengine.entities.player.components.attributes.Attributes;
 import battleengine.entities.player.Player;
 import battleengine.gateway.CoefficientGateway;
 import org.junit.Before;

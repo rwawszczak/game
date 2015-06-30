@@ -4,6 +4,10 @@ import battleengine.entities.BattleEntity;
 import battleengine.entities.Element;
 import battleengine.entities.elemental.Elemental;
 import battleengine.entities.elemental.Elementals;
+import battleengine.entities.player.components.attributes.Attributes;
+import battleengine.entities.player.components.Equipment;
+import battleengine.entities.player.components.items.BaseWeapon;
+import battleengine.entities.player.components.items.types.WeaponType;
 import battleengine.gateway.CoefficientGateway;
 
 /**
@@ -20,6 +24,11 @@ public class Player implements BattleEntity { //Todo: equip/unequip items
 
     public Player(String name, Attributes attributes) {
         this(name, attributes, new Equipment());
+    }
+
+    @Override
+    public int getInitiative() {
+        return (int) (attributes.getSpeed()* CoefficientGateway.getBase().ofPlayerSpeedInitiativeCoefficient());
     }
 
     public Player(String name, Attributes attributes, Equipment equipment) {
@@ -89,6 +98,10 @@ public class Player implements BattleEntity { //Todo: equip/unequip items
         return getReductionFromElementals(type);
     }
 
+    public BaseWeapon getMainWeapon() {
+        return equipment.getWeapon(WeaponType.MAINHAND);
+    }
+
     private double getReductionFromElementals(Element type) {
         double effectiveness = 0;
         for(int i = 0; i < elementals.getCount(); i++){
@@ -97,10 +110,5 @@ public class Player implements BattleEntity { //Todo: equip/unequip items
         double reduction = effectiveness / elementals.getCount();
 
         return reduction * CoefficientGateway.getBase().ofElementalDamageNegationCoefficient();
-    }
-
-    @Override
-    public int getInitiative() {
-        return (int) (attributes.getSpeed()* CoefficientGateway.getBase().ofPlayerSpeedInitiativeCoefficient());
     }
 }

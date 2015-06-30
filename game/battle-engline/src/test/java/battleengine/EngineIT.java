@@ -10,7 +10,7 @@ import battleengine.action.player.DefendAction;
 import battleengine.entities.BattleEntity;
 import battleengine.entities.Element;
 import battleengine.entities.elemental.Elemental;
-import battleengine.entities.player.Attributes;
+import battleengine.entities.player.components.attributes.Attributes;
 import battleengine.entities.player.Player;
 import battleengine.entities.player.Players;
 import battleengine.gateway.CoefficientGateway;

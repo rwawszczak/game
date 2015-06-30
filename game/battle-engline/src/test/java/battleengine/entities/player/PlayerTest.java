@@ -2,6 +2,7 @@ package battleengine.entities.player;
 
 import battleengine.entities.Element;
 import battleengine.entities.elemental.Elemental;
+import battleengine.entities.player.components.attributes.Attributes;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

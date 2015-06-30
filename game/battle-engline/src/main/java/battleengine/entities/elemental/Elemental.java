@@ -31,7 +31,7 @@ public class Elemental implements BattleEntity {
 
     @Override
     public int getInitiative() {
-        return CoefficientGateway.getInitiative().ofElement(type);
+        return CoefficientGateway.getInitiative().ofElement(type.toString());
     }
 
     public int getCurrentMana() {
