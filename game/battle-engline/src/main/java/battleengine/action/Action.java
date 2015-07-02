@@ -1,20 +1,17 @@
 package battleengine.action;
 
-import battleengine.action.log.LogItem;
-import battleengine.gateway.CoefficientGateway;
 import battleengine.entities.BattleEntity;
+import battleengine.gateway.CoefficientGateway;
 
 /**
  * Created by RaV on 09.05.15.
  */
-public abstract class Action implements Comparable<Action> {
+public abstract class Action implements Comparable<Action>,Performable {
 
     private int priority = 0;
     private int initiativeModifier = 0;
 
     public abstract BattleEntity getOwner();
-    public abstract LogItem perform(Actions pushedActions);
-    public abstract void finish();
 
     public final int getPriority() {
         return priority;

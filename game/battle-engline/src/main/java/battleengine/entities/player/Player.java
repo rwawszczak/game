@@ -13,7 +13,7 @@ import battleengine.gateway.CoefficientGateway;
 /**
  * Created by RaV on 09.05.15.
  */
-public class Player implements BattleEntity { //Todo: equip/unequip items
+public class Player implements BattleEntity {
     private String name;
     private int currentHP;
     private int currentMana;
@@ -77,6 +77,9 @@ public class Player implements BattleEntity { //Todo: equip/unequip items
         if (currentMana < 0) currentMana = 0;
     }
 
+    public Equipment getEquipment() {
+        return equipment;
+    }
     public void addElemental(Elemental elemental) {
         elementals.add(elemental);
     }
@@ -99,7 +102,7 @@ public class Player implements BattleEntity { //Todo: equip/unequip items
     }
 
     public BaseWeapon getMainWeapon() {
-        return equipment.getWeapon(WeaponType.MAINHAND);
+        return equipment.getEquipped(WeaponType.MAINHAND);
     }
 
     private double getReductionFromElementals(Element type) {

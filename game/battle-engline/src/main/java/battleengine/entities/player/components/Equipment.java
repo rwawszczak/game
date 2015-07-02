@@ -80,7 +80,7 @@ public class Equipment {
         return equipped;
     }
 
-    public BaseArmor getArmor(ArmorType type) {
+    public BaseArmor getEquipped(ArmorType type) {
         return armor.get(type);
     }
 
@@ -88,7 +88,7 @@ public class Equipment {
         armor.put(armorPiece.getType(),armorPiece);
     }
 
-    public BaseJewelery getJewelery(JeweleryType type) {
+    public BaseJewelery getEquipped(JeweleryType type) {
         return jewelery.get(type);
     }
 
@@ -96,7 +96,7 @@ public class Equipment {
         jewelery.put(jeweleryPiece.getType(),jeweleryPiece);
     }
 
-    public BaseWeapon getWeapon(WeaponType type) {
+    public BaseWeapon getEquipped(WeaponType type) {
         return weapons.get(type);
     }
 
@@ -114,15 +114,41 @@ public class Equipment {
         }
     }
 
+    public void unequip(WeaponType type){
+        BaseWeapon weapon = weapons.get(type);
+        if(weapon != null){
+            weapon.unequip();
+            weapons.remove(type);
+        }
+    }
+
+    public void unequip(ArmorType type){
+        BaseArmor armorPiece = armor.get(type);
+        if(armorPiece != null){
+            armorPiece.unequip();
+            armor.remove(type);
+        }
+    }
+
+    public void unequip(JeweleryType type){
+        BaseJewelery jeweleryPiece = jewelery.get(type);
+        if(jeweleryPiece != null){
+            jeweleryPiece.unequip();
+            jewelery.remove(type);
+        }
+    }
+
     private void equipWeapon(BaseWeapon equipment) {
         BaseWeapon current = equipment;
         BaseWeapon previous = weapons.get(current.getType());
         reequip(current, previous);
         if(current.getType()== WeaponType.MAINHAND && weapons.get(WeaponType.OFFHAND) != null && current.isTwoHanded()) {
             weapons.get(WeaponType.OFFHAND).unequip();
+            weapons.remove(WeaponType.OFFHAND);
         }
         if(current.getType()==WeaponType.OFFHAND && weapons.get(WeaponType.MAINHAND) != null && weapons.get(WeaponType.MAINHAND).isTwoHanded()) {
             weapons.get(WeaponType.MAINHAND).unequip();
+            weapons.remove(WeaponType.MAINHAND);
         }
         setWeapon(current);
     }

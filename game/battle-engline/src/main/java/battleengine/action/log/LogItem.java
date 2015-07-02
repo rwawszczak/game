@@ -13,6 +13,7 @@ public class LogItem {
     private int value = 0;
     private int duration = 0;
     private int infoCode = 0;
+    private LogItem innerLog;
 
     public LogItem(String action) {
         this.action = action;
@@ -36,6 +37,14 @@ public class LogItem {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public LogItem getInnerLog() {
+        return innerLog;
+    }
+
+    public void setInnerLog(LogItem innerLog) {
+        this.innerLog = innerLog;
     }
 
     public String getAction() {

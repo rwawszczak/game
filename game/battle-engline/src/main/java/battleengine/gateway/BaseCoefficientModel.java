@@ -11,7 +11,7 @@ public class BaseCoefficientModel {
     private static final double CRITICAL_STRIKE_MULTIPLIER = 1.5;
     private static final double HIT_CHANCE_MULTIPLIER = 0.125;
     private static final double PLAYER_SPEED_INITIATIVE_COEFFICIENT = 10;
-    private static final int ELEMENTAL_ATTACK_DAMAGE = 50;
+    private static final int ELEMENTAL_ATTACK_DAMAGE = 50;  //TODO: Should be constant?
     private static final double ELEMENTAL_DAMAGE_NEGATION_COEFFICIENT = 2.75;
     private static final double ELEMENTAL_TYPE_RESISTANCE_COEFFICIENT = 0.3;
 
@@ -44,7 +44,7 @@ public class BaseCoefficientModel {
     }
 
     public int ofElementalAttackDamage() {
-        return ELEMENTAL_ATTACK_DAMAGE; //TODO: Should be constant?
+        return ELEMENTAL_ATTACK_DAMAGE;
     }
 
     public double ofElementalDamageNegationCoefficient() {return ELEMENTAL_DAMAGE_NEGATION_COEFFICIENT;}
