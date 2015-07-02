@@ -1,6 +1,6 @@
 package battleengine.action.player.weapon;
 
-import battleengine.action.player.weapon.effects.NoEffect;
+import battleengine.action.player.weapon.effects.BaseEffect;
 import battleengine.entities.player.Player;
 import battleengine.entities.player.components.items.BaseWeapon;
 import org.junit.Test;
@@ -21,10 +21,10 @@ public class WeaponEffectFactoryTest {
         BaseWeapon weapon = mock(BaseWeapon.class);
         when(owner.getMainWeapon()).thenReturn(weapon);
 
-        WeaponEffect effect = WeaponEffectFactory.getWeaponEffect(owner, target);
+        BaseEffect effect = WeaponEffectFactory.getWeaponEffect(owner, target);
 
         assertEquals(owner, effect.getOwner());
         assertEquals(target, effect.getTarget());
-        assertTrue(NoEffect.class.isAssignableFrom(effect.getClass()));
+        assertTrue(BaseEffect.class.isAssignableFrom(effect.getClass()));
     }
 }
