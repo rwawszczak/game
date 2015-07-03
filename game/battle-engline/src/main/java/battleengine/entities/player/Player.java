@@ -97,7 +97,7 @@ public class Player implements BattleEntity {
         return 1 - (getAttributes().getDefence() / base);
     }
 
-    public double getElementalDamageReduction(Element type){
+    public double getElementalDamageReduction(Element type){ //TODO: add inteligence and equipment modifier
         return getReductionFromElementals(type);
     }
 

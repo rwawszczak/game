@@ -5,7 +5,6 @@ import battleengine.action.LuckCalculator;
 import battleengine.action.Performable;
 import battleengine.action.Targetable;
 import battleengine.action.log.LogItem;
-import battleengine.entities.BattleEntity;
 import battleengine.entities.player.Player;
 import battleengine.gateway.CoefficientGateway;
 
@@ -15,19 +14,19 @@ import battleengine.gateway.CoefficientGateway;
 public final class BaseEffect implements Targetable, Performable {
     private static final double ADVANTAGE_MODIFIER = 1.5;
     private boolean hit = true;
-    protected Player owner;
-    protected Player target;
+    private Player owner;
+    private Player target;
 
     public BaseEffect(Player owner, Player target) {
         this.owner = owner;
         this.target = target;
     }
 
-    public final BattleEntity getTarget(){
+    public final Player getTarget(){
         return target;
     }
 
-    public final BattleEntity getOwner(){
+    public final Player getOwner(){
         return owner;
     }
 
