@@ -10,9 +10,10 @@ import battleengine.action.player.DefendAction;
 import battleengine.entities.BattleEntity;
 import battleengine.entities.Element;
 import battleengine.entities.elemental.Elemental;
-import battleengine.entities.player.components.attributes.Attributes;
 import battleengine.entities.player.Player;
 import battleengine.entities.player.Players;
+import battleengine.entities.player.components.attributes.Attributes;
+import battleengine.entities.player.components.items.weapons.SharpKnife;
 import battleengine.gateway.CoefficientGateway;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,7 +68,7 @@ public class EngineIT {
 
         BattleLog log = engine.processTurn(actions).getBattleLog();
 
-        assertEquals(87, players.get(P2_NAME).getCurrentHP());
+        assertEquals(P2_HP - 13, players.get(P2_NAME).getCurrentHP());
         assertEquals(1,log.size());
         assertLog(log.getItem(0), 13, players.get(P1_NAME),players.get(P2_NAME), 0, true, 0);
     }
@@ -79,7 +80,7 @@ public class EngineIT {
 
         BattleLog log = engine.processTurn(actions).getBattleLog();
 
-        assertEquals(81, players.get(P2_NAME).getCurrentHP());
+        assertEquals(P2_HP - 19, players.get(P2_NAME).getCurrentHP());
         assertEquals(1,log.size());
         assertLog(log.getItem(0), 19, players.get(P1_NAME), players.get(P2_NAME), CoefficientGateway.getLogValue().ofCriticalStrike(), true, 0);
     }
@@ -141,6 +142,29 @@ public class EngineIT {
         engineOutput = engine.processTurn(engineOutput.getActions());
         assertEquals(20, players.get(P1_NAME).getAttributes().getAttack());
         assertLog(engineOutput.getBattleLog().getItem(0), 6, fireElemental, players.get(P1_NAME), 0, true, 0);
+
+        assertEquals(0, engineOutput.getActions().actionCount());
+    }
+
+    @Test
+    public void testBleedEffectFor3Turns() throws Exception {
+        players.get(P1_NAME).getAttributes().increaseLuck(1);
+        players.get(P1_NAME).getEquipment().equip(new SharpKnife());
+        Actions actions = new Actions(new AttackAction(players.get(P1_NAME), players.get(P2_NAME)));
+
+        EngineOutput engineOutput = engine.processTurn(actions);
+        assertEquals(P2_HP - 19 - 4, players.get(P2_NAME).getCurrentHP());
+        assertLog(engineOutput.getBattleLog().getItem(0), 19 + 4, players.get(P1_NAME), players.get(P2_NAME), CoefficientGateway.getLogValue().ofCriticalStrike(), true, 2);
+
+        engineOutput = engine.processTurn(engineOutput.getActions());
+        assertEquals(P2_HP - 19 - 4 - 4, players.get(P2_NAME).getCurrentHP());
+        assertLog(engineOutput.getBattleLog().getItem(0), 4, players.get(P1_NAME), players.get(P2_NAME), 0, true, 1);
+
+        engineOutput = engine.processTurn(engineOutput.getActions());
+        assertEquals(P2_HP - 19 - 4 - 4 - 4, players.get(P2_NAME).getCurrentHP());
+        assertLog(engineOutput.getBattleLog().getItem(0), 4, players.get(P1_NAME), players.get(P2_NAME), 0, true, 0);
+
+        assertEquals(0, engineOutput.getActions().actionCount());
     }
 
     private void assertLog(LogItem logItem, int value, BattleEntity owner, BattleEntity target, int code, boolean success, int duration) {

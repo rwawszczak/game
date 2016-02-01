@@ -11,13 +11,13 @@ import battleengine.gateway.CoefficientGateway;
 /**
  * Created by wawszcza on 7/2/2015.
  */
-public final class BaseEffect implements Targetable, Performable {
+public class BaseWeaponEffect implements Targetable, Performable {
     private static final double ADVANTAGE_MODIFIER = 1.5;
     private boolean hit = true;
     private Player owner;
     private Player target;
 
-    public BaseEffect(Player owner, Player target) {
+    public BaseWeaponEffect(Player owner, Player target) {
         this.owner = owner;
         this.target = target;
     }
@@ -38,9 +38,10 @@ public final class BaseEffect implements Targetable, Performable {
         hit = isHit();
         logItem.setSuccess(hit);
         if( hit )
-            performOnHit(logItem);
+            performOnHit(logItem, pushedActions);
         else
-            performOnMiss(logItem);
+            performOnMiss(logItem, pushedActions);
+        performAlways(logItem, pushedActions);
         return logItem;
     }
 
@@ -52,17 +53,30 @@ public final class BaseEffect implements Targetable, Performable {
             finishOnMiss();
     }
 
-    protected void performOnHit(LogItem logItem) {
+    protected void performAlways(LogItem logItem, Actions pushedActions) {
+    }
+
+    protected void performOnHit(LogItem logItem, Actions pushedActions) {
         boolean critical = testCritical();
         double critModifier = critical?CoefficientGateway.getBase().ofCriticalStrikeMultiplier():1d;
         int damage = (int) (calculateBaseDamage()*critModifier);
-        if(critical)
-            logItem.setInfoCode(CoefficientGateway.getLogValue().ofCriticalStrike());
-        target.decreaseHP( damage );
         logItem.setValue( damage );
+        if(critical){
+            performOnCrit(logItem, pushedActions);
+        } else{
+            performOnNoCrit(logItem, pushedActions);
+        }
+        target.decreaseHP( damage );
     }
 
-    protected void performOnMiss(LogItem logItem) {
+    protected void performOnCrit(LogItem logItem, Actions pushedActions) {
+        logItem.setInfoCode(CoefficientGateway.getLogValue().ofCriticalStrike());
+    }
+
+    protected void performOnNoCrit(LogItem logItem, Actions pushedActions) {
+    }
+
+    protected void performOnMiss(LogItem logItem, Actions pushedActions) {
     }
 
     protected void finishOnHit() {

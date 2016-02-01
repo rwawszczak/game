@@ -28,7 +28,7 @@ public class Player implements BattleEntity {
 
     @Override
     public int getInitiative() {
-        return (int) (attributes.getSpeed()* CoefficientGateway.getBase().ofPlayerSpeedInitiativeCoefficient());
+        return (int) (attributes.getSpeed() * CoefficientGateway.getBase().ofPlayerSpeedInitiativeCoefficient());
     }
 
     public Player(String name, Attributes attributes, Equipment equipment) {
@@ -47,8 +47,8 @@ public class Player implements BattleEntity {
         return attributes;
     }
 
-    public int getMissingHP(){
-        return attributes.getMaxHP()-currentHP;
+    public int getMissingHP() {
+        return attributes.getMaxHP() - currentHP;
     }
 
     public int getCurrentHP() {
@@ -80,6 +80,7 @@ public class Player implements BattleEntity {
     public Equipment getEquipment() {
         return equipment;
     }
+
     public void addElemental(Elemental elemental) {
         elementals.add(elemental);
     }
@@ -92,12 +93,12 @@ public class Player implements BattleEntity {
         return elementals.get(name);
     }
 
-    public double getPhysicalDamageReduction(){
+    public double getPhysicalDamageReduction() {
         double base = getAttributes().getDefence() + CoefficientGateway.getBase().ofDamageReduction();
         return 1 - (getAttributes().getDefence() / base);
     }
 
-    public double getElementalDamageReduction(Element type){ //TODO: add inteligence and equipment modifier
+    public double getElementalDamageReduction(Element type) { //TODO: add inteligence and equipment modifier
         return getReductionFromElementals(type);
     }
 
@@ -107,11 +108,16 @@ public class Player implements BattleEntity {
 
     private double getReductionFromElementals(Element type) {
         double effectiveness = 0;
-        for(int i = 0; i < elementals.getCount(); i++){
-            effectiveness += type.effectiveAgainst(getElemental(i).getType())-1;
+        for (int i = 0; i < elementals.getCount(); i++) {
+            effectiveness += type.effectiveAgainst(getElemental(i).getType()) - 1;
         }
         double reduction = effectiveness / elementals.getCount();
 
         return reduction * CoefficientGateway.getBase().ofElementalDamageNegationCoefficient();
+    }
+
+    @Override
+    public String toString() {
+        return "Player (" + name + ")";
     }
 }

@@ -11,7 +11,11 @@ public abstract class BaseEquipable extends BaseItem{
     public BaseEquipable(Attributes attributes) {
         this.attributes = attributes;
     }
-    
+
+    public Attributes getAttributes() {
+        return attributes;
+    }
+
     public abstract void equip();
     public abstract void unequip();
 }

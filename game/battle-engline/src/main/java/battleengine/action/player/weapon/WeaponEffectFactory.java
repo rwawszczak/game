@@ -1,8 +1,10 @@
 package battleengine.action.player.weapon;
 
-import battleengine.action.player.weapon.effects.BaseEffect;
+import battleengine.action.player.weapon.effects.BaseWeaponEffect;
+import battleengine.action.player.weapon.effects.BleedWeaponEffect;
 import battleengine.entities.player.Player;
 import battleengine.entities.player.components.items.BaseWeapon;
+import battleengine.entities.player.components.items.weapons.SharpKnife;
 import com.google.common.collect.ImmutableMap;
 
 import java.lang.reflect.Constructor;
@@ -16,25 +18,26 @@ public class WeaponEffectFactory
     private WeaponEffectFactory() {
     }
 
-    private static final Map<Class<? extends BaseWeapon>, Class<? extends BaseEffect>> WEAPON_EFFECTS =
-            ImmutableMap.<Class<? extends BaseWeapon>, Class<? extends BaseEffect>> builder()
+    private static final Map<Class<? extends BaseWeapon>, Class<? extends BaseWeaponEffect>> WEAPON_EFFECTS =
+            ImmutableMap.<Class<? extends BaseWeapon>, Class<? extends BaseWeaponEffect>> builder()
                     //.put(null, null)//TODO: fill with weapon effects
+                    .put(SharpKnife.class, BleedWeaponEffect.class)
                     .build();
 
-    public static BaseEffect getWeaponEffect(Player owner, Player target) {
-        BaseEffect effect;
+    public static BaseWeaponEffect getWeaponEffect(Player owner, Player target) {
+        BaseWeaponEffect effect;
         if(owner.getMainWeapon() != null && WEAPON_EFFECTS.containsKey(owner.getMainWeapon().getClass())) {
             effect = retrieveWeaponEffect(owner, target);
         } else {
-            effect = new BaseEffect(owner, target);
+            effect = new BaseWeaponEffect(owner, target);
         }
         return effect;
     }
 
-    private static BaseEffect retrieveWeaponEffect(Player owner, Player target) {
-        BaseEffect effect;
+    private static BaseWeaponEffect retrieveWeaponEffect(Player owner, Player target) {
+        BaseWeaponEffect effect;
         try {
-            Constructor<? extends BaseEffect> constructor = WEAPON_EFFECTS.get(owner.getMainWeapon().getClass()).getConstructor(Player.class, Player.class);
+            Constructor<? extends BaseWeaponEffect> constructor = WEAPON_EFFECTS.get(owner.getMainWeapon().getClass()).getConstructor(Player.class, Player.class);
             effect = constructor.newInstance(owner, target);
         } catch (Exception e) {
             throw new WeaponEffectRetrievingException(e);

@@ -5,7 +5,7 @@ import battleengine.action.Actions;
 import battleengine.action.Targetable;
 import battleengine.action.log.LogItem;
 import battleengine.action.player.weapon.WeaponEffectFactory;
-import battleengine.action.player.weapon.effects.BaseEffect;
+import battleengine.action.player.weapon.effects.BaseWeaponEffect;
 import battleengine.entities.BattleEntity;
 import battleengine.entities.player.Player;
 import battleengine.gateway.CoefficientGateway;
@@ -20,7 +20,7 @@ public class AttackAction
 {
     private final Player owner;
     private final Player target;
-    private BaseEffect weaponEffect;
+    private BaseWeaponEffect weaponEffect;
 
 
     public AttackAction( Player owner, Player target )
