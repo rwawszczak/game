@@ -10,9 +10,6 @@ import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 
-/**
- * Created by wawszcza on 7/2/2015.
- */
 public class WeaponEffectFactory
 {
     private WeaponEffectFactory() {
@@ -20,7 +17,7 @@ public class WeaponEffectFactory
 
     private static final Map<Class<? extends BaseWeapon>, Class<? extends BaseWeaponEffect>> WEAPON_EFFECTS =
             ImmutableMap.<Class<? extends BaseWeapon>, Class<? extends BaseWeaponEffect>> builder()
-                    //.put(null, null)//TODO: fill with weapon effects
+                    //.put(null, null)//TODO: fill with weapon effects (has everything to be hardcoded?)
                     .put(SharpKnife.class, BleedWeaponEffect.class)
                     .build();
 

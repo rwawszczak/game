@@ -1,8 +1,5 @@
 package battleengine.gateway;
 
-/**
- * Created by RaV on 10.05.15.
- */
 public final class CoefficientGateway
 {
     private static BaseCoefficientModel baseCoefficientModel = new BaseCoefficientModel();

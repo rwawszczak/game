@@ -10,9 +10,6 @@ import battleengine.entities.player.components.items.BaseWeapon;
 import battleengine.entities.player.components.items.types.WeaponType;
 import battleengine.gateway.CoefficientGateway;
 
-/**
- * Created by RaV on 09.05.15.
- */
 public class Player implements BattleEntity {
     private String name;
     private int currentHP;
@@ -98,7 +95,7 @@ public class Player implements BattleEntity {
         return 1 - (getAttributes().getDefence() / base);
     }
 
-    public double getElementalDamageReduction(Element type) { //TODO: add inteligence and equipment modifier
+    public double getElementalDamageReduction(Element type) { //TODO: add intelligence and equipment modifier
         return getReductionFromElementals(type);
     }
 

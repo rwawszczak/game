@@ -1,8 +1,5 @@
 package battleengine.gateway;
 
-/**
- * Created by RaV on 09.05.15.
- */
 public class BaseCoefficientModel {
     private static final int DAMAGE_REDUCTION_CONSTANT = 100;
     private static final int DEFEND_BONUS = 10;
@@ -15,15 +12,15 @@ public class BaseCoefficientModel {
     private static final double ELEMENTAL_DAMAGE_NEGATION_COEFFICIENT = 2.75;
     private static final double ELEMENTAL_TYPE_RESISTANCE_COEFFICIENT = 0.3;
 
-    public static int ofDamageReduction() {
+    public int ofDamageReduction() {
         return DAMAGE_REDUCTION_CONSTANT;
     }
 
-    public static int ofDefendBonus() {
+    public int ofDefendBonus() {
         return DEFEND_BONUS;
     }
 
-    public static int ofElementalMana() {
+    public int ofElementalMana() {
         return ELEMENTAL_MANA;
     }
 

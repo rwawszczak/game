@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by RaV on 09.05.15.
- */
 public class Actions {
     private final List<Action> actions;
 
@@ -21,6 +18,10 @@ public class Actions {
 
     private Actions(List<Action> actions) {
         this.actions = actions;
+    }
+
+    public Actions(Actions actions) {
+        this(actions.actions);
     }
 
     public void add(Action action) {
