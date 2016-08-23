@@ -18,6 +18,7 @@
   </plugins>
 </build>
   <modules>
+    <module>server</module>
   	<module>battle-engline</module>
   </modules>
 </project>
