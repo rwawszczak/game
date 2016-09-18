@@ -8,9 +8,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     
-    <artifactId>server</artifactId>
+    <artifactId>client</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <dependencies>
         <dependency>
             <groupId>game</groupId>

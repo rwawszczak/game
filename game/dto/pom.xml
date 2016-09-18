@@ -8,14 +8,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     
-    <artifactId>server</artifactId>
+    <artifactId>dto</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-    <dependencies>
-        <dependency>
-            <groupId>game</groupId>
-            <artifactId>dto</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 </project>

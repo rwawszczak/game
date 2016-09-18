@@ -18,8 +18,10 @@
   </plugins>
 </build>
   <modules>
-    <module>server</module>
-  	<module>battle-engline</module>
+      <module>dto</module>
+      <module>battle-engline</module>
+      <module>server</module>
+      <module>client</module>
   </modules>
 </project>
 
