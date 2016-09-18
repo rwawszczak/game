@@ -21,7 +21,9 @@ public class LoginCommand implements BaseCommand<CredentialsDTO> {
         } else {
             sessionObject.setOpened(false);
             try {
-                outputStream.writeObject(new TextMessageDTO("Wrong credentials for user " + credentials.getLogin()));
+                TextMessageDTO messageDTO = new TextMessageDTO("Wrong credentials for user " + credentials.getLogin());
+                messageDTO.setCode(-1);
+                outputStream.writeObject(messageDTO);
             } catch (IOException e) {
                 e.printStackTrace();
             }
