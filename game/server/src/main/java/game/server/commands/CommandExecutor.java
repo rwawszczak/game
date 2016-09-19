@@ -1,10 +1,10 @@
-package server.commands;
+package game.server.commands;
 
 import com.google.common.collect.ImmutableMap;
 import dto.CredentialsDTO;
 import dto.DTO;
 import dto.TextMessageDTO;
-import server.session.SessionObject;
+import game.server.session.SessionObject;
 
 import java.io.ObjectOutputStream;
 

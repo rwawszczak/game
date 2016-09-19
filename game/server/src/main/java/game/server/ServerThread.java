@@ -1,8 +1,8 @@
-package server;
+package game.server;
 
 import dto.DTO;
-import server.commands.CommandExecutor;
-import server.session.SessionObject;
+import game.server.commands.CommandExecutor;
+import game.server.session.SessionObject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
