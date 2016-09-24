@@ -1,7 +1,7 @@
-package server.commands;
+package game.server.commands;
 
 import dto.TextMessageDTO;
-import server.session.SessionObject;
+import game.server.session.SessionObject;
 
 import java.io.ObjectOutputStream;
 
