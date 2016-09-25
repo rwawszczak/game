@@ -22,6 +22,7 @@
       <module>battle-engline</module>
       <module>server</module>
       <module>client</module>
+      <module>desktopUI</module>
   </modules>
 </project>
 
