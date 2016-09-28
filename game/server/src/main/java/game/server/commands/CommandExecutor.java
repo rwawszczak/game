@@ -3,6 +3,7 @@ package game.server.commands;
 import com.google.common.collect.ImmutableMap;
 import dto.CredentialsDTO;
 import dto.DTO;
+import dto.MessageDTO;
 import dto.TextMessageDTO;
 import game.server.session.SessionObject;
 
@@ -11,6 +12,7 @@ import java.io.ObjectOutputStream;
 public class CommandExecutor {
     private ImmutableMap<Class<? extends DTO>, BaseCommand> commandMap = ImmutableMap.<Class<? extends DTO>, BaseCommand>of(
             CredentialsDTO.class, new LoginCommand(),
+            MessageDTO.class, new MessageCommand(),
             TextMessageDTO.class, new TextMessageCommand()
     );
 

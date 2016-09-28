@@ -1,47 +1,52 @@
 package client;
 
 import dto.CredentialsDTO;
+import dto.DTO;
+import dto.MessageDTO;
 import dto.TextMessageDTO;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class Client {
-    private String host = "localHost";
-    private int port = 4445;
+    Socket socket;
+    ObjectOutputStream outputStream;
+    ObjectInputStream inputStream;
 
-    public void communicate() {
-
-        try {
-            Socket socket = new Socket(host, port);
-            System.out.println("Connected");
-            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-            outputStream.writeObject(new CredentialsDTO("John", "John"));
-
-
-            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-            TextMessageDTO textMessageDTO = (TextMessageDTO) inputStream.readObject();
-            System.out.println(textMessageDTO.getMessage());
+    @Deprecated
+    public void communicate(String host, int port) throws IOException, ClassNotFoundException {
+        connect(host, port);
+        System.out.println("Connected");
+        send(new CredentialsDTO("John", "Johnd"));
 
 
-            TextMessageDTO logout = new TextMessageDTO("Logout");
-            logout.setCode(-1);
-            outputStream.writeObject(logout);
+        TextMessageDTO textMessageDTO = (TextMessageDTO) receive();
+        System.out.println(textMessageDTO.getMessage());
 
-            socket.close();
-            inputStream.close();
-            outputStream.close();
+        logoutAndDisconnect();
+    }
 
-        } catch (SocketException se) {
-            se.printStackTrace();
-            System.exit(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    private DTO receive() throws IOException, ClassNotFoundException {
+        return (DTO)inputStream.readObject();
+    }
+
+    public void send(DTO data) throws IOException {
+        outputStream.writeObject(data);
+    }
+
+    public void connect(String host, int port) throws IOException {
+        socket = new Socket(host, port);
+        outputStream = new ObjectOutputStream(socket.getOutputStream());
+        inputStream = new ObjectInputStream(socket.getInputStream());
+    }
+
+    public void logoutAndDisconnect() throws IOException {
+        MessageDTO logout = new MessageDTO(MessageDTO.Command.LOGOUT);
+        send(logout);
+        socket.close();
+        inputStream.close();
+        outputStream.close();
     }
 }

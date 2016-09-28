@@ -12,6 +12,15 @@
     <artifactId>desktopUI</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>game</groupId>
+            <artifactId>client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+
     <build>
         <finalName>GameDesktopUI</finalName>
         <plugins>
