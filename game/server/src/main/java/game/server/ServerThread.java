@@ -4,6 +4,7 @@ import dto.DTO;
 import game.server.commands.CommandExecutor;
 import game.server.session.SessionObject;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,11 +33,19 @@ public class ServerThread extends Thread {
                 commandExecutor.execute(data, outputStream, sessionObject);
             }
             System.out.println("Closing connection " + connectionId);
-            socket.close();
+            closeAll(inStream, outputStream);
+        } catch (EOFException e){
+            System.out.println("Client ended connection.");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void closeAll(ObjectInputStream inStream, ObjectOutputStream outputStream) throws IOException {
+        inStream.close();
+        outputStream.close();
+        socket.close();
     }
 }

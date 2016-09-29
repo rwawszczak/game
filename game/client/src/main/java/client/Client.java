@@ -3,14 +3,13 @@ package client;
 import dto.CredentialsDTO;
 import dto.DTO;
 import dto.MessageDTO;
-import dto.TextMessageDTO;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Client {
+class Client {
     Socket socket;
     ObjectOutputStream outputStream;
     ObjectInputStream inputStream;
@@ -19,17 +18,25 @@ public class Client {
     public void communicate(String host, int port) throws IOException, ClassNotFoundException {
         connect(host, port);
         System.out.println("Connected");
+
         send(new CredentialsDTO("John", "Johnd"));
+        MessageDTO messageDTO = (MessageDTO) receive();
+        System.out.println(messageDTO.getText());
 
+        send(new CredentialsDTO("John", "Johnd"));
+        messageDTO = (MessageDTO) receive();
+        System.out.println(messageDTO.getText());
 
-        TextMessageDTO textMessageDTO = (TextMessageDTO) receive();
-        System.out.println(textMessageDTO.getMessage());
+        send(new CredentialsDTO("John", "Johnm"));
+        messageDTO = (MessageDTO) receive();
+        System.out.println(messageDTO.getText());
 
-        logoutAndDisconnect();
+        logout();
+        disconnect();
     }
 
-    private DTO receive() throws IOException, ClassNotFoundException {
-        return (DTO)inputStream.readObject();
+    public DTO receive() throws IOException, ClassNotFoundException {
+        return (DTO) inputStream.readObject();
     }
 
     public void send(DTO data) throws IOException {
@@ -42,11 +49,14 @@ public class Client {
         inputStream = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void logoutAndDisconnect() throws IOException {
-        MessageDTO logout = new MessageDTO(MessageDTO.Command.LOGOUT);
-        send(logout);
+    public void disconnect() throws IOException {
         socket.close();
         inputStream.close();
         outputStream.close();
+    }
+
+    private void logout() throws IOException {
+        MessageDTO logout = new MessageDTO(MessageDTO.Command.LOGOUT);
+        send(logout);
     }
 }

@@ -2,7 +2,7 @@ package dto;
 
 public class MessageDTO extends DTO {
     public enum Command{
-        SUCCESS, ERROR, LOGOUT
+        SUCCESS, ERROR, LOGOUT, HEARTBEAT
     }
 
     private Command command;

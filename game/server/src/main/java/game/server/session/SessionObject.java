@@ -5,6 +5,7 @@ import game.model.Player;
 public class SessionObject {
     private boolean authenticated = false;
     private boolean opened = true;
+    private int failedLogins = 0;
     private Player player;
 
     public boolean isAuthenticated() {
@@ -29,5 +30,13 @@ public class SessionObject {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public int getFailedLogins() {
+        return failedLogins;
+    }
+
+    public void setFailedLogins(int failedLogins) {
+        this.failedLogins = failedLogins;
     }
 }

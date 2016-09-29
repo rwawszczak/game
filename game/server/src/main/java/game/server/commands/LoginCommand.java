@@ -1,7 +1,7 @@
 package game.server.commands;
 
 import dto.CredentialsDTO;
-import dto.TextMessageDTO;
+import dto.MessageDTO;
 import game.model.Player;
 import game.server.session.SessionObject;
 import game.services.PlayerServiceInterface;
@@ -21,10 +21,13 @@ public class LoginCommand implements BaseCommand<CredentialsDTO> {
             if (player != null) {
                 sessionObject.setAuthenticated(true);
                 sessionObject.setPlayer(player);
-                outputStream.writeObject(new TextMessageDTO("Successfully logged as " + credentials.getLogin()));
+                outputStream.writeObject(new MessageDTO(MessageDTO.Command.SUCCESS ,"Successfully logged as " + credentials.getLogin()));
             } else {
-                sessionObject.setOpened(false);
-                outputStream.writeObject(new TextMessageDTO("Wrong credentials for user " + credentials.getLogin()));
+                sessionObject.setFailedLogins(sessionObject.getFailedLogins()+1);
+                if(sessionObject.getFailedLogins()>2) {
+                    sessionObject.setOpened(false);
+                }
+                outputStream.writeObject(new MessageDTO(MessageDTO.Command.ERROR ,"Wrong credentials for user " + credentials.getLogin()));
             }
         } catch (IOException e) {
             e.printStackTrace();
