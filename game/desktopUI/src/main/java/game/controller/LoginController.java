@@ -1,6 +1,7 @@
 package game.controller;
 
 import client.ClientAPI;
+import game.Navigation;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,7 +27,17 @@ public class LoginController {
     @FXML
     private Label infoLabel;
 
-    private static ClientAPI client = new ClientAPI(); //TODO: pass to controller instead of creating
+    private ClientAPI client;
+
+    private Navigation navigation;
+
+    public void setClient(ClientAPI client) {
+        this.client = client;
+    }
+
+    public void setNavigation(Navigation navigation) {
+        this.navigation = navigation;
+    }
 
     @FXML
     public void close() {
@@ -51,17 +62,11 @@ public class LoginController {
         }
     }
 
-    private void disableLogin(boolean disable) {
-        loginField.setDisable(disable);
-        passwordField.setDisable(disable);
-        loginButton.setDisable(disable);
-    }
-
     @FXML
     public void login(){
         if(client.login(loginField.getText(), passwordField.getText())){
             setInfo("Successful login.");
-            disableLogin(true);
+            navigation.gotoLobby(loginField.getText());
         } else {
             setInfo("Login failed.");
         }
@@ -70,6 +75,12 @@ public class LoginController {
             disableLogin(true);
             setInfo("Disconnected by server.");
         }
+    }
+
+    private void disableLogin(boolean disable) {
+        loginField.setDisable(disable);
+        passwordField.setDisable(disable);
+        loginButton.setDisable(disable);
     }
 
     private void setInfo(String info){

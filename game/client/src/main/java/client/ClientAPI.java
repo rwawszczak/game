@@ -36,6 +36,9 @@ public class ClientAPI {
     }
 
     public boolean isConnected() {
+        if(!client.isSocketConnected()){
+            return false;
+        }
         try {
             client.send(new MessageDTO(HEARTBEAT));
             return isSuccess();

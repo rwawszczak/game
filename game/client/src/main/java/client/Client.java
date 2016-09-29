@@ -59,4 +59,8 @@ class Client {
         MessageDTO logout = new MessageDTO(MessageDTO.Command.LOGOUT);
         send(logout);
     }
+
+    public boolean isSocketConnected() {
+        return socket != null && socket.isConnected();
+    }
 }

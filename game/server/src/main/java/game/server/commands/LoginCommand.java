@@ -19,20 +19,36 @@ public class LoginCommand implements BaseCommand<CredentialsDTO> {
         try {
             final Player player = playerService.login(credentials.getLogin(), credentials.getPassword());
             if (player != null) {
-                sessionObject.setAuthenticated(true);
-                sessionObject.setPlayer(player);
-                outputStream.writeObject(new MessageDTO(MessageDTO.Command.SUCCESS ,"Successfully logged as " + credentials.getLogin()));
-            } else {
-                sessionObject.setFailedLogins(sessionObject.getFailedLogins()+1);
-                if(sessionObject.getFailedLogins()>2) {
-                    sessionObject.setOpened(false);
+                if(sessionObject.isAuthenticated()){
+                    handleAlreadyAuthenticated(outputStream);
+                } else {
+                    handleSuccessfulLogin(outputStream, sessionObject, player);
                 }
-                outputStream.writeObject(new MessageDTO(MessageDTO.Command.ERROR ,"Wrong credentials for user " + credentials.getLogin()));
+            } else {
+                handleWrongCredentials(outputStream, sessionObject);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void handleAlreadyAuthenticated(ObjectOutputStream outputStream) throws IOException {
+        outputStream.writeObject(new MessageDTO(MessageDTO.Command.ERROR ,"User is already authenticated"));
+    }
+
+    private void handleSuccessfulLogin(ObjectOutputStream outputStream, SessionObject sessionObject, Player player) throws IOException {
+        sessionObject.setAuthenticated(true);
+        sessionObject.setPlayer(player);
+        outputStream.writeObject(new MessageDTO(MessageDTO.Command.SUCCESS, "Successfully logged as"));
+    }
+
+    private void handleWrongCredentials(ObjectOutputStream outputStream, SessionObject sessionObject) throws IOException {
+        sessionObject.setFailedLogins(sessionObject.getFailedLogins()+1);
+        if(sessionObject.getFailedLogins()>2) {
+            sessionObject.setOpened(false);
+        }
+        outputStream.writeObject(new MessageDTO(MessageDTO.Command.ERROR ,"Wrong credentials for user"));
     }
 
 }

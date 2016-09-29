@@ -29,7 +29,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.2.0</version>
                 <configuration>
-                    <mainClass>game.Main</mainClass>
+                    <mainClass>game.UI</mainClass>
                 </configuration>
             </plugin>
         </plugins>
