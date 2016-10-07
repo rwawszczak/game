@@ -1,6 +1,7 @@
 package game;
 
 import client.ClientAPI;
+import game.controller.LobbyController;
 import game.controller.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ public class UI extends Application implements Navigation {
 
     private static final String WINDOW_NAME = "Game [Desktop]";
     private static final String LOGIN_FXML = "/login.fxml";
+    private static final String LOBBY_FXML = "/lobby.fxml";
     private static final int LOGIN_WIDTH = 350;
     private static final int LOGIN_HEIGHT = 180;
 
@@ -47,9 +49,10 @@ public class UI extends Application implements Navigation {
 
     public void gotoLobby(String username) {
         try {
-            LoginController login = (LoginController) replaceSceneContent(LOGIN_FXML, 800, 600);
-            login.setClient(client);
-            login.setNavigation(this);
+            LobbyController lobby = (LobbyController) replaceSceneContent(LOBBY_FXML, 800, 600);
+            lobby.setClient(client);
+            lobby.setNavigation(this);
+            lobby.setUserName(username);
             stage.setResizable(true);
         } catch (Exception ex) {
             Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,7 +73,7 @@ public class UI extends Application implements Navigation {
         Scene scene = new Scene(page, width, height);
         stage.setScene(scene);
         stage.sizeToScene();
-        return loader.getController();
+        return  loader.getController();
     }
 
 

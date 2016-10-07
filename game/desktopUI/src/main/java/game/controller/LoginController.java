@@ -1,15 +1,15 @@
 package game.controller;
 
 import client.ClientAPI;
-import game.Navigation;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class LoginController {
+public class LoginController extends BaseController {
     @FXML
     private Button closeButton;
 
@@ -24,24 +24,23 @@ public class LoginController {
 
     @FXML
     private PasswordField passwordField;
+
     @FXML
     private Label infoLabel;
 
+    @FXML
+    private GridPane loginLayout;
+
     private ClientAPI client;
 
-    private Navigation navigation;
-
-    public void setClient(ClientAPI client) {
-        this.client = client;
-    }
-
-    public void setNavigation(Navigation navigation) {
-        this.navigation = navigation;
+    @FXML
+    public void initialize() {
+        setupWindowDragging(loginLayout);
     }
 
     @FXML
     public void close() {
-        if(client.isConnected()){
+        if (client.isConnected()) {
             client.disconnect();
         }
         Stage stage = (Stage) closeButton.getScene().getWindow();
@@ -52,7 +51,7 @@ public class LoginController {
     public void connect() {
         setInfo("Connecting...");
         client.connect("localhost", 4445);
-        if(client.isConnected()){
+        if (client.isConnected()) {
             disableLogin(false);
             connectButton.setDisable(true);
             setInfo("Connected to server.");
@@ -63,18 +62,22 @@ public class LoginController {
     }
 
     @FXML
-    public void login(){
-        if(client.login(loginField.getText(), passwordField.getText())){
+    public void login() {
+        if (client.login(loginField.getText(), passwordField.getText())) {
             setInfo("Successful login.");
             navigation.gotoLobby(loginField.getText());
         } else {
             setInfo("Login failed.");
         }
-        if(!client.isConnected()){
+        if (!client.isConnected()) {
             connectButton.setDisable(false);
             disableLogin(true);
             setInfo("Disconnected by server.");
         }
+    }
+
+    public void setClient(ClientAPI client) {
+        this.client = client;
     }
 
     private void disableLogin(boolean disable) {
@@ -83,7 +86,9 @@ public class LoginController {
         loginButton.setDisable(disable);
     }
 
-    private void setInfo(String info){
+
+    private void setInfo(String info) {
         infoLabel.setText(info);
     }
+
 }
