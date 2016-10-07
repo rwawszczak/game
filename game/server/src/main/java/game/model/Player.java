@@ -1,9 +1,19 @@
 package game.model;
 
 public class Player {
-    private String login;
+    private long id;
+    private String name;
 
-    public Player(String login) {
-        this.login = login;
+    public Player(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }

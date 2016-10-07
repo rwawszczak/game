@@ -3,6 +3,7 @@ package game.server.commands;
 import dto.CredentialsDTO;
 import dto.MessageDTO;
 import game.model.Player;
+import game.server.ServerData;
 import game.server.session.SessionObject;
 import game.services.PlayerServiceInterface;
 import game.services.ServiceProvider;
@@ -40,6 +41,7 @@ public class LoginCommand implements BaseCommand<CredentialsDTO> {
     private void handleSuccessfulLogin(ObjectOutputStream outputStream, SessionObject sessionObject, Player player) throws IOException {
         sessionObject.setAuthenticated(true);
         sessionObject.setPlayer(player);
+        ServerData.getPlayers().put(player.getId(), player);
         outputStream.writeObject(new MessageDTO(MessageDTO.Command.SUCCESS, "Successfully logged as"));
     }
 

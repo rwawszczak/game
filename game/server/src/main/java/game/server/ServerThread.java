@@ -21,12 +21,12 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
+        SessionObject sessionObject = new SessionObject();
         try {
             ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
 
             System.out.println("Connected (connection " + connectionId + ")");
-            SessionObject sessionObject = new SessionObject();
             CommandExecutor commandExecutor = new CommandExecutor();
             while (sessionObject.isOpened()) {
                 DTO data = (DTO) inStream.readObject();
@@ -40,6 +40,9 @@ public class ServerThread extends Thread {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+        if(sessionObject.getPlayer() != null) {
+            ServerData.getPlayers().remove(sessionObject.getPlayer().getId());
         }
     }
 

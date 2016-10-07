@@ -2,12 +2,15 @@ package client;
 
 
 import dto.CredentialsDTO;
+import dto.LightPlayerDTO;
 import dto.MessageDTO;
+import dto.PlayersDTO;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import static dto.MessageDTO.Command.HEARTBEAT;
-import static dto.MessageDTO.Command.SUCCESS;
+import static dto.MessageDTO.Command.*;
 
 public class ClientAPI {
     private Client client = new Client();
@@ -70,5 +73,22 @@ public class ClientAPI {
     private boolean isSuccess() throws IOException, ClassNotFoundException {
         MessageDTO receive = (MessageDTO) client.receive();
         return receive.getCommand() == SUCCESS;
+    }
+
+    public Map<Long, String> getConnectedPlayers(){
+        try {
+            client.send(new MessageDTO(PLAYERLIST));
+            PlayersDTO players = (PlayersDTO)client.receive();
+            Map<Long, String> transformedPlayers = new HashMap<Long, String>();
+            for(LightPlayerDTO player : players.getPlayers()){
+                transformedPlayers.put(player.getId(), player.getName());
+            }
+            return transformedPlayers;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

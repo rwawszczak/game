@@ -22,6 +22,8 @@ public class UI extends Application implements Navigation {
     private static final String LOBBY_FXML = "/lobby.fxml";
     private static final int LOGIN_WIDTH = 350;
     private static final int LOGIN_HEIGHT = 180;
+    private static final int LOBBY_WIDTH = 1024;
+    private static final int LOBBY_HEIGHT = 768;
 
     private Stage stage;
     private ClientAPI client = new ClientAPI();
@@ -49,7 +51,7 @@ public class UI extends Application implements Navigation {
 
     public void gotoLobby(String username) {
         try {
-            LobbyController lobby = (LobbyController) replaceSceneContent(LOBBY_FXML, 800, 600);
+            LobbyController lobby = (LobbyController) replaceSceneContent(LOBBY_FXML, LOBBY_WIDTH, LOBBY_HEIGHT);
             lobby.setClient(client);
             lobby.setNavigation(this);
             lobby.setUserName(username);
