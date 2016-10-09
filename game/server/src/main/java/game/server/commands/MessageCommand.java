@@ -1,9 +1,9 @@
 package game.server.commands;
 
-import dto.LightPlayerDTO;
+import dto.PlayerDTO;
 import dto.MessageDTO;
 import dto.PlayersDTO;
-import game.model.Player;
+import game.model.domain.Player;
 import game.server.ServerData;
 import game.server.session.SessionObject;
 
@@ -27,13 +27,13 @@ public class MessageCommand implements BaseCommand<MessageDTO> {
             }
         } else if(message.getCommand() == PLAYERLIST) {
             try {
-                List<LightPlayerDTO> playerList = new ArrayList<LightPlayerDTO>();
+                List<PlayerDTO> playerList = new ArrayList<PlayerDTO>();
                 for(Player player : ServerData.getPlayers().values()){
                     if(player.getId()!=sessionObject.getPlayer().getId()) {
-                        playerList.add(new LightPlayerDTO(player.getId(), player.getName()));
+                        playerList.add(new PlayerDTO.Builder(player.getId(), player.getName()).build());
                     }
                 }
-                PlayersDTO players = new PlayersDTO(playerList);
+                PlayersDTO players = new PlayersDTO.Builder(playerList).build();
                 outputStream.writeObject(players);
             } catch (IOException e) {
                 e.printStackTrace();

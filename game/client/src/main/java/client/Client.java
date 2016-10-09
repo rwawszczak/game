@@ -10,24 +10,24 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 class Client {
-    Socket socket;
-    ObjectOutputStream outputStream;
-    ObjectInputStream inputStream;
+    private Socket socket;
+    private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
 
     @Deprecated
-    public void communicate(String host, int port) throws IOException, ClassNotFoundException {
+    void communicate(String host, int port) throws IOException, ClassNotFoundException {
         connect(host, port);
         System.out.println("Connected");
 
-        send(new CredentialsDTO("John", "Johnd"));
+        send(new CredentialsDTO.Builder("John", "Johnd").build());
         MessageDTO messageDTO = (MessageDTO) receive();
         System.out.println(messageDTO.getText());
 
-        send(new CredentialsDTO("John", "Johnd"));
+        send(new CredentialsDTO.Builder("John", "Johnd").build());
         messageDTO = (MessageDTO) receive();
         System.out.println(messageDTO.getText());
 
-        send(new CredentialsDTO("John", "Johnm"));
+        send(new CredentialsDTO.Builder("John", "Johnm").build());
         messageDTO = (MessageDTO) receive();
         System.out.println(messageDTO.getText());
 
@@ -35,21 +35,21 @@ class Client {
         disconnect();
     }
 
-    public DTO receive() throws IOException, ClassNotFoundException {
+    DTO receive() throws IOException, ClassNotFoundException {
         return (DTO) inputStream.readObject();
     }
 
-    public void send(DTO data) throws IOException {
+    void send(DTO data) throws IOException {
         outputStream.writeObject(data);
     }
 
-    public void connect(String host, int port) throws IOException {
+    void connect(String host, int port) throws IOException {
         socket = new Socket(host, port);
         outputStream = new ObjectOutputStream(socket.getOutputStream());
         inputStream = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void disconnect() throws IOException {
+    void disconnect() throws IOException {
         socket.close();
         inputStream.close();
         outputStream.close();
@@ -60,7 +60,7 @@ class Client {
         send(logout);
     }
 
-    public boolean isSocketConnected() {
+    boolean isSocketConnected() {
         return socket != null && socket.isConnected();
     }
 }

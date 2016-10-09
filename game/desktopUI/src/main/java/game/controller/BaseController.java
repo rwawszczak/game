@@ -2,8 +2,11 @@ package game.controller;
 
 import game.Navigation;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 public abstract class BaseController {
     protected Navigation navigation;
@@ -13,6 +16,10 @@ public abstract class BaseController {
 
     public void setNavigation(Navigation navigation) {
         this.navigation = navigation;
+    }
+
+    public void setDragable(boolean dragable) {
+        this.dragable = dragable;
     }
 
     protected void setupWindowDragging(final Pane layout) {
@@ -34,9 +41,5 @@ public abstract class BaseController {
                 }
             }
         });
-    }
-
-    public void setDragable(boolean dragable) {
-        this.dragable = dragable;
     }
 }

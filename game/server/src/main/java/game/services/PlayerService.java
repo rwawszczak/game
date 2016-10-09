@@ -1,6 +1,6 @@
 package game.services;
 
-import game.model.Player;
+import game.model.domain.Player;
 
 public class PlayerService implements PlayerServiceInterface { //TODO: this is mock implementation
     private long currentId = 0;

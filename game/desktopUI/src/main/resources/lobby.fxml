@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.LobbyController">
+<BorderPane id="mainPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@darkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.LobbyController">
    <top>
        <GridPane fx:id="headerPanel" BorderPane.alignment="CENTER">
            <columnConstraints>
@@ -20,9 +20,20 @@
                </font>
            </Label>
            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
-               <Button fx:id="maximizeButton" layoutX="36.0" layoutY="10.0" mnemonicParsing="false"
-                       onAction="#toggleMaximized" text="/\"/>
-               <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" text="X"/>
+               <Button fx:id="maximizeButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0"
+                       mnemonicParsing="false" onAction="#toggleMaximized" prefHeight="20.0" prefWidth="20.0"
+                       styleClass="headerButton" text="↑" HBox.hgrow="NEVER">
+                   <font>
+                       <Font size="10.0"/>
+                   </font>
+               </Button>
+               <Button fx:id="closeButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0"
+                       mnemonicParsing="false" onAction="#close" prefHeight="20.0" prefWidth="20.0"
+                       styleClass="headerButton" text="X" HBox.hgrow="NEVER">
+                   <font>
+                       <Font size="10.0"/>
+                   </font>
+               </Button>
            </HBox>
        </GridPane>
    </top>

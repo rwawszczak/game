@@ -1,6 +1,6 @@
 package game.server.session;
 
-import game.model.Player;
+import game.model.domain.Player;
 
 public class SessionObject {
     private boolean authenticated = false;

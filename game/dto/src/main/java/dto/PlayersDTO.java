@@ -3,13 +3,25 @@ package dto;
 import java.util.List;
 
 public class PlayersDTO extends DTO {
-    private List<LightPlayerDTO> players;
+    private List<PlayerDTO> players;
 
-    public PlayersDTO(List<LightPlayerDTO> players) {
+    private PlayersDTO(List<PlayerDTO> players) {
         this.players = players;
     }
 
-    public List<LightPlayerDTO> getPlayers() {
+    public List<PlayerDTO> getPlayers() {
         return players;
+    }
+
+    public static class Builder {
+        private PlayersDTO dto;
+
+        public Builder(List<PlayerDTO> players) {
+            dto = new PlayersDTO(players);
+        }
+
+        public PlayersDTO build() {
+            return dto;
+        }
     }
 }

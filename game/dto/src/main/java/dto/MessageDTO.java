@@ -1,7 +1,7 @@
 package dto;
 
 public class MessageDTO extends DTO {
-    public enum Command{
+    public enum Command {
         SUCCESS, ERROR, LOGOUT, HEARTBEAT, PLAYERLIST
     }
 
@@ -12,17 +12,29 @@ public class MessageDTO extends DTO {
         this.command = command;
     }
 
-    public MessageDTO(Command command, String text) {
-        this.command = command;
-        this.text = text;
-    }
-
     public Command getCommand() {
         return command;
     }
 
     public String getText() {
         return text;
+    }
+
+    public static class Builder {
+        private MessageDTO dto;
+
+        public Builder(Command command) {
+            dto = new MessageDTO(command);
+        }
+
+        public Builder withText(String text) {
+            dto.text = text;
+            return this;
+        }
+
+        public MessageDTO build() {
+            return dto;
+        }
     }
 
 }

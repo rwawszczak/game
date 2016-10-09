@@ -1,6 +1,8 @@
 package game;
 
+import client.model.domain.Player;
+
 public interface Navigation {
     void gotoLogin();
-    void gotoLobby(String username);
+    void gotoLobby(Player logged);
 }

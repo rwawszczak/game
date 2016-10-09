@@ -1,6 +1,6 @@
 package game.server;
 
-import game.model.Player;
+import game.model.domain.Player;
 
 import java.util.Collections;
 import java.util.HashMap;

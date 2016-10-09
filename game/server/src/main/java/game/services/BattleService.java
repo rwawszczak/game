@@ -1,6 +1,6 @@
 package game.services;
 
-import game.model.Battle;
+import game.model.domain.Battle;
 
 import java.util.HashMap;
 import java.util.Map;

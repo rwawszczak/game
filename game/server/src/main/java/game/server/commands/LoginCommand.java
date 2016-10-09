@@ -2,7 +2,9 @@ package game.server.commands;
 
 import dto.CredentialsDTO;
 import dto.MessageDTO;
-import game.model.Player;
+import dto.PlayerDTO;
+import game.model.assemblers.PlayerAssembler;
+import game.model.domain.Player;
 import game.server.ServerData;
 import game.server.session.SessionObject;
 import game.services.PlayerServiceInterface;
@@ -20,7 +22,7 @@ public class LoginCommand implements BaseCommand<CredentialsDTO> {
         try {
             final Player player = playerService.login(credentials.getLogin(), credentials.getPassword());
             if (player != null) {
-                if(sessionObject.isAuthenticated()){
+                if (sessionObject.isAuthenticated()) {
                     handleAlreadyAuthenticated(outputStream);
                 } else {
                     handleSuccessfulLogin(outputStream, sessionObject, player);
@@ -35,22 +37,29 @@ public class LoginCommand implements BaseCommand<CredentialsDTO> {
     }
 
     private void handleAlreadyAuthenticated(ObjectOutputStream outputStream) throws IOException {
-        outputStream.writeObject(new MessageDTO(MessageDTO.Command.ERROR ,"User is already authenticated"));
+        outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.ERROR)
+                .withText("User is already authenticated")
+                .build());
     }
 
     private void handleSuccessfulLogin(ObjectOutputStream outputStream, SessionObject sessionObject, Player player) throws IOException {
         sessionObject.setAuthenticated(true);
         sessionObject.setPlayer(player);
         ServerData.getPlayers().put(player.getId(), player);
-        outputStream.writeObject(new MessageDTO(MessageDTO.Command.SUCCESS, "Successfully logged as"));
+        outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.SUCCESS)
+                .withText("Successfully logged as")
+                .build());
+        outputStream.writeObject(PlayerAssembler.toDTO(player));
     }
 
     private void handleWrongCredentials(ObjectOutputStream outputStream, SessionObject sessionObject) throws IOException {
-        sessionObject.setFailedLogins(sessionObject.getFailedLogins()+1);
-        if(sessionObject.getFailedLogins()>2) {
+        sessionObject.setFailedLogins(sessionObject.getFailedLogins() + 1);
+        if (sessionObject.getFailedLogins() > 2) {
             sessionObject.setOpened(false);
         }
-        outputStream.writeObject(new MessageDTO(MessageDTO.Command.ERROR ,"Wrong credentials for user"));
+        outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.ERROR)
+                .withText("Wrong credentials for user")
+                .build());
     }
 
 }

@@ -1,12 +1,17 @@
 package game.controller;
 
 import client.ClientAPI;
+import client.model.domain.Player;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,14 +30,38 @@ public class LobbyController extends BaseController {
     private Label headerLabel;
 
     @FXML
-    private ListView connectedList;
+    private ListView<Player> connectedList;
 
     private ClientAPI client;
-    private Map<Long, String> connectedPlayers = new HashMap<Long, String>();
+    private ObservableList<Player> connectedPlayers = FXCollections.observableArrayList();
+    private Player loggedAs;
 
     @FXML
     public void initialize() {
         setupWindowDragging(headerPanel);
+        setupConnectedList();
+    }
+
+    private void setupConnectedList() {
+        connectedList.setCellFactory(new Callback<ListView<Player>, ListCell<Player>>() {
+            @Override
+            public ListCell<Player> call(ListView<Player> param) {
+                ListCell<Player> cell = new ListCell<Player>(){
+
+                    @Override
+                    protected void updateItem(Player p, boolean bln) {
+                        super.updateItem(p, bln);
+                        if (p != null) {
+                            setText(p.getName());
+                        }
+                    }
+
+                };
+
+                return cell;
+            }
+        });
+        connectedList.setItems(connectedPlayers);
     }
 
     @FXML
@@ -50,24 +79,23 @@ public class LobbyController extends BaseController {
         if (stage.isMaximized()) {
             stage.setMaximized(false);
             setDragable(true);
-            maximizeButton.setText("/\\");
+            maximizeButton.setText("↑");
         } else {
             stage.setMaximized(true);
             setDragable(false);
-            maximizeButton.setText("\\/");
+            maximizeButton.setText("↓");
         }
     }
 
     @FXML
-    public void refreshConnected(){
+    public void refreshConnected() {
         connectedPlayers.clear();
-        connectedPlayers.putAll(client.getConnectedPlayers());
-        connectedList.getItems().clear();
-        connectedList.getItems().addAll(connectedPlayers.values());
+        connectedPlayers.addAll(client.getConnectedPlayers());
     }
 
-    public void setUserName(String userName) {
-        headerLabel.setText("Logged as " + userName);
+    public void setLoggedPlayer(Player loggedPlayer) {
+        loggedAs = loggedPlayer;
+        headerLabel.setText("Logged as " + loggedPlayer.getName());
     }
 
     public void setClient(ClientAPI client) {

@@ -1,6 +1,7 @@
 package game;
 
 import client.ClientAPI;
+import client.model.domain.Player;
 import game.controller.LobbyController;
 import game.controller.LoginController;
 import javafx.application.Application;
@@ -21,7 +22,7 @@ public class UI extends Application implements Navigation {
     private static final String LOGIN_FXML = "/login.fxml";
     private static final String LOBBY_FXML = "/lobby.fxml";
     private static final int LOGIN_WIDTH = 350;
-    private static final int LOGIN_HEIGHT = 180;
+    private static final int LOGIN_HEIGHT = 210;
     private static final int LOBBY_WIDTH = 1024;
     private static final int LOBBY_HEIGHT = 768;
 
@@ -49,13 +50,14 @@ public class UI extends Application implements Navigation {
         }
     }
 
-    public void gotoLobby(String username) {
+    public void gotoLobby(Player logged) {
         try {
             LobbyController lobby = (LobbyController) replaceSceneContent(LOBBY_FXML, LOBBY_WIDTH, LOBBY_HEIGHT);
             lobby.setClient(client);
             lobby.setNavigation(this);
-            lobby.setUserName(username);
+            lobby.setLoggedPlayer(logged);
             stage.setResizable(true);
+            stage.centerOnScreen();
         } catch (Exception ex) {
             Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
         }

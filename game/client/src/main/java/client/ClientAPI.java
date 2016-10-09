@@ -1,13 +1,16 @@
 package client;
 
 
+import client.model.assemblers.PlayerAssembler;
+import client.model.domain.Player;
 import dto.CredentialsDTO;
-import dto.LightPlayerDTO;
 import dto.MessageDTO;
+import dto.PlayerDTO;
 import dto.PlayersDTO;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static dto.MessageDTO.Command.*;
@@ -39,7 +42,7 @@ public class ClientAPI {
     }
 
     public boolean isConnected() {
-        if(!client.isSocketConnected()){
+        if (!client.isSocketConnected()) {
             return false;
         }
         try {
@@ -55,11 +58,15 @@ public class ClientAPI {
         return false;
     }
 
-    public boolean login(String name, String password) {
-        CredentialsDTO credentials = new CredentialsDTO(name, password);
+    public Player login(String name, String password) {
+        CredentialsDTO credentials = new CredentialsDTO.Builder(name, password).build();
         try {
             client.send(credentials);
-            return isSuccess();
+            if (isSuccess()) {
+                PlayerDTO playerDTO = (PlayerDTO) client.receive();
+                Player player = PlayerAssembler.toDomainObject(playerDTO);
+                return player;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -67,7 +74,7 @@ public class ClientAPI {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     private boolean isSuccess() throws IOException, ClassNotFoundException {
@@ -75,15 +82,11 @@ public class ClientAPI {
         return receive.getCommand() == SUCCESS;
     }
 
-    public Map<Long, String> getConnectedPlayers(){
+    public List<Player> getConnectedPlayers() {
         try {
             client.send(new MessageDTO(PLAYERLIST));
-            PlayersDTO players = (PlayersDTO)client.receive();
-            Map<Long, String> transformedPlayers = new HashMap<Long, String>();
-            for(LightPlayerDTO player : players.getPlayers()){
-                transformedPlayers.put(player.getId(), player.getName());
-            }
-            return transformedPlayers;
+            PlayersDTO players = (PlayersDTO) client.receive();
+            return PlayerAssembler.toDomainObjects(players);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

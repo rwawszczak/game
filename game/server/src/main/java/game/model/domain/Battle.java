@@ -1,4 +1,4 @@
-package game.model;
+package game.model.domain;
 
 public class Battle {
     private long id;
