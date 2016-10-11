@@ -1,16 +1,20 @@
 package game;
 
 import client.ClientAPI;
+import client.listeners.SuccessListener;
 import client.model.domain.Player;
 import game.controller.LobbyController;
 import game.controller.LoginController;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -30,13 +34,14 @@ public class UI extends Application implements Navigation {
     private ClientAPI client = new ClientAPI();
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         stage.setOpacity(0.9);
         stage.setTitle(WINDOW_NAME);
         stage.initStyle(StageStyle.UNDECORATED);
         gotoLogin();
         stage.show();
+        setupOnCloseRequest();
     }
 
     public void gotoLogin() {
@@ -54,6 +59,7 @@ public class UI extends Application implements Navigation {
         try {
             LobbyController lobby = (LobbyController) replaceSceneContent(LOBBY_FXML, LOBBY_WIDTH, LOBBY_HEIGHT);
             lobby.setClient(client);
+            lobby.initWithClient();
             lobby.setNavigation(this);
             lobby.setLoggedPlayer(logged);
             stage.setResizable(true);
@@ -61,6 +67,11 @@ public class UI extends Application implements Navigation {
         } catch (Exception ex) {
             Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void close() {
+        client.isConnected(getSuccessCloseListener());
     }
 
     private Object replaceSceneContent(String fxml, int width, int height) throws Exception {
@@ -77,11 +88,44 @@ public class UI extends Application implements Navigation {
         Scene scene = new Scene(page, width, height);
         stage.setScene(scene);
         stage.sizeToScene();
-        return  loader.getController();
+        return loader.getController();
     }
 
+    private void setupOnCloseRequest() {
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                client.isConnected(getSuccessCloseListener());
+            }
+        });
+    }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private void closeStage(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                stage.close();
+            }
+        });
+    }
+
+
+    private SuccessListener getSuccessCloseListener() {
+        return new SuccessListener() {
+            @Override
+            public void onSuccess() {
+                client.disconnect();
+                closeStage();
+            }
+
+            @Override
+            public void onError() {
+                closeStage();
+            }
+        };
     }
 }

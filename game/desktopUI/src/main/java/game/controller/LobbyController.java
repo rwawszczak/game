@@ -1,7 +1,8 @@
 package game.controller;
 
-import client.ClientAPI;
+import client.listeners.PlayerListListener;
 import client.model.domain.Player;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,13 +14,9 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class LobbyController extends BaseController {
-    @FXML
-    private Button closeButton;
-
     @FXML
     private Button maximizeButton;
 
@@ -32,45 +29,14 @@ public class LobbyController extends BaseController {
     @FXML
     private ListView<Player> connectedList;
 
-    private ClientAPI client;
     private ObservableList<Player> connectedPlayers = FXCollections.observableArrayList();
     private Player loggedAs;
+    private PlayerListListener playerListListener = new LobbyPlayerListListener();
 
     @FXML
     public void initialize() {
         setupWindowDragging(headerPanel);
         setupConnectedList();
-    }
-
-    private void setupConnectedList() {
-        connectedList.setCellFactory(new Callback<ListView<Player>, ListCell<Player>>() {
-            @Override
-            public ListCell<Player> call(ListView<Player> param) {
-                ListCell<Player> cell = new ListCell<Player>(){
-
-                    @Override
-                    protected void updateItem(Player p, boolean bln) {
-                        super.updateItem(p, bln);
-                        if (p != null) {
-                            setText(p.getName());
-                        }
-                    }
-
-                };
-
-                return cell;
-            }
-        });
-        connectedList.setItems(connectedPlayers);
-    }
-
-    @FXML
-    public void close() {
-        if (client.isConnected()) {
-            client.disconnect();
-        }
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
     }
 
     @FXML
@@ -90,7 +56,7 @@ public class LobbyController extends BaseController {
     @FXML
     public void refreshConnected() {
         connectedPlayers.clear();
-        connectedPlayers.addAll(client.getConnectedPlayers());
+        client.promptForConnectedPlayers();
     }
 
     public void setLoggedPlayer(Player loggedPlayer) {
@@ -98,8 +64,60 @@ public class LobbyController extends BaseController {
         headerLabel.setText("Logged as " + loggedPlayer.getName());
     }
 
-    public void setClient(ClientAPI client) {
-        this.client = client;
+    private void setupConnectedList() {
+        connectedList.setCellFactory(new Callback<ListView<Player>, ListCell<Player>>() {
+            @Override
+            public ListCell<Player> call(ListView<Player> param) {
+
+                return new ListCell<Player>() {
+
+                    @Override
+                    protected void updateItem(Player p, boolean bln) {
+                        super.updateItem(p, bln);
+                        if (p != null) {
+                            setText(p.getName());
+                        }
+                    }
+
+                };
+            }
+        });
+        connectedList.setItems(connectedPlayers);
+    }
+
+    public void initWithClient(){
+        registerClisentListeners();
         refreshConnected();
+    }
+
+    private void unregisterClientListeners() {
+        client.unregisterListener(playerListListener);
+    }
+
+    private void registerClisentListeners() {
+        client.registerListener(playerListListener);
+    }
+
+    private class LobbyPlayerListListener extends PlayerListListener {
+        @Override
+        public void handlePlayers(final List<Player> players) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    connectedPlayers.clear();
+                    for (Player player : players) {
+                        if (player.getId() != loggedAs.getId()) {
+                            connectedPlayers.add(player);
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean oneTimeOnly() {
+            return false;
+        }
+
     }
 }

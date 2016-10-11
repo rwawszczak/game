@@ -2,6 +2,7 @@ package game.server;
 
 import dto.DTO;
 import game.server.commands.CommandExecutor;
+import game.server.session.ServerBroadcasting;
 import game.server.session.SessionObject;
 
 import java.io.EOFException;
@@ -13,6 +14,7 @@ import java.net.Socket;
 public class ServerThread extends Thread {
     private int connectionId;
     private Socket socket;
+    private ObjectOutputStream outputStream;
 
     public ServerThread(Socket socket, int connectionId) {
         this.socket = socket;
@@ -24,7 +26,7 @@ public class ServerThread extends Thread {
         SessionObject sessionObject = new SessionObject();
         try {
             ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+            outputStream = new ObjectOutputStream(socket.getOutputStream());
 
             System.out.println("Connected (connection " + connectionId + ")");
             CommandExecutor commandExecutor = new CommandExecutor();
@@ -35,12 +37,25 @@ public class ServerThread extends Thread {
             System.out.println("Closing connection " + connectionId);
             closeAll(inStream, outputStream);
         } catch (EOFException e){
-            System.out.println("Client ended connection.");
+            System.out.println("Client terminated connection.");
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        finally {
+            cleanup(sessionObject);
+            ServerBroadcasting.broadcastConnectedUsers();
+        }
+    }
+
+    public void send(DTO dto) throws IOException {
+        outputStream.writeObject(dto);
+    }
+
+    private void cleanup(SessionObject sessionObject) {
+        ServerData.getThreads().remove(this);
         if(sessionObject.getPlayer() != null) {
             ServerData.getPlayers().remove(sessionObject.getPlayer().getId());
         }

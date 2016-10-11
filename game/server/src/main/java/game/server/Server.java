@@ -21,6 +21,7 @@ public class Server {
             while (true) {
                 Socket socket = serverSocket.accept();
                 ServerThread serverThread = new ServerThread(socket, ++connections);
+                ServerData.getThreads().add(serverThread);
                 serverThread.start();
             }
 

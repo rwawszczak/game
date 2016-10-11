@@ -1,15 +1,15 @@
 package game.controller;
 
+import client.ClientAPI;
 import game.Navigation;
 import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
+import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 
 public abstract class BaseController {
     protected Navigation navigation;
+    protected ClientAPI client;
     private double xOffset = 0;
     private double yOffset = 0;
     private boolean dragable = true;
@@ -20,6 +20,10 @@ public abstract class BaseController {
 
     public void setDragable(boolean dragable) {
         this.dragable = dragable;
+    }
+
+    public void setClient(ClientAPI client) {
+        this.client = client;
     }
 
     protected void setupWindowDragging(final Pane layout) {
@@ -42,4 +46,10 @@ public abstract class BaseController {
             }
         });
     }
+
+    @FXML
+    public void close() {
+        navigation.close();
+    }
+
 }

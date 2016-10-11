@@ -1,34 +1,30 @@
 package client;
 
 
-import client.model.assemblers.PlayerAssembler;
-import client.model.domain.Player;
+import client.listeners.Listener;
+import client.listeners.LoginListener;
+import client.listeners.PlayerListListener;
+import client.listeners.SuccessListener;
 import dto.CredentialsDTO;
 import dto.MessageDTO;
-import dto.PlayerDTO;
-import dto.PlayersDTO;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import static dto.MessageDTO.Command.*;
+import static dto.MessageDTO.Command.HEARTBEAT;
+import static dto.MessageDTO.Command.PLAYERLIST;
 
 public class ClientAPI {
     private Client client = new Client();
 
 
-    public boolean connect(String host, int port) {
+    public void connect(String host, int port) {
         try {
             client.connect(host, port);
-            return true;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     public boolean disconnect() {
@@ -41,57 +37,61 @@ public class ClientAPI {
         return false;
     }
 
-    public boolean isConnected() {
+    public void isConnected(SuccessListener listener) {
         if (!client.isSocketConnected()) {
-            return false;
+            listener.onError();
+        } else {
+            try {
+                client.registerListener(listener);
+                client.send(new MessageDTO(HEARTBEAT)); //TODO: comes there when server thread fails on exception before instead of go to !client.isSocketConnected()
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        try {
-            client.send(new MessageDTO(HEARTBEAT));
-            return isSuccess();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
-    public Player login(String name, String password) {
+    public void registerListener(Listener listener) {
+        client.registerListener(listener);
+    }
+
+    public void unregisterListener(Listener listener) {
+        client.unregisterListener(listener);
+    }
+
+    public void login(String name, String password, final LoginListener listener) {
         CredentialsDTO credentials = new CredentialsDTO.Builder(name, password).build();
         try {
+            client.registerListener(new SuccessListener() {
+                @Override
+                public void onSuccess() {
+                    client.registerListener(listener);
+                }
+
+                @Override
+                public void onError() {
+                    listener.handlePlayer(null);
+                }
+            });
             client.send(credentials);
-            if (isSuccess()) {
-                PlayerDTO playerDTO = (PlayerDTO) client.receive();
-                Player player = PlayerAssembler.toDomainObject(playerDTO);
-                return player;
-            }
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    private boolean isSuccess() throws IOException, ClassNotFoundException {
-        MessageDTO receive = (MessageDTO) client.receive();
-        return receive.getCommand() == SUCCESS;
+    public void getConnectedPlayers(PlayerListListener listener) {
+        client.registerListener(listener);
+        promptForConnectedPlayers();
     }
 
-    public List<Player> getConnectedPlayers() {
+    public void promptForConnectedPlayers() {
         try {
             client.send(new MessageDTO(PLAYERLIST));
-            PlayersDTO players = (PlayersDTO) client.receive();
-            return PlayerAssembler.toDomainObjects(players);
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
-        return null;
     }
 }

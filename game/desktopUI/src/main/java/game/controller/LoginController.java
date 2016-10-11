@@ -1,7 +1,10 @@
 package game.controller;
 
-import client.ClientAPI;
+import client.listeners.DisconnectedListener;
+import client.listeners.LoginListener;
+import client.listeners.SuccessListener;
 import client.model.domain.Player;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -13,12 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 public class LoginController extends BaseController {
-    @FXML
-    private Button closeButton;
-
     @FXML
     private Button loginButton;
 
@@ -42,8 +41,8 @@ public class LoginController extends BaseController {
 
     @FXML
     private GridPane loginLayout;
+    private DisconnectedListener disconnectedListener = new LoginDisconnectedListener();
 
-    private ClientAPI client;
 
     @FXML
     public void initialize() {
@@ -53,50 +52,57 @@ public class LoginController extends BaseController {
     }
 
     @FXML
-    public void close() {
-        if (client.isConnected()) {
-            client.disconnect();
-        }
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
-    }
-
-    @FXML
     public void connect() {
         setInfo("Connecting...");
         client.connect(serverField.getText(), Integer.parseInt(portField.getText()));
-        if (client.isConnected()) {
-            disableLogin(false);
-            serverField.setDisable(true);
-            portField.setDisable(true);
-            connectButton.setDisable(true);
-            setInfo("Connected to server.");
-        } else {
-            disableLogin(true);
-            setInfo("Server is not responding.");
-        }
+        client.isConnected(new SuccessListener() {
+            @Override
+            public void onSuccess() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        disableLogin(false);
+                        serverField.setDisable(true);
+                        portField.setDisable(true);
+                        connectButton.setDisable(true);
+                        setInfo("Connected to server.");
+                        client.registerListener(disconnectedListener);
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        disableLogin(true);
+                        setInfo("Server is not responding.");
+                    }
+                });
+            }
+        });
     }
 
     @FXML
     public void login() {
-        Player logged = client.login(loginField.getText(), passwordField.getText());
-        if (logged != null) {
-            setInfo("Successful login.");
-            navigation.gotoLobby(logged);
-        } else {
-            setInfo("Login failed.");
-        }
-        if (!client.isConnected()) {
-            serverField.setDisable(false);
-            portField.setDisable(false);
-            connectButton.setDisable(false);
-            disableLogin(true);
-            setInfo("Disconnected by server.");
-        }
-    }
-
-    public void setClient(ClientAPI client) {
-        this.client = client;
+        client.login(loginField.getText(), passwordField.getText(), new LoginListener() {
+            @Override
+            public void handlePlayer(final Player player) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (player != null) {
+                            setInfo("Successful login.");
+                            client.unregisterListener(disconnectedListener);
+                            navigation.gotoLobby(player);
+                        } else {
+                            setInfo("Login failed.");
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void disableLogin(boolean disable) {
@@ -113,7 +119,7 @@ public class LoginController extends BaseController {
         loginLayout.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.ESCAPE){
+                if (event.getCode() == KeyCode.ESCAPE) {
                     close();
                 }
             }
@@ -135,7 +141,7 @@ public class LoginController extends BaseController {
         portField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(newValue.length() > 4){
+                if (newValue.length() > 4) {
                     portField.setText(oldValue);
                 } else if (!newValue.matches("\\d*")) {
                     portField.setText(newValue.replaceAll("[^\\d]", ""));
@@ -144,4 +150,20 @@ public class LoginController extends BaseController {
         });
     }
 
+    private class LoginDisconnectedListener extends DisconnectedListener {
+        @Override
+        public void onDisconnected() {
+            System.out.println("handling disconnect.");
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    serverField.setDisable(false);
+                    portField.setDisable(false);
+                    connectButton.setDisable(false);
+                    disableLogin(true);
+                    setInfo("Disconnected by server.");
+                }
+            });
+        }
+    }
 }

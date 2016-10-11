@@ -2,10 +2,10 @@ package game.server.commands;
 
 import dto.CredentialsDTO;
 import dto.MessageDTO;
-import dto.PlayerDTO;
 import game.model.assemblers.PlayerAssembler;
 import game.model.domain.Player;
 import game.server.ServerData;
+import game.server.session.ServerBroadcasting;
 import game.server.session.SessionObject;
 import game.services.PlayerServiceInterface;
 import game.services.ServiceProvider;
@@ -47,19 +47,25 @@ public class LoginCommand implements BaseCommand<CredentialsDTO> {
         sessionObject.setPlayer(player);
         ServerData.getPlayers().put(player.getId(), player);
         outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.SUCCESS)
-                .withText("Successfully logged as")
+                .withText("Successfully logged as" + player.getName())
                 .build());
         outputStream.writeObject(PlayerAssembler.toDTO(player));
+
+        ServerBroadcasting.broadcastConnectedUsers();
     }
 
     private void handleWrongCredentials(ObjectOutputStream outputStream, SessionObject sessionObject) throws IOException {
         sessionObject.setFailedLogins(sessionObject.getFailedLogins() + 1);
         if (sessionObject.getFailedLogins() > 2) {
             sessionObject.setOpened(false);
+            outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.DISCONNECTED)
+                    .withText("Wrong credentials for user")
+                    .build());
+        } else {
+            outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.ERROR)
+                    .withText("Wrong credentials for user")
+                    .build());
         }
-        outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.ERROR)
-                .withText("Wrong credentials for user")
-                .build());
     }
 
 }
