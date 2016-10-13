@@ -111,7 +111,7 @@ public class LoginController extends BaseController {
         loginButton.setDisable(disable);
     }
 
-    private void setInfo(String info) {
+    public void setInfo(String info) {
         infoLabel.setText(info);
     }
 

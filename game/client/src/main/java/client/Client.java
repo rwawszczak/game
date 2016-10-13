@@ -1,7 +1,6 @@
 package client;
 
 import client.listeners.Listener;
-import dto.CredentialsDTO;
 import dto.DTO;
 import dto.MessageDTO;
 
@@ -17,27 +16,7 @@ class Client {
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private Receiver receiver;
-
-    @Deprecated
-    void communicate(String host, int port) throws IOException, ClassNotFoundException {
-        connect(host, port);
-        System.out.println("Connected");
-
-        send(new CredentialsDTO.Builder("John", "Johnd").build());
-        MessageDTO messageDTO = (MessageDTO) receive();
-        System.out.println(messageDTO.getText());
-
-        send(new CredentialsDTO.Builder("John", "Johnd").build());
-        messageDTO = (MessageDTO) receive();
-        System.out.println(messageDTO.getText());
-
-        send(new CredentialsDTO.Builder("John", "Johnm").build());
-        messageDTO = (MessageDTO) receive();
-        System.out.println(messageDTO.getText());
-
-        logout();
-        disconnect();
-    }
+    private Runnable disconnectAction;
 
     public void registerListener(Listener listener) {
         receiver.registerListener(listener);
@@ -47,14 +26,14 @@ class Client {
         receiver.unregisterListener(listener);
     }
 
+    public void setPerformOnDisconnectAction(Runnable action) {
+        this.disconnectAction = action;
+    }
+
     public List<Listener> getListeners() {
         return receiver.getListeners();
     }
 
-    @Deprecated
-    DTO receive() throws IOException, ClassNotFoundException {
-        return (DTO) inputStream.readObject();
-    }
 
     void send(DTO data) throws IOException {
         outputStream.writeObject(data);
@@ -67,7 +46,7 @@ class Client {
             inputStream = new ObjectInputStream(socket.getInputStream());
             receiver = new Receiver(inputStream, new OnDisconnectedMessage());
             receiver.start();
-        } catch (ConnectException e){
+        } catch (ConnectException e) {
             e.printStackTrace();
         }
     }
@@ -93,14 +72,16 @@ class Client {
         return socket != null && socket.isConnected() && !socket.isClosed();
     }
 
-    private class OnDisconnectedMessage implements Runnable{
+    private class OnDisconnectedMessage implements Runnable {
         @Override
         public void run() {
             try {
                 closeConnection();
+                if (disconnectAction != null) {
+                    disconnectAction.run();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
-
             }
         }
     }

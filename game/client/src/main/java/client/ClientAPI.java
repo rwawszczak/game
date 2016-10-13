@@ -3,7 +3,6 @@ package client;
 
 import client.listeners.Listener;
 import client.listeners.LoginListener;
-import client.listeners.PlayerListListener;
 import client.listeners.SuccessListener;
 import dto.CredentialsDTO;
 import dto.MessageDTO;
@@ -43,7 +42,7 @@ public class ClientAPI {
         } else {
             try {
                 client.registerListener(listener);
-                client.send(new MessageDTO(HEARTBEAT)); //TODO: comes there when server thread fails on exception before instead of go to !client.isSocketConnected()
+                client.send(new MessageDTO(HEARTBEAT));
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -82,9 +81,8 @@ public class ClientAPI {
         }
     }
 
-    public void getConnectedPlayers(PlayerListListener listener) {
-        client.registerListener(listener);
-        promptForConnectedPlayers();
+    public void setPerformOnDisconnectAction(Runnable action) {
+        client.setPerformOnDisconnectAction(action);
     }
 
     public void promptForConnectedPlayers() {

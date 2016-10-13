@@ -15,6 +15,7 @@ public class ServerThread extends Thread {
     private int connectionId;
     private Socket socket;
     private ObjectOutputStream outputStream;
+    private ObjectInputStream inStream;
 
     public ServerThread(Socket socket, int connectionId) {
         this.socket = socket;
@@ -25,7 +26,7 @@ public class ServerThread extends Thread {
     public void run() {
         SessionObject sessionObject = new SessionObject();
         try {
-            ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
+            inStream = new ObjectInputStream(socket.getInputStream());
             outputStream = new ObjectOutputStream(socket.getOutputStream());
 
             System.out.println("Connected (connection " + connectionId + ")");
@@ -35,7 +36,6 @@ public class ServerThread extends Thread {
                 commandExecutor.execute(data, outputStream, sessionObject);
             }
             System.out.println("Closing connection " + connectionId);
-            closeAll(inStream, outputStream);
         } catch (EOFException e){
             System.out.println("Client terminated connection.");
             e.printStackTrace();
@@ -59,9 +59,14 @@ public class ServerThread extends Thread {
         if(sessionObject.getPlayer() != null) {
             ServerData.getPlayers().remove(sessionObject.getPlayer().getId());
         }
+        try {
+            closeAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void closeAll(ObjectInputStream inStream, ObjectOutputStream outputStream) throws IOException {
+    private void closeAll() throws IOException {
         inStream.close();
         outputStream.close();
         socket.close();

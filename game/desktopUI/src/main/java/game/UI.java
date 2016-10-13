@@ -39,23 +39,26 @@ public class UI extends Application implements Navigation {
         stage.setOpacity(0.9);
         stage.setTitle(WINDOW_NAME);
         stage.initStyle(StageStyle.UNDECORATED);
+        client.setPerformOnDisconnectAction(new OnDisconnectAction());
         gotoLogin();
         stage.show();
         setupOnCloseRequest();
     }
 
-    public void gotoLogin() {
+    public LoginController gotoLogin() {
         try {
             LoginController login = (LoginController) replaceSceneContent(LOGIN_FXML, LOGIN_WIDTH, LOGIN_HEIGHT);
             login.setClient(client);
             login.setNavigation(this);
             stage.setResizable(false);
+            return login;
         } catch (Exception ex) {
             Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
-    public void gotoLobby(Player logged) {
+    public LobbyController gotoLobby(Player logged) {
         try {
             LobbyController lobby = (LobbyController) replaceSceneContent(LOBBY_FXML, LOBBY_WIDTH, LOBBY_HEIGHT);
             lobby.setClient(client);
@@ -64,9 +67,11 @@ public class UI extends Application implements Navigation {
             lobby.setLoggedPlayer(logged);
             stage.setResizable(true);
             stage.centerOnScreen();
+            return lobby;
         } catch (Exception ex) {
             Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
@@ -127,5 +132,17 @@ public class UI extends Application implements Navigation {
                 closeStage();
             }
         };
+    }
+
+    private class OnDisconnectAction implements Runnable {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        gotoLogin().setInfo("Lost server connection.");
+                    }
+                });
+            }
     }
 }

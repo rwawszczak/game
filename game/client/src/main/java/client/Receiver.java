@@ -14,8 +14,8 @@ import static dto.MessageDTO.Command.DISCONNECTED;
 
 class Receiver extends Thread {
     private boolean running = false;
-    private ObjectInputStream inputStream;
-    private Runnable onDisconnectedMessage;
+    private final ObjectInputStream inputStream;
+    private final Runnable onDisconnectedMessage;
     private final List<Listener> listeners = Collections.synchronizedList(new ArrayList<Listener>());
 
     public Receiver(ObjectInputStream inputStream, Runnable onDisconnectedMessage) {
@@ -47,12 +47,13 @@ class Receiver extends Thread {
             }
         }
         System.out.println("Stopping receiver.");
+        onDisconnectedMessage.run();
     }
 
     private void checkForDisconnect(DTO dto) {
         if(MessageDTO.class.isAssignableFrom(dto.getClass()) && ((MessageDTO)dto).getCommand() == DISCONNECTED){
             System.out.println("DISSCONNECTED BY SERVER");
-            onDisconnectedMessage.run();
+            running = false;
         }
     }
 

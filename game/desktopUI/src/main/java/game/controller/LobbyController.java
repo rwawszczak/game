@@ -86,7 +86,7 @@ public class LobbyController extends BaseController {
     }
 
     public void initWithClient(){
-        registerClisentListeners();
+        registerClientListeners();
         refreshConnected();
     }
 
@@ -94,22 +94,26 @@ public class LobbyController extends BaseController {
         client.unregisterListener(playerListListener);
     }
 
-    private void registerClisentListeners() {
+    private void registerClientListeners() {
         client.registerListener(playerListListener);
     }
 
+    private void reloadPlayers(List<Player> players) {
+        connectedPlayers.clear();
+        for (Player player : players) {
+            if (player.getId() != loggedAs.getId()) {
+                connectedPlayers.add(player);
+            }
+        }
+    }
     private class LobbyPlayerListListener extends PlayerListListener {
+
         @Override
         public void handlePlayers(final List<Player> players) {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    connectedPlayers.clear();
-                    for (Player player : players) {
-                        if (player.getId() != loggedAs.getId()) {
-                            connectedPlayers.add(player);
-                        }
-                    }
+                    reloadPlayers(players);
                 }
             });
         }
