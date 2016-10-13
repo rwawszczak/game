@@ -3,6 +3,7 @@ package game;
 import client.ClientAPI;
 import client.listeners.SuccessListener;
 import client.model.domain.User;
+import game.controller.ChatController;
 import game.controller.LobbyController;
 import game.controller.LoginController;
 import javafx.application.Application;
@@ -21,18 +22,24 @@ import java.util.logging.Logger;
 public class UI extends Application implements Navigation {
 
     private static final String WINDOW_NAME = "Game [Desktop]";
+    private static final String CHAT_NAME = "Chat";
     private static final String LOGIN_FXML = "/login.fxml";
     private static final String LOBBY_FXML = "/lobby.fxml";
+    private static final String CHAT_FXML = "/chat.fxml";
     private static final int LOGIN_WIDTH = 350;
     private static final int LOGIN_HEIGHT = 210;
     private static final int LOBBY_WIDTH = 1024;
     private static final int LOBBY_HEIGHT = 768;
+    private static final int CHAT_WIDTH = 300;
+    private static final int CHAT_HEIGHT = 400;
 
     private Stage stage;
+    private Stage chatStage;
     private ClientAPI client = new ClientAPI();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        initChatStage();
         stage = primaryStage;
         stage.setOpacity(0.9);
         stage.setTitle(WINDOW_NAME);
@@ -43,9 +50,17 @@ public class UI extends Application implements Navigation {
         setupOnCloseRequest();
     }
 
+    private void initChatStage() {
+        chatStage = new Stage();
+        chatStage.initStyle(StageStyle.UNDECORATED);
+        chatStage.setOpacity(0.9);
+        chatStage.setTitle(CHAT_NAME);
+        chatStage.initStyle(StageStyle.UNDECORATED);
+    }
+
     public LoginController gotoLogin() {
         try {
-            LoginController login = (LoginController) replaceSceneContent(LOGIN_FXML, LOGIN_WIDTH, LOGIN_HEIGHT);
+            LoginController login = (LoginController) replaceSceneContent(LOGIN_FXML, LOGIN_WIDTH, LOGIN_HEIGHT, stage);
             login.setClient(client);
             login.setNavigation(this);
             stage.setResizable(false);
@@ -58,7 +73,7 @@ public class UI extends Application implements Navigation {
 
     public LobbyController gotoLobby(User logged) {
         try {
-            LobbyController lobby = (LobbyController) replaceSceneContent(LOBBY_FXML, LOBBY_WIDTH, LOBBY_HEIGHT);
+            LobbyController lobby = (LobbyController) replaceSceneContent(LOBBY_FXML, LOBBY_WIDTH, LOBBY_HEIGHT, stage);
             lobby.setClient(client);
             lobby.initWithClient();
             lobby.setNavigation(this);
@@ -73,11 +88,33 @@ public class UI extends Application implements Navigation {
     }
 
     @Override
+    public ChatController openChat(User selected) {
+        try {
+            ChatController chat = (ChatController) replaceSceneContent(CHAT_FXML, CHAT_WIDTH, CHAT_HEIGHT, chatStage);
+            chat.setClient(client);
+            chat.setNavigation(this);
+            chat.setStage(chatStage);
+            chat.addConversation(selected);
+            chatStage.setResizable(true);
+            chatStage.show();
+            return chat;
+        } catch (Exception ex) {
+            Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isChatShown() {
+        return chatStage != null && chatStage.isShowing();
+    }
+
+    @Override
     public void close() {
         client.isConnected(getSuccessCloseListener());
     }
 
-    private Object replaceSceneContent(String fxml, int width, int height) throws Exception {
+    private Object replaceSceneContent(String fxml, int width, int height, Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(UI.class.getResource(fxml));
@@ -100,7 +137,10 @@ public class UI extends Application implements Navigation {
     }
 
     private void closeStage(){
-        Platform.runLater(() -> stage.close());
+        Platform.runLater(() -> {
+            stage.close();
+            chatStage.close();
+        });
     }
 
 

@@ -32,6 +32,7 @@ public class LobbyController extends BaseController {
     private ObservableList<User> connectedUsers = FXCollections.observableArrayList();
     private User loggedAs;
     private UserListListener userListListener = new LobbyUserListListener();
+    private ChatController chatController;
 
     @FXML
     public void initialize() {
@@ -115,7 +116,11 @@ public class LobbyController extends BaseController {
             if (click.getClickCount() == 2) {
                 final User selected = connectedList.getSelectionModel().getSelectedItem();
                 if (selected != null) {
-                    System.out.println(selected.getName()); //TODO: open chat window here
+                    if (navigation.isChatShown()) {
+                        chatController.addConversation(selected);
+                    } else {
+                        chatController = navigation.openChat(selected);
+                    }
                 }
             }
         });
