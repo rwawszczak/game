@@ -1,22 +1,22 @@
 package client.listeners;
 
-import client.model.assemblers.PlayerAssembler;
-import client.model.domain.Player;
-import dto.PlayerDTO;
+import client.model.assemblers.UserAssembler;
+import client.model.domain.User;
+import dto.UserDTO;
 
-public abstract class LoginListener extends Listener<PlayerDTO> {
-    public abstract void handlePlayer(Player player);
+public abstract class LoginListener extends Listener<UserDTO> {
+    public abstract void handleUser(User user);
 
 
     @Override
-    public final Class<PlayerDTO> getHandledType() {
-        return PlayerDTO.class;
+    public final Class<UserDTO> getHandledType() {
+        return UserDTO.class;
     }
 
     @Override
-    public final boolean handle(PlayerDTO dto) {
-        Player player = PlayerAssembler.toDomainObject(dto);
-        handlePlayer(player);
+    public final boolean handle(UserDTO dto) {
+        User user = UserAssembler.toDomainObject(dto);
+        handleUser(user);
         return true;
     }
 

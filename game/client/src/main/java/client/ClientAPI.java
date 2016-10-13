@@ -10,7 +10,7 @@ import dto.MessageDTO;
 import java.io.IOException;
 
 import static dto.MessageDTO.Command.HEARTBEAT;
-import static dto.MessageDTO.Command.PLAYERLIST;
+import static dto.MessageDTO.Command.USERLIST;
 
 public class ClientAPI {
     private Client client = new Client();
@@ -70,7 +70,7 @@ public class ClientAPI {
 
                 @Override
                 public void onError() {
-                    listener.handlePlayer(null);
+                    listener.handleUser(null);
                 }
             });
             client.send(credentials);
@@ -85,9 +85,9 @@ public class ClientAPI {
         client.setPerformOnDisconnectAction(action);
     }
 
-    public void promptForConnectedPlayers() {
+    public void promptForConnectedUsers() {
         try {
-            client.send(new MessageDTO(PLAYERLIST));
+            client.send(new MessageDTO(USERLIST));
         } catch (IOException e) {
             e.printStackTrace();
         }

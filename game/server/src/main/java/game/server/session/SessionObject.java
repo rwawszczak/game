@@ -1,12 +1,12 @@
 package game.server.session;
 
-import game.model.domain.Player;
+import game.model.domain.User;
 
 public class SessionObject {
     private boolean authenticated = false;
     private boolean opened = true;
     private int failedLogins = 0;
-    private Player player;
+    private User user;
 
     public boolean isAuthenticated() {
         return authenticated;
@@ -24,12 +24,12 @@ public class SessionObject {
         this.opened = opened;
     }
 
-    public Player getPlayer() {
-        return player;
+    public User getUser() {
+        return user;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getFailedLogins() {

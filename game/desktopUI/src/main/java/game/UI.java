@@ -2,7 +2,7 @@ package game;
 
 import client.ClientAPI;
 import client.listeners.SuccessListener;
-import client.model.domain.Player;
+import client.model.domain.User;
 import game.controller.LobbyController;
 import game.controller.LoginController;
 import javafx.application.Application;
@@ -58,13 +58,13 @@ public class UI extends Application implements Navigation {
         return null;
     }
 
-    public LobbyController gotoLobby(Player logged) {
+    public LobbyController gotoLobby(User logged) {
         try {
             LobbyController lobby = (LobbyController) replaceSceneContent(LOBBY_FXML, LOBBY_WIDTH, LOBBY_HEIGHT);
             lobby.setClient(client);
             lobby.initWithClient();
             lobby.setNavigation(this);
-            lobby.setLoggedPlayer(logged);
+            lobby.setLoggedUser(logged);
             stage.setResizable(true);
             stage.centerOnScreen();
             return lobby;

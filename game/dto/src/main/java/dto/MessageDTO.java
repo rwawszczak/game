@@ -2,7 +2,7 @@ package dto;
 
 public class MessageDTO extends DTO {
     public enum Command {
-        SUCCESS, ERROR, LOGOUT, HEARTBEAT, PLAYERLIST, DISCONNECTED
+        SUCCESS, ERROR, LOGOUT, HEARTBEAT, USERLIST, DISCONNECTED
     }
 
     private long conversationId =-1L;

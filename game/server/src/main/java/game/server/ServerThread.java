@@ -56,8 +56,8 @@ public class ServerThread extends Thread {
 
     private void cleanup(SessionObject sessionObject) {
         ServerData.getThreads().remove(this);
-        if(sessionObject.getPlayer() != null) {
-            ServerData.getPlayers().remove(sessionObject.getPlayer().getId());
+        if(sessionObject.getUser() != null) {
+            ServerData.getUsers().remove(sessionObject.getUser().getId());
         }
         try {
             closeAll();

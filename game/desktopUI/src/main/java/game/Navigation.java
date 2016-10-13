@@ -1,11 +1,11 @@
 package game;
 
-import client.model.domain.Player;
+import client.model.domain.User;
 import game.controller.LobbyController;
 import game.controller.LoginController;
 
 public interface Navigation {
     LoginController gotoLogin();
-    LobbyController gotoLobby(Player logged);
+    LobbyController gotoLobby(User logged);
     void close();
 }

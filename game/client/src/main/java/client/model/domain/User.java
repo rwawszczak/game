@@ -1,16 +1,16 @@
 package client.model.domain;
 
-public class Player {
+public class User {
     private long id;
     private String name;
-    private PlayerDetails details;
+    private UserDetails details;
 
-    public Player(long id, String name) {
+    public User(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Player(long id, String name, PlayerDetails details) {
+    public User(long id, String name, UserDetails details) {
         this.id = id;
         this.name = name;
         this.details = details;
@@ -32,11 +32,11 @@ public class Player {
         this.name = name;
     }
 
-    public PlayerDetails getDetails() {
+    public UserDetails getDetails() {
         return details;
     }
 
-    public void setDetails(PlayerDetails details) {
+    public void setDetails(UserDetails details) {
         this.details = details;
     }
 }

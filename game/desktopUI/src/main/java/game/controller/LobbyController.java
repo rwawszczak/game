@@ -1,7 +1,7 @@
 package game.controller;
 
-import client.listeners.PlayerListListener;
-import client.model.domain.Player;
+import client.listeners.UserListListener;
+import client.model.domain.User;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,11 +27,11 @@ public class LobbyController extends BaseController {
     private Label headerLabel;
 
     @FXML
-    private ListView<Player> connectedList;
+    private ListView<User> connectedList;
 
-    private ObservableList<Player> connectedPlayers = FXCollections.observableArrayList();
-    private Player loggedAs;
-    private PlayerListListener playerListListener = new LobbyPlayerListListener();
+    private ObservableList<User> connectedUsers = FXCollections.observableArrayList();
+    private User loggedAs;
+    private UserListListener userListListener = new LobbyUserListListener();
 
     @FXML
     public void initialize() {
@@ -55,24 +55,24 @@ public class LobbyController extends BaseController {
 
     @FXML
     public void refreshConnected() {
-        connectedPlayers.clear();
-        client.promptForConnectedPlayers();
+        connectedUsers.clear();
+        client.promptForConnectedUsers();
     }
 
-    public void setLoggedPlayer(Player loggedPlayer) {
-        loggedAs = loggedPlayer;
-        headerLabel.setText("Logged as " + loggedPlayer.getName());
+    public void setLoggedUser(User loggedUser) {
+        loggedAs = loggedUser;
+        headerLabel.setText("Logged as " + loggedUser.getName());
     }
 
     private void setupConnectedList() {
-        connectedList.setCellFactory(new Callback<ListView<Player>, ListCell<Player>>() {
+        connectedList.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
             @Override
-            public ListCell<Player> call(ListView<Player> param) {
+            public ListCell<User> call(ListView<User> param) {
 
-                return new ListCell<Player>() {
+                return new ListCell<User>() {
 
                     @Override
-                    protected void updateItem(Player p, boolean bln) {
+                    protected void updateItem(User p, boolean bln) {
                         super.updateItem(p, bln);
                         if (p != null) {
                             setText(p.getName());
@@ -82,7 +82,7 @@ public class LobbyController extends BaseController {
                 };
             }
         });
-        connectedList.setItems(connectedPlayers);
+        connectedList.setItems(connectedUsers);
     }
 
     public void initWithClient(){
@@ -91,29 +91,29 @@ public class LobbyController extends BaseController {
     }
 
     private void unregisterClientListeners() {
-        client.unregisterListener(playerListListener);
+        client.unregisterListener(userListListener);
     }
 
     private void registerClientListeners() {
-        client.registerListener(playerListListener);
+        client.registerListener(userListListener);
     }
 
-    private void reloadPlayers(List<Player> players) {
-        connectedPlayers.clear();
-        for (Player player : players) {
-            if (player.getId() != loggedAs.getId()) {
-                connectedPlayers.add(player);
+    private void reloadUsers(List<User> users) {
+        connectedUsers.clear();
+        for (User user : users) {
+            if (user.getId() != loggedAs.getId()) {
+                connectedUsers.add(user);
             }
         }
     }
-    private class LobbyPlayerListListener extends PlayerListListener {
+    private class LobbyUserListListener extends UserListListener {
 
         @Override
-        public void handlePlayers(final List<Player> players) {
+        public void handleUsers(final List<User> users) {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    reloadPlayers(players);
+                    reloadUsers(users);
                 }
             });
         }

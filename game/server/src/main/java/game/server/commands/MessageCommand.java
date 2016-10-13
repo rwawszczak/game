@@ -1,8 +1,8 @@
 package game.server.commands;
 
 import dto.MessageDTO;
-import dto.PlayersDTO;
-import game.model.assemblers.PlayerAssembler;
+import dto.UsersDTO;
+import game.model.assemblers.UserAssembler;
 import game.server.ServerData;
 import game.server.session.SessionObject;
 
@@ -24,12 +24,12 @@ public class MessageCommand implements BaseCommand<MessageDTO> {
             }
         } else if(message.getCommand() == DISCONNECTED) {
             sessionObject.setOpened(false);
-        } else if(message.getCommand() == PLAYERLIST) {
+        } else if(message.getCommand() == USERLIST) {
             try {
-                PlayersDTO players = new PlayersDTO.Builder(
-                        PlayerAssembler.toDTOs(ServerData.getPlayers().values())
+                UsersDTO users = new UsersDTO.Builder(
+                        UserAssembler.toDTOs(ServerData.getUsers().values())
                 ).build();
-                outputStream.writeObject(players);
+                outputStream.writeObject(users);
             } catch (IOException e) {
                 e.printStackTrace();
             }

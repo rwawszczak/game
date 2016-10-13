@@ -1,7 +1,7 @@
 package game.server.session;
 
-import dto.PlayersDTO;
-import game.model.assemblers.PlayerAssembler;
+import dto.UsersDTO;
+import game.model.assemblers.UserAssembler;
 import game.server.ServerData;
 import game.server.ServerThread;
 
@@ -12,12 +12,12 @@ public class ServerBroadcasting {
     }
 
     public static void broadcastConnectedUsers(){
-        PlayersDTO players = new PlayersDTO.Builder(
-                PlayerAssembler.toDTOs(ServerData.getPlayers().values())
+        UsersDTO users = new UsersDTO.Builder(
+                UserAssembler.toDTOs(ServerData.getUsers().values())
         ).build();
         for(ServerThread serverThread : ServerData.getThreads()){
             try {
-                serverThread.send(players);
+                serverThread.send(users);
             } catch (IOException e) {
                 e.printStackTrace();
             }

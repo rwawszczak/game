@@ -3,7 +3,7 @@ package game.controller;
 import client.listeners.DisconnectedListener;
 import client.listeners.LoginListener;
 import client.listeners.SuccessListener;
-import client.model.domain.Player;
+import client.model.domain.User;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -88,14 +88,14 @@ public class LoginController extends BaseController {
     public void login() {
         client.login(loginField.getText(), passwordField.getText(), new LoginListener() {
             @Override
-            public void handlePlayer(final Player player) {
+            public void handleUser(final User user) {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (player != null) {
+                        if (user != null) {
                             setInfo("Successful login.");
                             client.unregisterListener(disconnectedListener);
-                            navigation.gotoLobby(player);
+                            navigation.gotoLobby(user);
                         } else {
                             setInfo("Login failed.");
                         }

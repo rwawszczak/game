@@ -2,12 +2,12 @@ package dto;
 
 import java.io.Serializable;
 
-public class PlayerDTO extends DTO implements Serializable {
+public class UserDTO extends DTO implements Serializable {
     private String name;
     private long id;
-    private PlayerDetailsDTO details;
+    private UserDetailsDTO details;
 
-    private PlayerDTO(long id, String name) {
+    private UserDTO(long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -20,23 +20,23 @@ public class PlayerDTO extends DTO implements Serializable {
         return id;
     }
 
-    public PlayerDetailsDTO getDetails() {
+    public UserDetailsDTO getDetails() {
         return details;
     }
 
     public static class Builder {
-        private PlayerDTO dto;
+        private UserDTO dto;
 
         public Builder(long id, String name) {
-            dto = new PlayerDTO(id, name);
+            dto = new UserDTO(id, name);
         }
 
-        public Builder withDetails(PlayerDetailsDTO details) {
+        public Builder withDetails(UserDetailsDTO details) {
             dto.details = details;
             return this;
         }
 
-        public PlayerDTO build() {
+        public UserDTO build() {
             return dto;
         }
     }
