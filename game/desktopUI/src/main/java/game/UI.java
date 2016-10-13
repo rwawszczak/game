@@ -7,14 +7,12 @@ import game.controller.LobbyController;
 import game.controller.LoginController;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -81,14 +79,11 @@ public class UI extends Application implements Navigation {
 
     private Object replaceSceneContent(String fxml, int width, int height) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        InputStream in = UI.class.getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(UI.class.getResource(fxml));
         Pane page;
-        try {
+        try (InputStream in = UI.class.getResourceAsStream(fxml)) {
             page = loader.load(in);
-        } finally {
-            in.close();
         }
         Scene scene = new Scene(page, width, height);
         stage.setScene(scene);
@@ -97,12 +92,7 @@ public class UI extends Application implements Navigation {
     }
 
     private void setupOnCloseRequest() {
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                client.isConnected(getSuccessCloseListener());
-            }
-        });
+        stage.setOnCloseRequest(event -> client.isConnected(getSuccessCloseListener()));
     }
 
     public static void main(String[] args) {
@@ -110,12 +100,7 @@ public class UI extends Application implements Navigation {
     }
 
     private void closeStage(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                stage.close();
-            }
-        });
+        Platform.runLater(() -> stage.close());
     }
 
 
@@ -137,12 +122,7 @@ public class UI extends Application implements Navigation {
     private class OnDisconnectAction implements Runnable {
             @Override
             public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        gotoLogin().setInfo("Lost server connection.");
-                    }
-                });
+                Platform.runLater(() -> gotoLogin().setInfo("Lost server connection."));
             }
     }
 }

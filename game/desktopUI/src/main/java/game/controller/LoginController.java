@@ -5,8 +5,6 @@ import client.listeners.LoginListener;
 import client.listeners.SuccessListener;
 import client.model.domain.User;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -58,27 +56,21 @@ public class LoginController extends BaseController {
         client.isConnected(new SuccessListener() {
             @Override
             public void onSuccess() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        disableLogin(false);
-                        serverField.setDisable(true);
-                        portField.setDisable(true);
-                        connectButton.setDisable(true);
-                        setInfo("Connected to server.");
-                        client.registerListener(disconnectedListener);
-                    }
+                Platform.runLater(() -> {
+                    disableLogin(false);
+                    serverField.setDisable(true);
+                    portField.setDisable(true);
+                    connectButton.setDisable(true);
+                    setInfo("Connected to server.");
+                    client.registerListener(disconnectedListener);
                 });
             }
 
             @Override
             public void onError() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        disableLogin(true);
-                        setInfo("Server is not responding.");
-                    }
+                Platform.runLater(() -> {
+                    disableLogin(true);
+                    setInfo("Server is not responding.");
                 });
             }
         });
@@ -89,16 +81,13 @@ public class LoginController extends BaseController {
         client.login(loginField.getText(), passwordField.getText(), new LoginListener() {
             @Override
             public void handleUser(final User user) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (user != null) {
-                            setInfo("Successful login.");
-                            client.unregisterListener(disconnectedListener);
-                            navigation.gotoLobby(user);
-                        } else {
-                            setInfo("Login failed.");
-                        }
+                Platform.runLater(() -> {
+                    if (user != null) {
+                        setInfo("Successful login.");
+                        client.unregisterListener(disconnectedListener);
+                        navigation.gotoLobby(user);
+                    } else {
+                        setInfo("Login failed.");
                     }
                 });
             }
@@ -116,20 +105,14 @@ public class LoginController extends BaseController {
     }
 
     private void setupKeyListeners() {
-        loginLayout.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ESCAPE) {
-                    close();
-                }
+        loginLayout.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                close();
             }
         });
-        EventHandler<KeyEvent> enterLoginHandler = new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    login();
-                }
+        EventHandler<KeyEvent> enterLoginHandler = event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                login();
             }
         };
         loginField.setOnKeyPressed(enterLoginHandler);
@@ -138,14 +121,11 @@ public class LoginController extends BaseController {
 
 
     private void setupPortField() {
-        portField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.length() > 4) {
-                    portField.setText(oldValue);
-                } else if (!newValue.matches("\\d*")) {
-                    portField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
+        portField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 4) {
+                portField.setText(oldValue);
+            } else if (!newValue.matches("\\d*")) {
+                portField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
     }
@@ -154,15 +134,12 @@ public class LoginController extends BaseController {
         @Override
         public void onDisconnected() {
             System.out.println("handling disconnect.");
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    serverField.setDisable(false);
-                    portField.setDisable(false);
-                    connectButton.setDisable(false);
-                    disableLogin(true);
-                    setInfo("Disconnected by server.");
-                }
+            Platform.runLater(() -> {
+                serverField.setDisable(false);
+                portField.setDisable(false);
+                connectButton.setDisable(false);
+                disableLogin(true);
+                setInfo("Disconnected by server.");
             });
         }
     }
