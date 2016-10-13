@@ -5,11 +5,13 @@ import client.model.domain.User;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -36,6 +38,7 @@ public class LobbyController extends BaseController {
     @FXML
     public void initialize() {
         setupWindowDragging(headerPanel);
+        setupListClick();
         setupConnectedList();
     }
 
@@ -55,7 +58,6 @@ public class LobbyController extends BaseController {
 
     @FXML
     public void refreshConnected() {
-        connectedUsers.clear();
         client.promptForConnectedUsers();
     }
 
@@ -72,10 +74,13 @@ public class LobbyController extends BaseController {
                 return new ListCell<User>() {
 
                     @Override
-                    protected void updateItem(User p, boolean bln) {
-                        super.updateItem(p, bln);
-                        if (p != null) {
-                            setText(p.getName());
+                    protected void updateItem(User user, boolean empty) {
+                        super.updateItem(user, empty);
+                        if (empty || user == null) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            setText(user.getName());
                         }
                     }
 
@@ -85,7 +90,7 @@ public class LobbyController extends BaseController {
         connectedList.setItems(connectedUsers);
     }
 
-    public void initWithClient(){
+    public void initWithClient() {
         registerClientListeners();
         refreshConnected();
     }
@@ -106,6 +111,21 @@ public class LobbyController extends BaseController {
             }
         }
     }
+
+    private void setupListClick() {
+        connectedList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent click) {
+                if (click.getClickCount() == 2) {
+                    final User selected = connectedList.getSelectionModel().getSelectedItem();
+                    if (selected != null) {
+                        System.out.println(selected.getName()); //TODO: open chat window here
+                    }
+                }
+            }
+        });
+    }
+
     private class LobbyUserListListener extends UserListListener {
 
         @Override
