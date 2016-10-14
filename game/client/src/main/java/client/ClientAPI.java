@@ -87,7 +87,6 @@ public class ClientAPI {
     }
 
     public void sendChatMessage(long to, String message) {
-        System.out.println("Sending to "+ to +" message: "+message);
         try {
             client.send(new ChatMessageDTO(to, message));
         } catch (IOException e) {
