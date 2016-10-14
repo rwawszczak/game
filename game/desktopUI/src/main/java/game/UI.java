@@ -3,7 +3,7 @@ package game;
 import client.ClientAPI;
 import client.listeners.SuccessListener;
 import client.model.domain.User;
-import game.controller.ChatController;
+import game.controller.chat.ChatController;
 import game.controller.LobbyController;
 import game.controller.LoginController;
 import javafx.application.Application;
@@ -94,7 +94,7 @@ public class UI extends Application implements Navigation {
             chat.setClient(client);
             chat.setNavigation(this);
             chat.setStage(chatStage);
-            chat.addConversation(selected);
+            chat.openConversation(selected);
             chatStage.setResizable(true);
             chatStage.show();
             return chat;

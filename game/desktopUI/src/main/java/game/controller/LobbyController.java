@@ -2,6 +2,7 @@ package game.controller;
 
 import client.listeners.UserListListener;
 import client.model.domain.User;
+import game.controller.chat.ChatController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -117,7 +118,7 @@ public class LobbyController extends BaseController {
                 final User selected = connectedList.getSelectionModel().getSelectedItem();
                 if (selected != null) {
                     if (navigation.isChatShown()) {
-                        chatController.addConversation(selected);
+                        chatController.openConversation(selected);
                     } else {
                         chatController = navigation.openChat(selected);
                     }
