@@ -21,13 +21,10 @@ import java.util.List;
 public class LobbyController extends BaseController {
     @FXML
     private Button maximizeButton;
-
     @FXML
     private GridPane headerPanel;
-
     @FXML
     private Label headerLabel;
-
     @FXML
     private ListView<User> connectedList;
 

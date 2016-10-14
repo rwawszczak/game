@@ -27,7 +27,7 @@
                        <Font size="10.0"/>
                    </font>
                </Button>
-               <Button fx:id="closeButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0"
+               <Button maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0"
                        mnemonicParsing="false" onAction="#close" prefHeight="20.0" prefWidth="20.0"
                        styleClass="headerButton" text="X" HBox.hgrow="NEVER">
                    <font>
@@ -40,7 +40,10 @@
    <right>
        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
            <ListView fx:id="connectedList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
-           <Button mnemonicParsing="false" onAction="#refreshConnected" text="↻"/>
+           <HBox VBox.vgrow="NEVER">
+               <Button mnemonicParsing="false" text="Battle"/>
+               <Button mnemonicParsing="false" onAction="#refreshConnected" text="↻"/>
+           </HBox>
        </VBox>
    </right>
 </BorderPane>
