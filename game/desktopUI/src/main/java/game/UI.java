@@ -88,10 +88,11 @@ public class UI extends Application implements Navigation {
     }
 
     @Override
-    public ChatController openChat(User selected) {
+    public ChatController openChat(User selected, User sender) {
         try {
             ChatController chat = (ChatController) replaceSceneContent(CHAT_FXML, CHAT_WIDTH, CHAT_HEIGHT, chatStage);
             chat.setClient(client);
+            chat.setSender(sender);
             chat.setNavigation(this);
             chat.setStage(chatStage);
             chat.openConversation(selected);

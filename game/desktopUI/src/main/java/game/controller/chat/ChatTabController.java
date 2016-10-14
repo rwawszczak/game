@@ -1,6 +1,8 @@
 package game.controller.chat;
 
 import client.model.domain.User;
+import game.controller.BaseController;
+import game.model.ChatMessage;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,17 +13,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
 
-public class ChatTabController {
+public class ChatTabController extends BaseController {
     @FXML
-    private Tab tab;
-    @FXML
-    private ListView<String> chatText;
+    private ListView<ChatMessage> chatText;
     @FXML
     private TextField inputField;
-    @FXML
-    private Button sendButton;
 
-    private ObservableList<String> messages = FXCollections.observableArrayList();
+    private ObservableList<ChatMessage> messages = FXCollections.observableArrayList();
     private User sender;
     private User recipient;
 
@@ -31,22 +29,30 @@ public class ChatTabController {
         setupChatText();
     }
 
+    public void setRecipient(User recipient) {
+        this.recipient = recipient;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
     private void setupChatText() {
         chatText.setSelectionModel(new DisabledSelectionModel<>());
-        chatText.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+        chatText.setCellFactory(new Callback<ListView<ChatMessage>, ListCell<ChatMessage>>() {
             @Override
-            public ListCell<String> call(ListView<String> param) {
+            public ListCell<ChatMessage> call(ListView<ChatMessage> param) {
 
-                return new ListCell<String>() {
+                return new ListCell<ChatMessage>() {
 
                     @Override
-                    protected void updateItem(String text, boolean empty) {
-                        super.updateItem(text, empty);
-                        if (empty || text == null) {
+                    protected void updateItem(ChatMessage message, boolean empty) {
+                        super.updateItem(message, empty);
+                        if (empty || message == null) {
                             setText(null);
                             setGraphic(null);
                         } else {
-                            setText(text);
+                            setText(message.getSender().toUpperCase() + ": " + message.getMessage());
                         }
                     }
 
@@ -71,9 +77,18 @@ public class ChatTabController {
 
     @FXML
     private void send() {
-        messages.add("You: " + inputField.getText());
+        client.sendChatMessage(recipient.getId(), inputField.getText());
+        ChatMessage message = new ChatMessage(sender.getName(), inputField.getText());
+        messages.add(message);
         inputField.clear();
         scrollToBottom();
+    }
+
+    public void newMessage(User user, String message) {
+        ChatMessage chatMessage = new ChatMessage(user.getName(), message);
+        messages.add(chatMessage);
+        scrollToBottom();
+
     }
 
     private class DisabledSelectionModel<T> extends MultipleSelectionModel<T> {

@@ -16,6 +16,7 @@ public class ServerThread extends Thread {
     private Socket socket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inStream;
+    private SessionObject sessionObject;
 
     public ServerThread(Socket socket, int connectionId) {
         this.socket = socket;
@@ -24,7 +25,7 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
-        SessionObject sessionObject = new SessionObject();
+        sessionObject = new SessionObject();
         try {
             inStream = new ObjectInputStream(socket.getInputStream());
             outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -52,6 +53,10 @@ public class ServerThread extends Thread {
 
     public void send(DTO dto) throws IOException {
         outputStream.writeObject(dto);
+    }
+
+    public long getUserId(){
+        return sessionObject != null ? sessionObject.getUser().getId() : -1L;
     }
 
     private void cleanup(SessionObject sessionObject) {

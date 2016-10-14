@@ -4,6 +4,7 @@ package client;
 import client.listeners.Listener;
 import client.listeners.LoginListener;
 import client.listeners.SuccessListener;
+import dto.ChatMessageDTO;
 import dto.CredentialsDTO;
 import dto.MessageDTO;
 
@@ -83,6 +84,15 @@ public class ClientAPI {
 
     public void setPerformOnDisconnectAction(Runnable action) {
         client.setPerformOnDisconnectAction(action);
+    }
+
+    public void sendChatMessage(long to, String message) {
+        System.out.println("Sending to "+ to +" message: "+message);
+        try {
+            client.send(new ChatMessageDTO(to, message));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void promptForConnectedUsers() {

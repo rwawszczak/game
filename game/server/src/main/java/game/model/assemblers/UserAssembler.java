@@ -26,6 +26,11 @@ public class UserAssembler {
         return builder.build();
     }
 
+    public static UserDTO toLightDTO(User user) {
+        UserDTO.Builder builder = new UserDTO.Builder(user.getId(), user.getName());
+        return builder.build();
+    }
+
     public static List<UserDTO> toDTOs(Collection<User> users) {
         return FluentIterable.from(users).transform(userToDTO).toList();
     }

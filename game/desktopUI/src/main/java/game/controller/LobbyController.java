@@ -1,5 +1,6 @@
 package game.controller;
 
+import client.listeners.ChatMessageListener;
 import client.listeners.UserListListener;
 import client.model.domain.User;
 import game.controller.chat.ChatController;
@@ -33,6 +34,7 @@ public class LobbyController extends BaseController {
     private ObservableList<User> connectedUsers = FXCollections.observableArrayList();
     private User loggedAs;
     private UserListListener userListListener = new LobbyUserListListener();
+    private ChatMessageListener chatMessageListener = new ReceivedMessageListener();
     private ChatController chatController;
 
     @FXML
@@ -97,10 +99,12 @@ public class LobbyController extends BaseController {
 
     private void unregisterClientListeners() {
         client.unregisterListener(userListListener);
+        client.unregisterListener(chatMessageListener);
     }
 
     private void registerClientListeners() {
         client.registerListener(userListListener);
+        client.registerListener(chatMessageListener);
     }
 
     private void reloadUsers(List<User> users) {
@@ -117,14 +121,18 @@ public class LobbyController extends BaseController {
             if (click.getClickCount() == 2) {
                 final User selected = connectedList.getSelectionModel().getSelectedItem();
                 if (selected != null) {
-                    if (navigation.isChatShown()) {
-                        chatController.openConversation(selected);
-                    } else {
-                        chatController = navigation.openChat(selected);
-                    }
+                    openChat(selected);
                 }
             }
         });
+    }
+
+    private void openChat(User user) {
+        if (navigation.isChatShown()) {
+            chatController.openConversation(user);
+        } else {
+            chatController = navigation.openChat(user, loggedAs);
+        }
     }
 
     private class LobbyUserListListener extends UserListListener {
@@ -139,5 +147,20 @@ public class LobbyController extends BaseController {
             return false;
         }
 
+    }
+
+    private class ReceivedMessageListener extends ChatMessageListener {
+        @Override
+        public void handleMessage(User user, String message) {
+            Platform.runLater(() ->{
+                openChat(user);
+                chatController.newMessage(user, message);
+            });
+        }
+
+        @Override
+        public boolean oneTimeOnly() {
+            return false;
+        }
     }
 }
