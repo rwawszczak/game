@@ -37,15 +37,14 @@ public class ChatController extends BaseController {
     }
 
     public void openConversation(User user) {
-        if(conversations.containsKey(user)){
-            tabPane.getSelectionModel().select(conversations.get(user).tab);
-        } else {
+        if (!conversations.containsKey(user)) {
             try {
                 prepareNewConversationTab(user);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        tabPane.getSelectionModel().select(conversations.get(user).tab);
     }
 
     private void prepareNewConversationTab(User user) throws IOException {
@@ -73,12 +72,12 @@ public class ChatController extends BaseController {
         this.sender = sender;
     }
 
-    public void newMessage(User user, String message){
+    public void newMessage(User user, String message) {
         openConversation(user);
         conversations.get(user).controller.newMessage(user, message);
     }
 
-    private class ChatWindow{
+    private class ChatWindow {
         private Tab tab;
         private ChatTabController controller;
 

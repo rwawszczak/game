@@ -8,7 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
@@ -78,13 +81,13 @@ public class ChatTabController extends BaseController {
     @FXML
     private void send() {
         client.sendChatMessage(recipient.getId(), inputField.getText());
-        ChatMessage message = new ChatMessage(sender.getName(), inputField.getText());
+        ChatMessage message = new ChatMessage("You", inputField.getText());
         messages.add(message);
         inputField.clear();
         scrollToBottom();
     }
 
-    public void newMessage(User user, String message) {
+    void newMessage(User user, String message) {
         ChatMessage chatMessage = new ChatMessage(user.getName(), message);
         messages.add(chatMessage);
         scrollToBottom();
