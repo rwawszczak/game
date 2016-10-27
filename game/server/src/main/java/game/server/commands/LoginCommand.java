@@ -21,14 +21,15 @@ public class LoginCommand implements BaseCommand<CredentialsDTO> {
     public void execute(CredentialsDTO credentials, ObjectOutputStream outputStream, SessionObject sessionObject) {
         try {
             final User user = userService.login(credentials.getLogin(), credentials.getPassword());
+            long conversationId = credentials.getConversationId();
             if (user != null) {
                 if (sessionObject.isAuthenticated()) {
-                    handleAlreadyAuthenticated(outputStream);
+                    handleAlreadyAuthenticated(outputStream, conversationId);
                 } else {
-                    handleSuccessfulLogin(outputStream, sessionObject, user);
+                    handleSuccessfulLogin(outputStream, sessionObject, user, conversationId);
                 }
             } else {
-                handleWrongCredentials(outputStream, sessionObject);
+                handleWrongCredentials(outputStream, sessionObject, conversationId);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,33 +37,37 @@ public class LoginCommand implements BaseCommand<CredentialsDTO> {
 
     }
 
-    private void handleAlreadyAuthenticated(ObjectOutputStream outputStream) throws IOException {
+    private void handleAlreadyAuthenticated(ObjectOutputStream outputStream, long conversationId) throws IOException {
         outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.ERROR)
+                .withConversationId(conversationId)
                 .withText("User is already authenticated")
                 .build());
     }
 
-    private void handleSuccessfulLogin(ObjectOutputStream outputStream, SessionObject sessionObject, User user) throws IOException {
+    private void handleSuccessfulLogin(ObjectOutputStream outputStream, SessionObject sessionObject, User user, long conversationId) throws IOException {
         sessionObject.setAuthenticated(true);
         sessionObject.setUser(user);
         ServerData.getUsers().put(user.getId(), user);
         outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.SUCCESS)
-                .withText("Successfully logged as" + user.getName())
+                .withConversationId(conversationId)
+                .withText("Successfully logged as " + user.getName())
                 .build());
         outputStream.writeObject(UserAssembler.toDTO(user));
 
         ServerBroadcasting.broadcastConnectedUsers();
     }
 
-    private void handleWrongCredentials(ObjectOutputStream outputStream, SessionObject sessionObject) throws IOException {
+    private void handleWrongCredentials(ObjectOutputStream outputStream, SessionObject sessionObject, long conversationId) throws IOException {
         sessionObject.setFailedLogins(sessionObject.getFailedLogins() + 1);
         if (sessionObject.getFailedLogins() > 2) {
             sessionObject.setOpened(false);
             outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.DISCONNECTED)
+                    .withConversationId(conversationId)
                     .withText("Wrong credentials for user")
                     .build());
         } else {
             outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.ERROR)
+                    .withConversationId(conversationId)
                     .withText("Wrong credentials for user")
                     .build());
         }

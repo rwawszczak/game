@@ -64,7 +64,7 @@ class Client {
     }
 
     private void logout() throws IOException {
-        MessageDTO logout = new MessageDTO(MessageDTO.Command.LOGOUT);
+        MessageDTO logout = new MessageDTO.Builder(MessageDTO.Command.LOGOUT).build();
         send(logout);
     }
 

@@ -1,6 +1,7 @@
 package game.server.commands;
 
 import dto.ChatMessageDTO;
+import dto.UserDTO;
 import game.model.assemblers.UserAssembler;
 import game.server.ServerData;
 import game.server.ServerThread;
@@ -16,7 +17,13 @@ public class ChatMessageCommand implements BaseCommand<ChatMessageDTO> {
         for(ServerThread serverThread : ServerData.getThreads()){
             if(message.getRecipientId() == serverThread.getUserId()){
                 try {
-                    serverThread.send(new ChatMessageDTO(UserAssembler.toLightDTO(sessionObject.getUser()), message.getMessage()));
+                    UserDTO sender = UserAssembler.toLightDTO(sessionObject.getUser());
+                    String messageText = message.getMessage();
+                    serverThread.send(
+                            new ChatMessageDTO.Builder(sender, messageText)
+                                    .withConversationId(message.getConversationId())
+                                    .build()
+                    );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

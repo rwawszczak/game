@@ -14,12 +14,14 @@ public abstract class SuccessListener extends Listener<MessageDTO> {
 
     @Override
     public final boolean handle(MessageDTO dto) {
-        if (dto.getCommand() == MessageDTO.Command.SUCCESS) {
-            onSuccess();
-            return true;
-        } else if (dto.getCommand() == MessageDTO.Command.ERROR) {
-            onError();
-            return true;
+        if(conversationId == dto.getConversationId()) {
+            if (dto.getCommand() == MessageDTO.Command.SUCCESS) {
+                onSuccess();
+                return true;
+            } else if (dto.getCommand() == MessageDTO.Command.ERROR) {
+                onError();
+                return true;
+            }
         }
         return false;
     }

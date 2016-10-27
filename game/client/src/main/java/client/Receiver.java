@@ -31,7 +31,7 @@ class Receiver extends Thread {
                 DTO dto = (DTO) inputStream.readObject();
                 int handledBy = handle(dto);
                 ////////////////////////DEBUG/////////////////////////
-                System.out.println("Message received: " + dto.getClass().getSimpleName());
+                System.out.println("Message received: " + dto.getClass().getSimpleName() + ", id:"+dto.getConversationId());
                 if (MessageDTO.class.isAssignableFrom(dto.getClass())) {
                     System.out.println(((MessageDTO) dto).getCommand() + " " + ((MessageDTO) dto).getText());
                 }

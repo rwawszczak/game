@@ -5,11 +5,10 @@ public class MessageDTO extends DTO {
         SUCCESS, ERROR, LOGOUT, HEARTBEAT, USERLIST, DISCONNECTED
     }
 
-    private long conversationId =-1L;
     private Command command;
     private String text;
 
-    public MessageDTO(Command command) {
+    private MessageDTO(Command command) {
         this.command = command;
     }
 
@@ -37,7 +36,7 @@ public class MessageDTO extends DTO {
             return this;
         }
 
-        public Builder withConversationId(long id){ //TODO: use conversationID
+        public Builder withConversationId(long id){
             dto.conversationId = id;
             return this;
         }

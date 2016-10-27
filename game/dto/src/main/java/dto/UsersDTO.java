@@ -23,5 +23,10 @@ public class UsersDTO extends DTO {
         public UsersDTO build() {
             return dto;
         }
+
+        public Builder withConversationId(long id){
+            dto.conversationId = id;
+            return this;
+        }
     }
 }

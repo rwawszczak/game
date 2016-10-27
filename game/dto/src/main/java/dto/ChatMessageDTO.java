@@ -7,12 +7,12 @@ public class ChatMessageDTO extends DTO implements Serializable {
     private UserDTO sender;
     private long recipientId;
 
-    public ChatMessageDTO(long recipientId, String message) {
+    private ChatMessageDTO(long recipientId, String message) {
         this.recipientId = recipientId;
         this.message = message;
     }
 
-    public ChatMessageDTO(UserDTO sender, String message) {
+    private ChatMessageDTO(UserDTO sender, String message) {
         this.sender = sender;
         this.message = message;
     }
@@ -27,5 +27,25 @@ public class ChatMessageDTO extends DTO implements Serializable {
 
     public UserDTO getSender() {
         return sender;
+    }
+
+    public static class Builder{
+        private ChatMessageDTO dto;
+
+        public Builder(long recipientId, String message) {
+            dto = new ChatMessageDTO(recipientId, message);        }
+
+        public Builder(UserDTO sender, String message) {
+            dto = new ChatMessageDTO(sender, message);
+        }
+
+        public Builder withConversationId(long conversationId){
+            dto.conversationId = conversationId;
+            return this;
+        }
+
+        public ChatMessageDTO build(){
+            return dto;
+        }
     }
 }

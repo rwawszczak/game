@@ -15,6 +15,7 @@ import static dto.MessageDTO.Command.USERLIST;
 
 public class ClientAPI {
     private Client client = new Client();
+    private long nextConversationId = 1;
 
 
     public void connect(String host, int port) {
@@ -41,9 +42,15 @@ public class ClientAPI {
         if (!client.isSocketConnected()) {
             listener.onError();
         } else {
+            long conversationId = nextConversationId++;
             try {
+                listener.setConversationId(conversationId);
                 client.registerListener(listener);
-                client.send(new MessageDTO(HEARTBEAT));
+                client.send(
+                        new MessageDTO.Builder(HEARTBEAT)
+                                .withConversationId(conversationId)
+                                .build()
+                );
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -88,7 +95,10 @@ public class ClientAPI {
 
     public void sendChatMessage(long to, String message) {
         try {
-            client.send(new ChatMessageDTO(to, message));
+            client.send(
+                    new ChatMessageDTO.Builder(to, message)
+                            .build()
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,7 +106,7 @@ public class ClientAPI {
 
     public void promptForConnectedUsers() {
         try {
-            client.send(new MessageDTO(USERLIST));
+            client.send(new MessageDTO.Builder(USERLIST).build());
         } catch (IOException e) {
             e.printStackTrace();
         }

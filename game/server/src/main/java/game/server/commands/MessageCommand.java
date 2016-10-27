@@ -14,11 +14,16 @@ import static dto.MessageDTO.Command.*;
 public class MessageCommand implements BaseCommand<MessageDTO> {
     @Override
     public void execute(MessageDTO message, ObjectOutputStream outputStream, SessionObject sessionObject) {
+        long conversationId = message.getConversationId();
         if (message.getCommand() == LOGOUT) {
             sessionObject.setOpened(false);
         } else if(message.getCommand() == HEARTBEAT) {
             try {
-                outputStream.writeObject(new MessageDTO(MessageDTO.Command.SUCCESS));
+                outputStream.writeObject(
+                        new MessageDTO.Builder(MessageDTO.Command.SUCCESS)
+                                .withConversationId(conversationId)
+                                .build()
+                );
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -27,8 +32,9 @@ public class MessageCommand implements BaseCommand<MessageDTO> {
         } else if(message.getCommand() == USERLIST) {
             try {
                 UsersDTO users = new UsersDTO.Builder(
-                        UserAssembler.toDTOs(ServerData.getUsers().values())
-                ).build();
+                        UserAssembler.toDTOs(ServerData.getUsers().values()))
+                        .withConversationId(conversationId)
+                        .build();
                 outputStream.writeObject(users);
             } catch (IOException e) {
                 e.printStackTrace();
