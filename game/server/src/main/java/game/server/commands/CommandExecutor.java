@@ -2,6 +2,7 @@ package game.server.commands;
 
 import com.google.common.collect.ImmutableMap;
 import dto.*;
+import dto.battle.BattleInvitationDTO;
 import game.server.session.SessionObject;
 
 import java.io.ObjectOutputStream;
@@ -11,7 +12,8 @@ public class CommandExecutor {
             CredentialsDTO.class, new LoginCommand(),
             MessageDTO.class, new MessageCommand(),
             TextMessageDTO.class, new TextMessageCommand(),
-            ChatMessageDTO.class, new ChatMessageCommand()
+            ChatMessageDTO.class, new ChatMessageCommand(),
+            BattleInvitationDTO.class, new BattleInvitationCommand()
     );
 
     public void execute(DTO data, ObjectOutputStream outputStream, SessionObject session) {

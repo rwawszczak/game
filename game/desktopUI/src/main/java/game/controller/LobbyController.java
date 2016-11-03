@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.util.Collections;
 import java.util.List;
 
 public class LobbyController extends BaseController {
@@ -58,6 +59,15 @@ public class LobbyController extends BaseController {
     @FXML
     public void refreshConnected() {
         client.promptForConnectedUsers();
+    }
+
+    @FXML
+    public void sendBattleRequest() {
+        final User selectedUser = connectedList.getSelectionModel().getSelectedItem();
+        if (selectedUser != null) {
+            List<User> users = Collections.singletonList(selectedUser);
+            client.promptForBattle(users);
+        }
     }
 
     public void setLoggedUser(User loggedUser) {
@@ -149,7 +159,7 @@ public class LobbyController extends BaseController {
     private class ReceivedMessageListener extends ChatMessageListener {
         @Override
         public void handleMessage(User user, String message) {
-            Platform.runLater(() ->{
+            Platform.runLater(() -> {
                 openChat(user);
                 chatController.newMessage(user, message);
             });

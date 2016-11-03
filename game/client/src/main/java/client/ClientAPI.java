@@ -4,11 +4,13 @@ package client;
 import client.listeners.Listener;
 import client.listeners.LoginListener;
 import client.listeners.SuccessListener;
-import dto.ChatMessageDTO;
-import dto.CredentialsDTO;
-import dto.MessageDTO;
+import client.model.domain.User;
+import dto.*;
+import dto.battle.BattleInvitationDTO;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static dto.MessageDTO.Command.HEARTBEAT;
 import static dto.MessageDTO.Command.USERLIST;
@@ -107,6 +109,20 @@ public class ClientAPI {
     public void promptForConnectedUsers() {
         try {
             client.send(new MessageDTO.Builder(USERLIST).build());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void promptForBattle(List<User> users) {
+        try {
+            List<UserDTO> userDtos = new ArrayList<>();
+            for(User user : users){
+                userDtos.add(new UserDTO.Builder(user.getId(), user.getName()).build());
+            }
+            client.send(
+                    new BattleInvitationDTO.Builder(userDtos).build()
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }

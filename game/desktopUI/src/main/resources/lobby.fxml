@@ -41,7 +41,7 @@
        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
            <ListView fx:id="connectedList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
            <HBox VBox.vgrow="NEVER">
-               <Button mnemonicParsing="false" text="Battle"/>
+               <Button mnemonicParsing="false" text="Battle" onAction="#sendBattleRequest"/>
                <Button mnemonicParsing="false" onAction="#refreshConnected" text="↻"/>
            </HBox>
        </VBox>
