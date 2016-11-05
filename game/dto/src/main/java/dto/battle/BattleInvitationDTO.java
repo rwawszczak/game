@@ -17,6 +17,10 @@ public class BattleInvitationDTO extends DTO {
         return users;
     }
 
+    public long getBattleId() {
+        return battleId;
+    }
+
     public static class Builder{
         private BattleInvitationDTO dto;
         public Builder(List<UserDTO> users){

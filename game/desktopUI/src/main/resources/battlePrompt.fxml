@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0"
+          prefWidth="400.0" stylesheets="@darkTheme.css" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.BattlePromptController">
+    <columnConstraints>
+        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="20.0" prefWidth="20.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="20.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER"/>
+    </rowConstraints>
+    <Label fx:id="promptLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308"
+           text="Battle" GridPane.columnSpan="3">
+        <font>
+            <Font name="System Italic" size="16.0"/>
+        </font>
+    </Label>
+    <Button fx:id="acceptButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false"
+            onAction="#accept" text="ACCEPT" GridPane.rowIndex="2">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+    <Button fx:id="declineButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false"
+            onAction="#decline" text="DECLINE" GridPane.columnIndex="2" GridPane.rowIndex="2">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+    <VBox fx:id="youBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="promptPlayerBox"
+          GridPane.rowIndex="1">
+        <opaqueInsets>
+            <Insets/>
+        </opaqueInsets>
+        <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </GridPane.margin>
+        <Label fx:id="youLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="promptPlayerLabel"
+               text="You" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="youInfo" styleClass="promptPlayerLabel" text="Pending">
+            <font>
+                <Font name="System Italic" size="12.0"/>
+            </font>
+        </Label>
+    </VBox>
+    <VBox fx:id="otherBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="promptPlayerBox"
+          GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <opaqueInsets>
+            <Insets/>
+        </opaqueInsets>
+        <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </GridPane.margin>
+        <Label fx:id="otherLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="promptPlayerLabel"
+               text="Other" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="otherInfo" styleClass="promptPlayerLabel" text="Pending">
+            <font>
+                <Font name="System Italic" size="12.0"/>
+            </font>
+        </Label>
+    </VBox>
+    <Label fx:id="countdownLabel" text="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <font>
+            <Font name="System Bold" size="36.0"/>
+        </font>
+    </Label>
+</GridPane>

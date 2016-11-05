@@ -1,11 +1,12 @@
 .root {
     -fx-base: rgb(50, 50, 50);
     -fx-background: rgb(50, 50, 50);
-    -fx-control-inner-background:  rgb(50, 50, 50);
-    -fx-border-width:2;
-    -fx-border-color:rgb(40, 40, 40);
+    -fx-control-inner-background: rgb(50, 50, 50);
+    -fx-border-width: 2;
+    -fx-border-color: rgb(40, 40, 40);
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+    prompt-player-color: darkOrange;
 }
 
 #headerPanel {
@@ -20,9 +21,10 @@
 }
 
 .list-view {
-    -fx-border-width:2;
-    -fx-border-color:rgb(40, 40, 40);
+    -fx-border-width: 2;
+    -fx-border-color: rgb(40, 40, 40);
 }
+
 .list-cell:filled:selected {
     -fx-background-color: rgb(60, 60, 80);
 }
@@ -30,6 +32,14 @@
 *.headerButton {
     -fx-border-radius: 20 20 20 20;
     -fx-background-radius: 20 20 20 20;
+}
+
+*.promptPlayerBox {
+    -fx-border-width: 2;
+    -fx-border-color: prompt-player-color;
+}
+*.promptPlayerLabel {
+    -fx-text-fill: prompt-player-color;
 }
 
 .button {
@@ -40,7 +50,6 @@
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
     -fx-color: -fx-hover-base;
 }
-
 
 .separator-label {
     -fx-text-fill: orange;

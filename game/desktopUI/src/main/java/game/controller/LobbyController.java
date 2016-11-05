@@ -1,5 +1,6 @@
 package game.controller;
 
+import client.listeners.BattleInvitationListener;
 import client.listeners.ChatMessageListener;
 import client.listeners.UserListListener;
 import client.model.domain.User;
@@ -16,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class LobbyController extends BaseController {
     private User loggedAs;
     private UserListListener userListListener = new LobbyUserListListener();
     private ChatMessageListener chatMessageListener = new ReceivedMessageListener();
+    private BattleInvListener battleInvListener = new BattleInvListener();
     private ChatController chatController;
 
     @FXML
@@ -107,11 +110,13 @@ public class LobbyController extends BaseController {
     private void unregisterClientListeners() {
         client.unregisterListener(userListListener);
         client.unregisterListener(chatMessageListener);
+        client.unregisterListener(battleInvListener);
     }
 
     private void registerClientListeners() {
         client.registerListener(userListListener);
         client.registerListener(chatMessageListener);
+        client.registerListener(battleInvListener);
     }
 
     private void reloadUsers(List<User> users) {
@@ -168,6 +173,20 @@ public class LobbyController extends BaseController {
         @Override
         public boolean oneTimeOnly() {
             return false;
+        }
+    }
+
+
+    private class BattleInvListener extends BattleInvitationListener {
+        @Override
+        public void handleInvitation(long battleId, List<User> users) {
+            Platform.runLater(() -> {
+                List<User> us = new ArrayList<>(users);
+                us.remove(loggedAs);
+                if (!navigation.isBattlePromptShown()) {
+                    navigation.showBattlePrompt(us.get(0));
+                }
+            });
         }
     }
 }

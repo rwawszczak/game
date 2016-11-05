@@ -3,15 +3,17 @@ package game;
 import client.ClientAPI;
 import client.listeners.SuccessListener;
 import client.model.domain.User;
-import game.controller.chat.ChatController;
+import game.controller.BattlePromptController;
 import game.controller.LobbyController;
 import game.controller.LoginController;
+import game.controller.chat.ChatController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -23,24 +25,31 @@ public class UI extends Application implements Navigation {
 
     private static final String WINDOW_NAME = "Game [Desktop]";
     private static final String CHAT_NAME = "Chat";
+    private static final String PROMPT_NAME = "Prompt";
     private static final String LOGIN_FXML = "/login.fxml";
     private static final String LOBBY_FXML = "/lobby.fxml";
     private static final String CHAT_FXML = "/chat.fxml";
+    private static final String BATTLE_PROMPT_FXML = "/battlePrompt.fxml";
     private static final int LOGIN_WIDTH = 350;
     private static final int LOGIN_HEIGHT = 210;
     private static final int LOBBY_WIDTH = 1024;
     private static final int LOBBY_HEIGHT = 768;
     private static final int CHAT_WIDTH = 300;
     private static final int CHAT_HEIGHT = 400;
+    private static final int PROMPT_WIDTH = 400;
+    private static final int PROMPT_HEIGHT = 200;
 
     private Stage stage;
     private Stage chatStage;
+    private Stage promptStage;
     private ClientAPI client = new ClientAPI();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        initChatStage();
+        chatStage = new Stage();
+        initDefaultStage(chatStage, CHAT_NAME);
         stage = primaryStage;
+        preparePromptStage();
         stage.setOpacity(0.9);
         stage.setTitle(WINDOW_NAME);
         stage.initStyle(StageStyle.UNDECORATED);
@@ -50,12 +59,18 @@ public class UI extends Application implements Navigation {
         setupOnCloseRequest();
     }
 
-    private void initChatStage() {
-        chatStage = new Stage();
-        chatStage.initStyle(StageStyle.UNDECORATED);
-        chatStage.setOpacity(0.9);
-        chatStage.setTitle(CHAT_NAME);
-        chatStage.initStyle(StageStyle.UNDECORATED);
+    private void preparePromptStage() {
+        promptStage = new Stage();
+        promptStage.initModality(Modality.WINDOW_MODAL);
+        promptStage.initOwner(stage);
+        initDefaultStage(promptStage, PROMPT_NAME);
+    }
+
+    private void initDefaultStage(Stage stage, String name) {
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setOpacity(0.9);
+        stage.setTitle(name);
+        stage.initStyle(StageStyle.UNDECORATED);
     }
 
     public LoginController gotoLogin() {
@@ -106,8 +121,30 @@ public class UI extends Application implements Navigation {
     }
 
     @Override
+    public BattlePromptController showBattlePrompt(User other) {
+        try {
+            BattlePromptController battlePrompt = (BattlePromptController) replaceSceneContent(BATTLE_PROMPT_FXML, PROMPT_WIDTH, PROMPT_HEIGHT, promptStage);
+            battlePrompt.setClient(client);
+            battlePrompt.setOtherUser(other);
+            battlePrompt.setNavigation(this);
+            battlePrompt.setStage(promptStage);
+            promptStage.setResizable(false);
+            promptStage.show();
+            return battlePrompt;
+        } catch (Exception ex) {
+            Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
     public boolean isChatShown() {
         return chatStage != null && chatStage.isShowing();
+    }
+
+    @Override
+    public boolean isBattlePromptShown() {
+        return promptStage != null && promptStage.isShowing();
     }
 
     @Override
