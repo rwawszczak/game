@@ -1,5 +1,6 @@
 package game.controller;
 
+import client.listeners.BattleInvitationResponseListener;
 import client.model.domain.User;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -7,12 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class BattlePromptController extends BaseController {
     @FXML
     private Label promptLabel;
-    @FXML
-    private Label youLabel;
     @FXML
     private Label youInfo;
     @FXML
@@ -30,10 +30,13 @@ public class BattlePromptController extends BaseController {
     @FXML
     private Label countdownLabel;
 
+    private ResponseListener listener;
+
     private Stage stage;
     private User otherUser;
     private Status youStatus;
     private Status otherStatus;
+    private long battleId;
 
     private Integer countdown = 10;
 
@@ -42,6 +45,15 @@ public class BattlePromptController extends BaseController {
         setYouStatus(Status.PENDING);
         setOtherStatus(Status.PENDING);
         startCountdown();
+    }
+
+    public void postCreateInitialize() {
+        registerListeners();
+        stage.setOnCloseRequest((WindowEvent we) -> unregisterListeners());
+    }
+
+    public void setBattleId(long battleId) {
+        this.battleId = battleId;
     }
 
     private void startCountdown() {
@@ -58,7 +70,7 @@ public class BattlePromptController extends BaseController {
             Platform.runLater(() -> {
                 countdownLabel.setText("");
                 disableButtons();
-                if(youStatus == Status.ACCEPTED && youStatus == otherStatus){
+                if (youStatus == Status.ACCEPTED && youStatus == otherStatus) {
                     startBattle();
                 } else {
                     backToLobby();
@@ -108,11 +120,24 @@ public class BattlePromptController extends BaseController {
     public void accept() {
         setYouStatus(Status.ACCEPTED);
         disableButtons();
+        client.acceptBattleInvitation(battleId);
     }
 
     public void decline() {
         setYouStatus(Status.DECLINED);
         disableButtons();
+        client.declineBattleInvitation(battleId);
+    }
+
+    private void registerListeners(){
+        if(listener == null){
+            listener = new ResponseListener();
+        }
+        client.registerListener(listener);
+    }
+
+    private void unregisterListeners(){
+        client.unregisterListener(listener);
     }
 
     private enum Status {
@@ -131,6 +156,21 @@ public class BattlePromptController extends BaseController {
 
         public String getMessage() {
             return message;
+        }
+    }
+
+    private class ResponseListener extends BattleInvitationResponseListener {
+        @Override
+        public void handleResponse(long id, User user, boolean hasAccepted) {
+            if (battleId == id && otherUser.equals(user)){
+                Platform.runLater(()->{
+                    if(hasAccepted){
+                        setOtherStatus(Status.ACCEPTED);
+                    } else {
+                        setOtherStatus(Status.DECLINED);
+                    }
+                });
+            }
         }
     }
 }

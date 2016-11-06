@@ -7,6 +7,7 @@ import client.listeners.SuccessListener;
 import client.model.domain.User;
 import dto.*;
 import dto.battle.BattleInvitationDTO;
+import dto.battle.BattleInvitationResponseDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +24,6 @@ public class ClientAPI {
     public void connect(String host, int port) {
         try {
             client.connect(host, port);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,8 +52,6 @@ public class ClientAPI {
                                 .withConversationId(conversationId)
                                 .build()
                 );
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -84,8 +81,6 @@ public class ClientAPI {
                 }
             });
             client.send(credentials);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,5 +121,26 @@ public class ClientAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void acceptBattleInvitation(long battleId){
+        sendBattleInvitationResponse(battleId, BattleInvitationResponseDTO.Response.ACCEPTED);
+    }
+
+    public void declineBattleInvitation(long battleId){
+        sendBattleInvitationResponse(battleId, BattleInvitationResponseDTO.Response.DECLINED);
+    }
+
+    private void sendBattleInvitationResponse(long battleId, BattleInvitationResponseDTO.Response response){
+        try {
+            client.send(
+                    new BattleInvitationResponseDTO.Builder(battleId)
+                            .withResponse(response)
+                            .build()
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

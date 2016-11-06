@@ -10,7 +10,7 @@ public interface Navigation {
     LoginController gotoLogin();
     LobbyController gotoLobby(User logged);
     ChatController openChat(User selected, User sender);
-    BattlePromptController showBattlePrompt(User other);
+    BattlePromptController showBattlePrompt(User other, long battleId);
     boolean isChatShown();
     boolean isBattlePromptShown();
     void close();

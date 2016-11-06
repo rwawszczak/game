@@ -184,7 +184,7 @@ public class LobbyController extends BaseController {
                 List<User> us = new ArrayList<>(users);
                 us.remove(loggedAs);
                 if (!navigation.isBattlePromptShown()) {
-                    navigation.showBattlePrompt(us.get(0));
+                    navigation.showBattlePrompt(us.get(0), battleId);
                 }
             });
         }

@@ -1,8 +1,6 @@
 package game.server;
 
 import dto.DTO;
-import game.server.commands.CommandExecutor;
-import game.server.session.ServerBroadcasting;
 import game.server.session.SessionObject;
 
 import java.io.EOFException;
@@ -40,12 +38,9 @@ public class ServerThread extends Thread {
         } catch (EOFException e){
             System.out.println("Client terminated connection.");
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        finally {
+        } finally {
             cleanup(sessionObject);
             ServerBroadcasting.broadcastConnectedUsers();
         }

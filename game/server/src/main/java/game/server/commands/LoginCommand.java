@@ -5,7 +5,7 @@ import dto.MessageDTO;
 import game.model.assemblers.UserAssembler;
 import game.model.domain.User;
 import game.server.ServerData;
-import game.server.session.ServerBroadcasting;
+import game.server.ServerBroadcasting;
 import game.server.session.SessionObject;
 import game.services.UserServiceInterface;
 import game.services.ServiceProvider;

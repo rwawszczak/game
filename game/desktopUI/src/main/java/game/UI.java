@@ -121,13 +121,15 @@ public class UI extends Application implements Navigation {
     }
 
     @Override
-    public BattlePromptController showBattlePrompt(User other) {
+    public BattlePromptController showBattlePrompt(User other, long battleId) {
         try {
             BattlePromptController battlePrompt = (BattlePromptController) replaceSceneContent(BATTLE_PROMPT_FXML, PROMPT_WIDTH, PROMPT_HEIGHT, promptStage);
             battlePrompt.setClient(client);
             battlePrompt.setOtherUser(other);
             battlePrompt.setNavigation(this);
             battlePrompt.setStage(promptStage);
+            battlePrompt.setBattleId(battleId);
+            battlePrompt.postCreateInitialize();
             promptStage.setResizable(false);
             promptStage.show();
             return battlePrompt;
