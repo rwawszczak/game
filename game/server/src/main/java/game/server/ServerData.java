@@ -10,9 +10,9 @@ public class ServerData {
     }
 
     private static long nextBattleId = 1;
-    private static Map<Long, User> users = Collections.synchronizedMap(new HashMap<Long, User>());
-    private static List<ServerThread> threads = Collections.synchronizedList(new ArrayList<ServerThread>());
-    private static Map<Long, Battle> battles = Collections.synchronizedMap(new HashMap<Long, Battle>());
+    private static final Map<Long, User> users = Collections.synchronizedMap(new HashMap<Long, User>());
+    private static final List<ServerThread> threads = Collections.synchronizedList(new ArrayList<ServerThread>());
+    private static final Map<Long, Battle> battles = Collections.synchronizedMap(new HashMap<Long, Battle>());
 
     public static synchronized Map<Long, User> getUsers() {
         return users;
@@ -23,7 +23,15 @@ public class ServerData {
     }
 
     public static synchronized Map<Long, Battle> getBattles() {
-        return battles;
+        synchronized (battles) {
+            return battles;
+        }
+    }
+
+    public static void removeBattle(Battle battle) {
+        synchronized (battles) {
+            battles.remove(battle.getId());
+        }
     }
 
 

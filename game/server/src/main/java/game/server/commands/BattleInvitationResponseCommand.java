@@ -32,6 +32,9 @@ public class BattleInvitationResponseCommand implements BaseCommand<BattleInvita
                                 .withResponse(response.getResponse())
                                 .build()
                 );
+                if(battle.allAccepted()){
+                    //TODO: Battle is matched, create and send Battle dto to matched users
+                }
             } else {
                 System.out.println("User " + sessionObject.getUser().getName() + " tried to respond to battle he is not associated to nr: " + response.getBattleId());
             }

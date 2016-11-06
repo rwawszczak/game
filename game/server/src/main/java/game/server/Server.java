@@ -14,9 +14,11 @@ public class Server {
     }
 
     public void communicate() {
+        BattleInspector inspector = new BattleInspector();
         try {
             System.out.println("Server started.");
             ServerSocket serverSocket = new ServerSocket(port);
+            inspector.start();
 
             while (true) {
                 Socket socket = serverSocket.accept();
@@ -29,6 +31,8 @@ public class Server {
             System.exit(0);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            inspector.stopGracefully();
         }
     }
 }
