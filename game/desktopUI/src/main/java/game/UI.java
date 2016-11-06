@@ -79,6 +79,8 @@ public class UI extends Application implements Navigation {
             login.setClient(client);
             login.setNavigation(this);
             stage.setResizable(false);
+            promptStage.close();
+            chatStage.close();
             return login;
         } catch (Exception ex) {
             Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
