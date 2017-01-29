@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dto.CredentialsDTO.Operation.LOGIN;
+import static dto.CredentialsDTO.Operation.REGISTER;
 import static dto.MessageDTO.Command.HEARTBEAT;
 import static dto.MessageDTO.Command.USERLIST;
 
@@ -67,19 +69,29 @@ public class ClientAPI {
     }
 
     public void login(String name, String password, final LoginListener listener) {
-        CredentialsDTO credentials = new CredentialsDTO.Builder(name, password).build();
+        CredentialsDTO credentials = new CredentialsDTO.Builder(name, password, LOGIN).build();
         try {
             client.registerListener(new SuccessListener() {
                 @Override
-                public void onSuccess() {
+                public void onSuccess(String message) {
                     client.registerListener(listener);
                 }
 
                 @Override
-                public void onError() {
+                public void onError(String message) {
                     listener.handleUser(null);
                 }
             });
+            client.send(credentials);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void register(String name, String password, final SuccessListener listener) {
+        CredentialsDTO credentials = new CredentialsDTO.Builder(name, password, REGISTER).build();
+        try {
+            client.registerListener(listener);
             client.send(credentials);
         } catch (Exception e) {
             e.printStackTrace();

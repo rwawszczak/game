@@ -1,7 +1,7 @@
 package game;
 
 import client.model.domain.User;
-import game.controller.BattlePromptController;
+import game.controller.battle.BattlePromptController;
 import game.controller.chat.ChatController;
 import game.controller.LobbyController;
 import game.controller.LoginController;

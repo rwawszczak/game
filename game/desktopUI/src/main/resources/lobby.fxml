@@ -3,9 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane id="mainPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@darkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.LobbyController">
+<BorderPane id="mainPanel" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@darkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.LobbyController">
    <top>
-       <GridPane fx:id="headerPanel" BorderPane.alignment="CENTER">
+       <GridPane fx:id="headerPanel" minHeight="20.0" BorderPane.alignment="CENTER">
            <columnConstraints>
                <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="50.0"/>
                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
@@ -27,9 +27,9 @@
                        <Font size="10.0"/>
                    </font>
                </Button>
-               <Button maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0"
-                       mnemonicParsing="false" onAction="#close" prefHeight="20.0" prefWidth="20.0"
-                       styleClass="headerButton" text="X" HBox.hgrow="NEVER">
+               <Button maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false"
+                       onAction="#close" prefHeight="20.0" prefWidth="20.0" styleClass="headerButton" text="X"
+                       HBox.hgrow="NEVER">
                    <font>
                        <Font size="10.0"/>
                    </font>
@@ -38,12 +38,15 @@
        </GridPane>
    </top>
    <right>
-       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+       <VBox alignment="CENTER" minWidth="100.0" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
            <ListView fx:id="connectedList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
            <HBox VBox.vgrow="NEVER">
-               <Button mnemonicParsing="false" text="Battle" onAction="#sendBattleRequest"/>
+               <Button mnemonicParsing="false" onAction="#sendBattleRequest" text="Battle"/>
                <Button mnemonicParsing="false" onAction="#refreshConnected" text="↻"/>
            </HBox>
        </VBox>
    </right>
+   <center>
+      <Pane fx:id="centerPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

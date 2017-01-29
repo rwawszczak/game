@@ -1,6 +1,7 @@
-package game.server;
+package game.server.battle;
 
 import game.model.domain.Battle;
+import game.server.ServerData;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;

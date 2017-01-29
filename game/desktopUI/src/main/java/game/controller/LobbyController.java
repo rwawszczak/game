@@ -9,19 +9,21 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.layout.GridPane;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class LobbyController extends BaseController {
+    private static final String BATTLE_VIEW_FXML = "/battleView.fxml";
+
     @FXML
     private Button maximizeButton;
     @FXML
@@ -30,6 +32,10 @@ public class LobbyController extends BaseController {
     private Label headerLabel;
     @FXML
     private ListView<User> connectedList;
+    @FXML
+    private BorderPane mainPane;
+    @FXML
+    private Pane centerPane;
 
     private ObservableList<User> connectedUsers = FXCollections.observableArrayList();
     private User loggedAs;
@@ -43,6 +49,18 @@ public class LobbyController extends BaseController {
         setupWindowDragging(headerPanel);
         setupListClick();
         setupConnectedList();
+        setupBattleView();
+    }
+
+    private void setupBattleView() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setBuilderFactory(new JavaFXBuilderFactory());
+        loader.setLocation(this.getClass().getResource(BATTLE_VIEW_FXML));
+        try {
+            mainPane.setCenter(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

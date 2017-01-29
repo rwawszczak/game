@@ -1,11 +1,13 @@
-package game.controller;
+package game.controller.battle;
 
 import client.listeners.BattleInvitationResponseListener;
 import client.model.domain.User;
+import game.controller.BaseController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -29,6 +31,8 @@ public class BattlePromptController extends BaseController {
     private Button declineButton;
     @FXML
     private Label countdownLabel;
+    @FXML
+    private GridPane mainPane;
 
     private ResponseListener listener;
 
@@ -44,6 +48,7 @@ public class BattlePromptController extends BaseController {
     public void initialize() {
         setYouStatus(Status.PENDING);
         setOtherStatus(Status.PENDING);
+        setupWindowDragging(mainPane);
         startCountdown();
     }
 
@@ -70,21 +75,9 @@ public class BattlePromptController extends BaseController {
             Platform.runLater(() -> {
                 countdownLabel.setText("");
                 disableButtons();
-                if (youStatus == Status.ACCEPTED && youStatus == otherStatus) {
-                    startBattle();
-                } else {
-                    backToLobby();
-                }
+                stage.close();
             });
         }).start();
-    }
-
-    private void backToLobby() {
-        stage.close();
-    }
-
-    private void startBattle() {
-
     }
 
     public void setOtherUser(User otherUser) {

@@ -1,5 +1,7 @@
 package game.server;
 
+import game.server.battle.BattleInspector;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

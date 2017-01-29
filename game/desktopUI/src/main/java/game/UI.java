@@ -3,7 +3,7 @@ package game;
 import client.ClientAPI;
 import client.listeners.SuccessListener;
 import client.model.domain.User;
-import game.controller.BattlePromptController;
+import game.controller.battle.BattlePromptController;
 import game.controller.LobbyController;
 import game.controller.LoginController;
 import game.controller.chat.ChatController;
@@ -189,13 +189,13 @@ public class UI extends Application implements Navigation {
     private SuccessListener getSuccessCloseListener() {
         return new SuccessListener() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(String message) {
                 client.disconnect();
                 closeStage();
             }
 
             @Override
-            public void onError() {
+            public void onError(String message) {
                 closeStage();
             }
         };

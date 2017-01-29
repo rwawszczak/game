@@ -20,6 +20,10 @@
     -fx-opacity: 1.0;
 }
 
+#battlePane {
+    -fx-background-color: black;
+}
+
 .list-view {
     -fx-border-width: 2;
     -fx-border-color: rgb(40, 40, 40);
@@ -32,6 +36,26 @@
 *.headerButton {
     -fx-border-radius: 20 20 20 20;
     -fx-background-radius: 20 20 20 20;
+}
+.buttonIcon{
+    -fx-effect: dropshadow( three-pass-box , black , 5, 0.0 , 0 , 1 );
+}
+.menuButton {
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
+    -fx-text-fill: white;
+    vertical-align: bottom;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow( three-pass-box , black , 5, 0.0 , 0 , 1 );
+    -fx-border-color: saddlebrown;
+    -fx-background-color: linear-gradient(darkgoldenrod, saddlebrown);
+}
+.menuButton:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+.menuButton:pressed {
+    -fx-background-color: linear-gradient(saddlebrown, darkgoldenrod);
 }
 
 *.promptPlayerBox {

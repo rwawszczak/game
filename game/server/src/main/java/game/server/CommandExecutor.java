@@ -14,7 +14,7 @@ public class CommandExecutor {
     private Map<Class<? extends DTO>, BaseCommand> commandMap = new HashMap<>();
 
     public CommandExecutor() {
-        commandMap.put(CredentialsDTO.class, new LoginCommand());
+        commandMap.put(CredentialsDTO.class, new CredentialsCommand());
         commandMap.put(MessageDTO.class, new MessageCommand());
         commandMap.put(TextMessageDTO.class, new TextMessageCommand());
         commandMap.put(ChatMessageDTO.class, new ChatMessageCommand());

@@ -20,6 +20,9 @@ public class LoginController extends BaseController {
     private Button loginButton;
 
     @FXML
+    private Button registerButton;
+
+    @FXML
     private Button connectButton;
 
     @FXML
@@ -55,7 +58,7 @@ public class LoginController extends BaseController {
         client.connect(serverField.getText(), Integer.parseInt(portField.getText()));
         client.isConnected(new SuccessListener() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(String message) {
                 Platform.runLater(() -> {
                     disableLogin(false);
                     serverField.setDisable(true);
@@ -67,7 +70,7 @@ public class LoginController extends BaseController {
             }
 
             @Override
-            public void onError() {
+            public void onError(String message) {
                 Platform.runLater(() -> {
                     disableLogin(true);
                     setInfo("Server is not responding.");
@@ -94,10 +97,28 @@ public class LoginController extends BaseController {
         });
     }
 
+    @FXML
+    public void register() {
+        client.register(loginField.getText(), passwordField.getText(), new SuccessListener() {
+            @Override
+            public void onSuccess(String message) {
+                Platform.runLater(() ->
+                        setInfo(message));
+            }
+
+            @Override
+            public void onError(String message) {
+                Platform.runLater(() ->
+                        setInfo(message));
+            }
+        });
+    }
+
     private void disableLogin(boolean disable) {
         loginField.setDisable(disable);
         passwordField.setDisable(disable);
         loginButton.setDisable(disable);
+        registerButton.setDisable(disable);
     }
 
     public void setInfo(String info) {

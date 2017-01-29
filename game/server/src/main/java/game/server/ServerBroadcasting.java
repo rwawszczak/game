@@ -4,11 +4,14 @@ import dto.DTO;
 import dto.UserDTO;
 import dto.UsersDTO;
 import dto.battle.BattleInvitationDTO;
+import dto.battle.BattleStateDTO;
 import game.model.assemblers.UserAssembler;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ServerBroadcasting {
     private ServerBroadcasting() {
@@ -48,4 +51,16 @@ public class ServerBroadcasting {
         broadcast(ids, invitation);
     }
 
+    public static void broadcastBattleState(Map<Long, BattleStateDTO> battleStateDTOs) {
+        Set<Long> userIds = battleStateDTOs.keySet();
+        for (ServerThread serverThread : ServerData.getThreads()) {
+            if(userIds.contains(serverThread.getUserId()) ) {
+                try {
+                    serverThread.send(battleStateDTOs.get(serverThread.getUserId()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

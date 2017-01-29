@@ -4,8 +4,14 @@ import dto.MessageDTO;
 
 public abstract class SuccessListener extends Listener<MessageDTO> {
 
-    public abstract void onSuccess();
-    public abstract void onError();
+    public abstract void onSuccess(String message);
+    public abstract void onError(String message);
+    public void onSuccess(){
+        onSuccess("");
+    }
+    public void onError(){
+        onError("");
+    }
 
     @Override
     public final Class<MessageDTO> getHandledType() {
@@ -16,10 +22,10 @@ public abstract class SuccessListener extends Listener<MessageDTO> {
     public final boolean handle(MessageDTO dto) {
         if(conversationId == dto.getConversationId()) {
             if (dto.getCommand() == MessageDTO.Command.SUCCESS) {
-                onSuccess();
+                onSuccess(dto.getText());
                 return true;
             } else if (dto.getCommand() == MessageDTO.Command.ERROR) {
-                onError();
+                onError(dto.getText());
                 return true;
             }
         }

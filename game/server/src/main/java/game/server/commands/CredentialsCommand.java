@@ -13,34 +13,68 @@ import game.services.ServiceProvider;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-public class LoginCommand implements BaseCommand<CredentialsDTO> {
+import static dto.CredentialsDTO.Operation.LOGIN;
+import static dto.CredentialsDTO.Operation.REGISTER;
+
+public class CredentialsCommand implements BaseCommand<CredentialsDTO> {
 
     private UserServiceInterface userService = ServiceProvider.getUserService();
 
     @Override
     public void execute(CredentialsDTO credentials, ObjectOutputStream outputStream, SessionObject sessionObject) {
+        if (credentials.getOperation() == LOGIN) {
+            handleLogin(credentials, outputStream, sessionObject);
+        }
+        if (credentials.getOperation() == REGISTER) {
+            handleRegistration(credentials, outputStream, sessionObject);
+        }
+    }
+
+    private void handleLogin(CredentialsDTO credentials, ObjectOutputStream outputStream, SessionObject sessionObject) {
         try {
-            final User user = userService.login(credentials.getLogin(), credentials.getPassword());
             long conversationId = credentials.getConversationId();
-            if (user != null) {
+            try {
+                User user = userService.login(credentials.getLogin(), credentials.getPassword());
                 if (sessionObject.isAuthenticated()) {
-                    handleAlreadyAuthenticated(outputStream, conversationId);
+                    handleError(outputStream, conversationId, "User is already authenticated");
                 } else {
                     handleSuccessfulLogin(outputStream, sessionObject, user, conversationId);
                 }
-            } else {
+            } catch (UserServiceInterface.UserDontExistsException | UserServiceInterface.WrongPasswordException e) {
                 handleWrongCredentials(outputStream, sessionObject, conversationId);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    private void handleAlreadyAuthenticated(ObjectOutputStream outputStream, long conversationId) throws IOException {
+    private void handleRegistration(CredentialsDTO credentials, ObjectOutputStream outputStream, SessionObject sessionObject) {
+        try {
+            long conversationId = credentials.getConversationId();
+            try {
+                userService.register(credentials.getLogin(), credentials.getPassword());
+                handleRegistered(outputStream, conversationId);
+            } catch (UserServiceInterface.UserAlreadyExistsException e) {
+                handleError(outputStream, conversationId, "User already exists");
+            } catch (Exception e) {
+                handleError(outputStream, conversationId, "Error occurred during registration");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleRegistered(ObjectOutputStream outputStream, long conversationId) throws IOException {
+        outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.SUCCESS)
+                .withConversationId(conversationId)
+                .withText("User successfully registered")
+                .build());
+    }
+
+    private void handleError(ObjectOutputStream outputStream, long conversationId, String errorMessage) throws IOException {
         outputStream.writeObject(new MessageDTO.Builder(MessageDTO.Command.ERROR)
                 .withConversationId(conversationId)
-                .withText("User is already authenticated")
+                .withText(errorMessage)
                 .build());
     }
 

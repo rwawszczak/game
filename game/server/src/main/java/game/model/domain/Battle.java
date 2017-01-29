@@ -22,7 +22,7 @@ public class Battle {
     }
 
     public enum Status {
-        PENDING, ACCEPTED, DECLINED
+        PENDING, ACCEPTED, DECLINED, ONGOING, ENDED
     }
 
     public long getTimeCreated() {
