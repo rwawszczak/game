@@ -1,4 +1,6 @@
-package dto;
+package dto.user;
+
+import dto.DTO;
 
 import java.util.List;
 

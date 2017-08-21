@@ -1,8 +1,8 @@
 package game.server;
 
 import dto.DTO;
-import dto.UserDTO;
-import dto.UsersDTO;
+import dto.user.UserDTO;
+import dto.user.UsersDTO;
 import dto.battle.BattleInvitationDTO;
 import dto.battle.BattleStateDTO;
 import game.model.assemblers.UserAssembler;

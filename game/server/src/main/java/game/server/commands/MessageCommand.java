@@ -1,7 +1,7 @@
 package game.server.commands;
 
 import dto.MessageDTO;
-import dto.UsersDTO;
+import dto.user.UsersDTO;
 import game.model.assemblers.UserAssembler;
 import game.server.ServerData;
 import game.server.session.SessionObject;

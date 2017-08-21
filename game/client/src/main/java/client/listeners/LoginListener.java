@@ -2,7 +2,7 @@ package client.listeners;
 
 import client.model.assemblers.UserAssembler;
 import client.model.domain.User;
-import dto.UserDTO;
+import dto.user.UserDTO;
 
 public abstract class LoginListener extends Listener<UserDTO> {
     public abstract void handleUser(User user);

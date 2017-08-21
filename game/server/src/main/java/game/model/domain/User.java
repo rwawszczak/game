@@ -43,4 +43,8 @@ public class User {
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
     }
+
+    public void setDetails(UserDetails details) {
+        this.details = details;
+    }
 }

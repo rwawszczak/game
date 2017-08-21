@@ -1,12 +1,12 @@
 package game.model.assemblers;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import dto.UserDTO;
+import dto.user.UserDTO;
 import game.model.domain.User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class UserAssembler {
     private static Function<User, UserDTO> userToDTO = getUserToDTOFunction();
@@ -32,15 +32,10 @@ public class UserAssembler {
     }
 
     public static List<UserDTO> toDTOs(Collection<User> users) {
-        return FluentIterable.from(users).transform(userToDTO).toList();
+        return users.stream().map(userToDTO).collect(Collectors.toList());
     }
 
     private static Function<User, UserDTO> getUserToDTOFunction() {
-        return new Function<User, UserDTO>() {
-            @Override
-            public UserDTO apply(User user) {
-                return toDTO(user);
-            }
-        };
+        return UserAssembler::toDTO;
     }
 }

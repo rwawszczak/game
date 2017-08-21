@@ -2,8 +2,8 @@ package client.model.assemblers;
 
 import client.model.domain.User;
 import com.google.common.collect.Lists;
-import dto.UserDTO;
-import dto.UsersDTO;
+import dto.user.UserDTO;
+import dto.user.UsersDTO;
 
 import java.util.List;
 

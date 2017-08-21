@@ -1,11 +1,14 @@
 package game.model.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Battle {
     private long id;
     private Map<User, Status> users = new HashMap<>();
+    private List<Character> characters = new ArrayList<>();
     private long timeCreated;
 
     public Battle(long id) {
@@ -13,8 +16,12 @@ public class Battle {
         timeCreated = System.currentTimeMillis();
     }
 
-    public Map<User, Status> getUsers() {
+    public Map<User, Status> getUsers() { //TODO: dont give direct access to users
         return users;
+    }
+
+    public List<Character> getCharacters() {  //TODO: dont give direct access to characters
+        return characters;
     }
 
     public long getId() {
@@ -33,7 +40,7 @@ public class Battle {
         return users.values().stream().filter(s -> s == status).count();
     }
 
-    public boolean allAccepted(){
+    public boolean allAccepted() {
         return statusCount(Status.ACCEPTED) == users.size();
     }
 }

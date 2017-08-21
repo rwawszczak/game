@@ -5,6 +5,7 @@ import game.model.domain.User;
 
 public interface UserServiceInterface {
     User login(String login, String password) throws UserDontExistsException, WrongPasswordException;
+    User update(User user, String password) throws WrongPasswordException;
     User register(String login, String password) throws UserAlreadyExistsException;
 
     class UserAlreadyExistsException extends Exception{}

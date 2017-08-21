@@ -1,7 +1,7 @@
 package dto.battle;
 
 import dto.DTO;
-import dto.UserDTO;
+import dto.user.UserDTO;
 
 public class BattleInvitationResponseDTO extends DTO {
     private long battleId;

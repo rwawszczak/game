@@ -1,7 +1,7 @@
 package game.server.commands;
 
 import dto.ChatMessageDTO;
-import dto.UserDTO;
+import dto.user.UserDTO;
 import game.model.assemblers.UserAssembler;
 import game.server.ServerData;
 import game.server.ServerThread;

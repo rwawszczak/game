@@ -1,5 +1,7 @@
 package dto;
 
+import dto.user.UserDTO;
+
 import java.io.Serializable;
 
 public class ChatMessageDTO extends DTO implements Serializable {

@@ -2,7 +2,7 @@ package client.listeners;
 
 import client.model.assemblers.UserAssembler;
 import client.model.domain.User;
-import dto.UsersDTO;
+import dto.user.UsersDTO;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package client.model.assemblers;
 
 import client.model.domain.UserDetails;
-import dto.UserDetailsDTO;
+import dto.user.UserDetailsDTO;
 
 public class UserDetailsAssembler {
     private UserDetailsAssembler() {

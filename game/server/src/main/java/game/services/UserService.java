@@ -1,6 +1,7 @@
 package game.services;
 
 import game.model.domain.User;
+import game.model.domain.UserDetails;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -30,10 +31,15 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
+    public User update(User user, String password) throws WrongPasswordException {
+        return null; //TODO: implement
+    }
+
+    @Override
     public User register(String login, String password) throws UserAlreadyExistsException {
-        try{
-            if(doUserExists(login)){
-               throw new UserAlreadyExistsException();
+        try {
+            if (doUserExists(login)) {
+                throw new UserAlreadyExistsException();
             }
             long id = getUserCount() + 1; //TODO: make smarter id generation
             User user = new User(id, login);
@@ -47,10 +53,13 @@ public class UserService implements UserServiceInterface {
 
     private void saveUser(User user, String password) throws FileNotFoundException, UnsupportedEncodingException, InvalidKeySpecException, NoSuchAlgorithmException {
         prepareDir();
-        PrintWriter writer = new PrintWriter(USERS_DIR +user.getName()+ USER_FILE_EXTENSION, "UTF-8");
+        PrintWriter writer = new PrintWriter(USERS_DIR + user.getName() + USER_FILE_EXTENSION, "UTF-8");
         writer.println(user.getId());
         writer.println(user.getName());
         writer.println(hashPassword(password));
+
+        UserDetails details = user.getDetails();
+        if (details != null) writer.println(details.getCharacterIds());
         writer.close();
     }
 
@@ -62,10 +71,24 @@ public class UserService implements UserServiceInterface {
     private User loadUser(String login, String password) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, WrongPasswordException {
         String userFileDir = USERS_DIR + login + USER_FILE_EXTENSION;
         List<String> lines = readFile(userFileDir);
-        if(!hashPassword(password).equals(lines.get(2))){
+        if (!hashPassword(password).equals(lines.get(2))) {
             throw new WrongPasswordException();
         }
-        return new User(Long.parseLong(lines.get(0)), lines.get(1));
+        List<Long> characterIds = null;
+        User user = new User(Long.parseLong(lines.get(0)), lines.get(1));
+        if (lines.size() >= 4) {
+            characterIds = parseCharacterIds(lines.get(3));
+            user.setDetails(new UserDetails(characterIds));
+        }
+        return user;
+    }
+
+    private List<Long> parseCharacterIds(String ids) {
+        List<Long> characterIds = new ArrayList<>();
+        for (String id : ids.split(" ")) {
+            characterIds.add(Long.parseLong(id));
+        }
+        return characterIds;
     }
 
     private List<String> readFile(String pathname) throws IOException {
@@ -91,17 +114,17 @@ public class UserService implements UserServiceInterface {
         return enc.encodeToString(hash);
     }
 
-    private boolean doUserExists(String login){
-        File f = new File(USERS_DIR+login+USER_FILE_EXTENSION);
+    private boolean doUserExists(String login) {
+        File f = new File(USERS_DIR + login + USER_FILE_EXTENSION);
         return f.exists();
     }
 
-    private int getUserCount(){
+    private int getUserCount() {
         return new File(USERS_DIR).list().length;
     }
 
 
-    public static class ErrorWhileHandlingUserException extends RuntimeException{
+    public static class ErrorWhileHandlingUserException extends RuntimeException {
         public ErrorWhileHandlingUserException(Exception e) {
             super(e);
         }

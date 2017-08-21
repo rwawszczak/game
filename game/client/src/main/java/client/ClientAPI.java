@@ -8,6 +8,7 @@ import client.model.domain.User;
 import dto.*;
 import dto.battle.BattleInvitationDTO;
 import dto.battle.BattleInvitationResponseDTO;
+import dto.user.UserDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
