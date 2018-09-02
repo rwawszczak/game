@@ -8,4 +8,7 @@ spring:
     password:
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
-    show-sql: true
+    show-sql: false
+app:
+  jwtSecret: superSecretOIASD(*@&#@)( #TODO change
+  jwtExpirationInMs: 3600000
