@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 
 import {User} from '../_models';
 import {AuthenticationService} from '../_services';
 import {FormControl, Validators} from '@angular/forms';
 
 @Component({
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
 
@@ -16,11 +17,19 @@ export class RegisterComponent implements OnInit {
     Validators.required,
     Validators.email,
   ]);
+  usernameFormControl: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3),
+    Validators.maxLength(15),
+  ]);
+  passwordFormControl: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(6),
+    Validators.maxLength(20),
+  ]);
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private authenticationService: AuthenticationService) {
+  constructor(private router: Router,
+              private authenticationService: AuthenticationService) {
   }
 
 

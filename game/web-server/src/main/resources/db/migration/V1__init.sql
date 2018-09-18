@@ -7,7 +7,7 @@ PRIMARY KEY (uid));
 
 CREATE TABLE role(
 id BIGINT(20) NOT NULL AUTO_INCREMENT,
-NAME VARCHAR(255),
+name VARCHAR(255),
 PRIMARY KEY (id));
 
 CREATE TABLE user_roles (
@@ -18,3 +18,5 @@ CREATE TABLE user_roles (
   CONSTRAINT fk_user_roles_role_id FOREIGN KEY (role_id) REFERENCES role (id),
   CONSTRAINT fk_user_roles_user_id FOREIGN KEY (user_uid) REFERENCES user (uid)
 );
+INSERT INTO role(name) VALUES ('ROLE_USER');
+INSERT INTO role(name) VALUES ('ROLE_ADMIN');
