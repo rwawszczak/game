@@ -1,7 +1,7 @@
 <div class="col-md-6">
-  <h2 class="text-center">Register</h2>
 
-  <form class="register-form">
+  <form class="register-form" (ngSubmit)="registerUser()">
+    <h1 class="mat-h1 register-header">Register new account</h1>
 
     <mat-form-field class="register-full-width">
       <input matInput placeholder="Username" [(ngModel)]="user.username" name="userName" id="userName" [formControl]="usernameFormControl">
@@ -26,7 +26,7 @@
 
 
     <mat-form-field class="register-full-width">
-      <input matInput placeholder="Password" min="6" max="20" [(ngModel)]="user.password" name="email" id="password" type="password" [formControl]="passwordFormControl">
+      <input matInput placeholder="Password" min="6" max="20" [(ngModel)]="user.password" name="password" id="password" type="password" [formControl]="passwordFormControl">
       <mat-error *ngIf="passwordFormControl.hasError('required')">
         Password is <strong>required</strong>
       </mat-error>
@@ -36,7 +36,15 @@
     </mat-form-field>
 
 
-    <button mat-flat-button (click)="createUser()">Register</button>
+    <mat-form-field class="register-full-width">
+      <input matInput placeholder="Confirm password" min="6" max="20" [(ngModel)]="passwordConfirm" name="passwordConfirm" id="passwordConfirm" type="password" [formControl]="passwordConfirmFormControl">
+      <mat-error *ngIf="passwordConfirmFormControl.hasError('required') || passwordConfirmFormControl.hasError('notMatchingPassword')">
+        Passwords must match
+      </mat-error>
+    </mat-form-field>
+
+
+    <button mat-flat-button class="register-button">Register</button>
   </form>
 
 </div>

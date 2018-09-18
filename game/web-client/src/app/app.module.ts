@@ -6,6 +6,7 @@ import {AppComponent} from './app.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatButtonModule, MatCheckboxModule, MatInputModule} from '@angular/material';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatFormFieldModule} from '@angular/material/form-field';
 
@@ -29,6 +30,7 @@ import {RegisterComponent} from './register/register.component';
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    MatSnackBarModule,
     MatButtonModule,
     MatCheckboxModule,
     MatTabsModule,
