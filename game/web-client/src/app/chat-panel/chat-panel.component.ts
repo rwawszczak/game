@@ -15,11 +15,11 @@ export class ChatPanelComponent implements OnInit {
     private domSanitizer: DomSanitizer) {
     this.matIconRegistry.addSvgIcon(
       'chat',
-      this.domSanitizer.bypassSecurityTrustResourceUrl("/assets/graphics/icons/chat.svg")
+      this.domSanitizer.bypassSecurityTrustResourceUrl('/assets/graphics/icons/chat.svg')
     );
     this.matIconRegistry.addSvgIcon(
       'close',
-      this.domSanitizer.bypassSecurityTrustResourceUrl("/assets/graphics/icons/close.svg")
+      this.domSanitizer.bypassSecurityTrustResourceUrl('/assets/graphics/icons/close.svg')
     );
   }
 
