@@ -1,0 +1,45 @@
+.sidePanel{
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 20%;
+  background-color: lightgray;
+  border-radius: 5px 0 0 5px;
+}
+
+.topPanel{
+  width: 100%;
+  height: 50px;
+  background-color: darkgray;
+  border-radius: 5px 5px 0 0;
+}
+
+.closedIcons{
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.closePanel{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.friendList{
+  position: relative;
+  margin: 20px;
+}
+
+.buttonIcon {
+  position: absolute;
+  height: 65%;
+  width: 65%;
+
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

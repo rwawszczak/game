@@ -1,0 +1,18 @@
+<div class="sidePanel" *ngIf="opened">
+  <div class="topPanel">
+    <button mat-mini-fab color="warn" class="closePanel" (click)="togglePanel()">
+      <mat-icon svgIcon="close" class="buttonIcon"></mat-icon>
+    </button>
+  </div>
+  <mat-nav-list class="friendList">
+    <a mat-list-item > Friend 1 </a>
+    <a mat-list-item > Friend 2 </a>
+    <a mat-list-item > Friend 3 </a>
+  </mat-nav-list>
+
+
+
+</div>
+<button mat-fab class="closedIcons" *ngIf="!opened" (click)="togglePanel()">
+  <mat-icon svgIcon="chat" class="buttonIcon"></mat-icon>
+</button>

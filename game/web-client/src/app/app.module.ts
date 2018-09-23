@@ -9,19 +9,23 @@ import {MatButtonModule, MatCheckboxModule, MatInputModule} from '@angular/mater
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
 
 import {ErrorInterceptor, JwtInterceptor} from './_helpers';
 import {HomeComponent} from './home/home.component';
 import {LoginComponent} from './login/login.component';
 import {AppRoutingModule} from './app-routing.module';
 import {RegisterComponent} from './register/register.component';
+import { ChatPanelComponent } from './chat-panel/chat-panel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ChatPanelComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +39,8 @@ import {RegisterComponent} from './register/register.component';
     MatCheckboxModule,
     MatTabsModule,
     MatFormFieldModule,
+    MatIconModule,
+    MatListModule,
     MatInputModule
   ],
   providers: [
