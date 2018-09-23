@@ -8,7 +8,7 @@ import {DomSanitizer} from '@angular/platform-browser';
   styleUrls: ['./chat-panel.component.css']
 })
 export class ChatPanelComponent implements OnInit {
-  opened = false;
+  opened = true;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
